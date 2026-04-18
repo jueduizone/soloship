@@ -1,0 +1,251 @@
+/* SoloShip scoped design tokens and utilities. */
+
+.ss-scope {
+  --ss-bg-deep: #0a0b0e;
+  --ss-bg: #0d0f14;
+  --ss-bg-alt: #12141b;
+  --ss-surface: #171a23;
+  --ss-surface-hi: #1e2230;
+  --ss-border-dark: #242836;
+  --ss-border-dark-soft: #1b1e27;
+
+  --ss-light-bg: #f6f4ee;
+  --ss-light-surface: #ffffff;
+  --ss-border-light: #e4e1d7;
+  --ss-border-light-soft: #ecead9;
+
+  --ss-text-strong: #f3f4f6;
+  --ss-text: #c8ccd6;
+  --ss-text-dim: #8a8f9c;
+  --ss-text-faint: #5b6070;
+
+  --ss-ink: #0a0b0e;
+  --ss-ink-2: #2c2f38;
+  --ss-ink-3: #5a5d67;
+
+  --ss-accent: #3a6cff;
+  --ss-accent-hi: #5c83ff;
+  --ss-accent-glow: rgba(58, 108, 255, 0.18);
+  --ss-accent-soft: rgba(58, 108, 255, 0.08);
+
+  --ss-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  color: var(--ss-text);
+  background: var(--ss-bg-deep);
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.ss-scope ::selection {
+  background: var(--ss-accent);
+  color: #fff;
+}
+
+.ss-eyebrow {
+  font-family: var(--ss-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ss-text-dim);
+}
+
+.ss-eyebrow.is-light { color: var(--ss-ink-3); }
+
+.ss-display {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: var(--ss-text-strong);
+}
+
+.ss-display.is-light { color: var(--ss-ink); }
+
+.ss-h2 {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--ss-text-strong);
+  font-size: clamp(28px, 4vw, 42px);
+}
+
+.ss-h2.is-light { color: var(--ss-ink); }
+
+.ss-lede {
+  color: var(--ss-text);
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.6;
+}
+
+.ss-lede.is-light { color: var(--ss-ink-2); }
+
+.ss-mono {
+  font-family: var(--ss-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.ss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: transform 120ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+  white-space: nowrap;
+}
+
+.ss-btn-primary {
+  background: var(--ss-text-strong);
+  color: var(--ss-ink);
+  border: 1px solid var(--ss-text-strong);
+}
+.ss-btn-primary:hover { background: #fff; border-color: #fff; transform: translateY(-1px); }
+
+.ss-btn-primary.on-light {
+  background: var(--ss-ink);
+  color: #fff;
+  border-color: var(--ss-ink);
+}
+.ss-btn-primary.on-light:hover { background: #000; border-color: #000; }
+
+.ss-btn-ghost {
+  background: transparent;
+  color: var(--ss-text-strong);
+  border: 1px solid var(--ss-border-dark);
+}
+.ss-btn-ghost:hover { border-color: var(--ss-text-dim); transform: translateY(-1px); }
+
+.ss-btn-ghost.on-light {
+  color: var(--ss-ink);
+  border-color: var(--ss-border-light);
+}
+.ss-btn-ghost.on-light:hover { border-color: var(--ss-ink-3); }
+
+.ss-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .ss-container { padding: 0 40px; }
+}
+
+.ss-section {
+  padding: 96px 0;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .ss-section { padding: 140px 0; }
+}
+
+.ss-section.is-light {
+  background: var(--ss-light-bg);
+  color: var(--ss-ink-2);
+}
+
+.ss-hairline-top {
+  border-top: 1px solid var(--ss-border-dark-soft);
+}
+.ss-hairline-top.on-light { border-top-color: var(--ss-border-light-soft); }
+
+.ss-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.ss-hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(600px 400px at 85% 20%, var(--ss-accent-glow), transparent 70%),
+    radial-gradient(800px 500px at 10% 90%, rgba(255,255,255,0.04), transparent 70%);
+}
+
+.ss-card {
+  background: var(--ss-surface);
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 14px;
+  padding: 28px;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+.ss-card:hover { border-color: #333847; }
+
+.ss-card.is-light {
+  background: var(--ss-light-surface);
+  border-color: var(--ss-border-light);
+}
+.ss-card.is-light:hover { border-color: #d4d0c2; }
+
+.ss-divider { height: 1px; background: var(--ss-border-dark); }
+.ss-divider.on-light { background: var(--ss-border-light); }
+
+.ss-accent-rule {
+  width: 32px;
+  height: 1px;
+  background: var(--ss-accent);
+}
+
+details.ss-faq-item {
+  border-top: 1px solid var(--ss-border-light);
+}
+details.ss-faq-item:last-child { border-bottom: 1px solid var(--ss-border-light); }
+
+details.ss-faq-item > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ss-ink);
+}
+details.ss-faq-item > summary::-webkit-details-marker { display: none; }
+details.ss-faq-item > summary .ss-faq-plus {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  position: relative;
+  transition: transform 240ms ease;
+}
+details.ss-faq-item > summary .ss-faq-plus::before,
+details.ss-faq-item > summary .ss-faq-plus::after {
+  content: ''; position: absolute; background: var(--ss-ink);
+  left: 50%; top: 50%; transform: translate(-50%, -50%);
+}
+details.ss-faq-item > summary .ss-faq-plus::before { width: 14px; height: 1.5px; }
+details.ss-faq-item > summary .ss-faq-plus::after  { width: 1.5px; height: 14px; transition: transform 240ms ease; }
+details.ss-faq-item[open] > summary .ss-faq-plus::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+
+details.ss-faq-item > .ss-faq-body {
+  padding: 0 0 24px 0;
+  color: var(--ss-ink-2);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 720px;
+}
+
+.ss-marker {
+  font-family: var(--ss-mono);
+  color: var(--ss-accent-hi);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
