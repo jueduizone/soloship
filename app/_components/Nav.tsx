@@ -1,61 +1,90 @@
-import { event } from './content'
+import { event, nav } from './content'
 
 export function Nav() {
   return (
     <nav
       className="sticky top-0 z-20"
       style={{
-        background: 'rgba(10,11,14,0.72)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        background: 'rgba(10,11,14,0.78)',
+        backdropFilter: 'saturate(140%) blur(14px)',
+        WebkitBackdropFilter: 'saturate(140%) blur(14px)',
         borderBottom: '1px solid var(--ss-border-dark-soft)',
       }}
     >
-      <div className="ss-container flex items-center justify-between" style={{ height: 64 }}>
-        <a href="#top" className="flex items-center gap-3">
+      <div className="ss-container flex items-center justify-between" style={{ height: 60 }}>
+        <a href="#top" className="flex items-center gap-2.5" aria-label={`${event.name} ${event.volume}`}>
           <span
-            className="flex items-center justify-center rounded-md"
+            aria-hidden
             style={{
-              width: 24,
-              height: 24,
-              border: '1px solid var(--ss-border-dark)',
-              background: 'var(--ss-surface)',
+              display: 'inline-block',
+              width: 8,
+              height: 8,
+              borderRadius: 2,
+              background: 'var(--ss-accent)',
+              boxShadow: '0 0 0 3px rgba(58,108,255,0.14)',
+            }}
+          />
+          <span
+            style={{
               color: 'var(--ss-text-strong)',
-              fontSize: 11,
               fontWeight: 600,
-              letterSpacing: 0.5,
+              fontSize: 15,
+              letterSpacing: '-0.01em',
             }}
           >
-            S
-          </span>
-          <span style={{ color: 'var(--ss-text-strong)', fontWeight: 600, fontSize: 15, letterSpacing: '-0.005em' }}>
             {event.name}
           </span>
           <span
-            className="ss-mono"
+            className="ss-mono hidden sm:inline-flex items-center"
             style={{
               color: 'var(--ss-text-dim)',
               padding: '2px 8px',
               border: '1px solid var(--ss-border-dark)',
               borderRadius: 999,
               fontSize: 10,
+              letterSpacing: '0.08em',
             }}
           >
             {event.volume}
           </span>
         </a>
-        <div className="flex items-center gap-8">
-          <a href="#why" className="hidden md:inline ss-mono" style={{ color: 'var(--ss-text-dim)' }}>
-            WHY
-          </a>
-          <a href="#timeline" className="hidden md:inline ss-mono" style={{ color: 'var(--ss-text-dim)' }}>
-            TIMELINE
-          </a>
-          <a href="#faq" className="hidden md:inline ss-mono" style={{ color: 'var(--ss-text-dim)' }}>
-            FAQ
-          </a>
-          <a href={event.applyHref} className="ss-btn ss-btn-primary" style={{ height: 36, padding: '0 16px', fontSize: 13 }}>
-            申请报名
+
+        <div className="flex items-center gap-1 sm:gap-6">
+          {nav.links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className="hidden md:inline-flex items-center"
+              style={{
+                color: 'var(--ss-text-dim)',
+                fontSize: 13.5,
+                fontWeight: 450,
+                letterSpacing: '-0.005em',
+                padding: '6px 4px',
+                transition: 'color 160ms ease',
+              }}
+            >
+              {l.label}
+            </a>
+          ))}
+
+          <a
+            href={nav.cta.href}
+            className="ss-btn ss-btn-ghost group"
+            style={{ height: 34, padding: '0 14px', fontSize: 12.5 }}
+          >
+            <span
+              aria-hidden
+              style={{
+                display: 'inline-block',
+                width: 6,
+                height: 6,
+                borderRadius: 999,
+                background: 'var(--ss-accent-hi)',
+                boxShadow: '0 0 0 3px rgba(58,108,255,0.18)',
+              }}
+            />
+            {nav.cta.label}
           </a>
         </div>
       </div>

@@ -2,7 +2,13 @@ import { outcome } from './content'
 
 export function Outcome() {
   return (
-    <section className="ss-section" style={{ background: 'var(--ss-bg-deep)' }}>
+    <section
+      className="ss-section"
+      style={{
+        background: 'var(--ss-bg-deep)',
+        borderTop: '1px solid var(--ss-border-dark-soft)',
+      }}
+    >
       <div className="ss-container">
         <div className="mb-14" style={{ maxWidth: 780 }}>
           <div className="ss-eyebrow mb-6">{outcome.eyebrow}</div>

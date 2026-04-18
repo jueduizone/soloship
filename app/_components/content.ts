@@ -6,39 +6,53 @@ export const event = {
   duration: '2 周',
   format: '线上 + 异步',
   capacity: '约 30 人 · 审核制',
+  capacityShort: '30 人',
   price: '¥399',
   priceNote: '录取后支付',
-  applyHref: '#apply',
+  status: 'Vol.1 申请通道筹备中',
+  statusShort: '即将开放',
+  applyHref: '#waitlist',
   timelineHref: '#timeline',
+}
+
+export const nav = {
+  links: [
+    { label: '为什么', href: '#why' },
+    { label: '活动节奏', href: '#timeline' },
+    { label: 'FAQ', href: '#faq' },
+  ],
+  cta: { label: '加入候补名单', href: event.applyHref },
 }
 
 export const hero = {
   eyebrow: `${event.volume} · ${event.year} · ${event.tagline}`,
+  status: event.status,
   headline: '两周，把手里的 idea 做成一个能上线的全球化产品。',
-  sub: 'SoloShip 不是课程。它是一次带 deadline、带同伴、带 Demo Day 的 shipping sprint——为想真正 ship 出海产品的 builder 准备。',
+  sub: '面向独立 builder 的两周 shipping sprint——带 deadline、带同伴、带 Demo Day。',
   meta: [
     { label: '周期', value: event.duration },
     { label: '形式', value: event.format },
     { label: '名额', value: event.capacity },
     { label: '价格', value: `${event.price} · ${event.priceNote}` },
   ],
-  primaryCta: { label: '申请报名', href: event.applyHref },
+  primaryCta: { label: '加入候补名单', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
+  fineprint: '审核制 · 录取后支付 · 申请通道开放时，候补名单优先通知',
 }
 
 export const whyNow = {
   eyebrow: '为什么是现在',
   headline: '这是超级个体第一次真正能独立做全球产品的窗口。',
   body: [
-    'AI 基础设施第一次把独立 builder 推到了发行位——一个人就能写代码、做设计、跑增长、做客服。',
-    '真正卡住大家的已经不是技术，而是出海、支付、增长，以及把一个项目做完的执行力。',
-    'SoloShip 想把这几件事压进两周，让你在同伴压力下真正把东西 ship 出去。',
+    'AI 基础设施第一次让一个人完整覆盖一款产品的每一环——写代码、做设计、跑增长、做客服。',
+    '真正卡住的早就不是技术，而是出海、支付、增长，以及把一个项目做完的执行力。',
+    'SoloShip 把这几件事压进两周。在同伴密度和 deadline 之下，让项目真的 ship 出去。',
   ],
 }
 
 export const whySoloship = {
-  eyebrow: '不是普通共学营',
-  headline: 'SoloShip 是 shipping sprint，不是一次课程。',
+  eyebrow: 'WHY SOLOSHIP',
+  headline: 'Cohort，不是课程。Sprint，不是社群。',
   cards: [
     {
       title: 'Builder-only',
@@ -61,7 +75,7 @@ export const whySoloship = {
 
 export const whoFor = {
   eyebrow: '适合谁 / 不适合谁',
-  headline: '如果你只想"学点东西"，这不是你该来的地方。',
+  headline: '审核制，宁缺毋滥。',
   suits: [
     '手里有 idea，想真正 ship 出海产品的 builder',
     '做过一点东西，但还没形成节奏的独立开发者',
@@ -156,7 +170,7 @@ export const faq = {
     },
     {
       q: '¥399 什么时候收？',
-      a: '录取之后才收。我们做的是"录取后支付"——先申请，再审核，通过了才收款。这样对双方都更干净。',
+      a: '录取之后才收。先申请、再审核，通过了才收款——这样对双方都更干净。',
     },
     {
       q: '需要已经有项目吗？',
@@ -174,13 +188,27 @@ export const faq = {
       q: '活动结束后资料会保留吗？',
       a: '会。录取学员会进入 SoloShip 同学录和资料页；优秀项目会在下一期招募时被公开展示。',
     },
+    {
+      q: '现在能申请吗？',
+      a: 'Vol.1 申请通道筹备中，先以候补名单形式收集意向。开放后会优先通知名单上的 builder。',
+    },
   ],
 }
 
 export const finalCta = {
   eyebrow: '下一步',
   headline: '下一个真的 ship 出去的项目，是不是你的？',
-  sub: `SoloShip ${event.volume} 限额 ${event.capacity}。申请通道开启后，优先发放给提前登记的人。`,
-  primaryCta: { label: '申请报名', href: event.applyHref },
+  sub: `Vol.1 限额 ${event.capacityShort}，审核制。申请通道开放时，候补名单会先收到通知。`,
+  primaryCta: { label: '加入候补名单', href: event.applyHref },
   secondaryCta: { label: '先看活动节奏', href: event.timelineHref },
+  fineprint: '审核制 · 录取后支付 ¥399',
+}
+
+export const footer = {
+  tagline: '为真的会 ship 的 builder 准备的 cohort。',
+  links: [
+    { label: '活动节奏', href: '#timeline' },
+    { label: 'FAQ', href: '#faq' },
+    { label: '候补名单', href: event.applyHref },
+  ],
 }

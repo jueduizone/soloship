@@ -2,7 +2,14 @@ import { timeline } from './content'
 
 export function Timeline() {
   return (
-    <section id="timeline" className="ss-section" style={{ background: 'var(--ss-bg)' }}>
+    <section
+      id="timeline"
+      className="ss-section"
+      style={{
+        background: 'var(--ss-bg)',
+        borderTop: '1px solid var(--ss-border-dark-soft)',
+      }}
+    >
       <div className="ss-container">
         <div className="mb-14" style={{ maxWidth: 780 }}>
           <div className="ss-eyebrow mb-6">{timeline.eyebrow}</div>

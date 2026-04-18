@@ -2,7 +2,13 @@ import { whySoloship } from './content'
 
 export function WhySoloShip() {
   return (
-    <section className="ss-section" style={{ background: 'var(--ss-bg)' }}>
+    <section
+      className="ss-section"
+      style={{
+        background: 'var(--ss-bg)',
+        borderTop: '1px solid var(--ss-border-dark-soft)',
+      }}
+    >
       <div className="ss-container">
         <div className="grid gap-14" style={{ gridTemplateColumns: 'minmax(0, 1fr)' }}>
           <div style={{ maxWidth: 780 }}>

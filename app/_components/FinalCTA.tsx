@@ -1,14 +1,15 @@
-import { finalCta, event } from './content'
+import { finalCta } from './content'
 
 export function FinalCTA() {
   return (
     <section
-      id="apply"
+      id="waitlist"
       className="ss-section"
       style={{
         background: 'var(--ss-bg-deep)',
         position: 'relative',
         overflow: 'hidden',
+        borderTop: '1px solid var(--ss-border-dark-soft)',
       }}
     >
       <div
@@ -17,7 +18,7 @@ export function FinalCTA() {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(700px 360px at 80% 0%, var(--ss-accent-glow), transparent 60%)',
+            'radial-gradient(720px 360px at 80% 0%, var(--ss-accent-glow), transparent 60%), radial-gradient(560px 320px at 8% 100%, rgba(255,255,255,0.03), transparent 70%)',
         }}
       />
       <div className="ss-container relative">
@@ -26,29 +27,41 @@ export function FinalCTA() {
           <h2
             className="ss-display"
             style={{
-              fontSize: 'clamp(36px, 5.4vw, 64px)',
+              fontSize: 'clamp(34px, 5.2vw, 60px)',
               letterSpacing: '-0.02em',
+              maxWidth: 'min(20ch, 100%)',
             }}
           >
             {finalCta.headline}
           </h2>
-          <p className="ss-lede mt-6" style={{ maxWidth: 620 }}>
+          <p className="ss-lede mt-6" style={{ maxWidth: 580 }}>
             {finalCta.sub}
           </p>
+
           <div className="flex flex-wrap items-center gap-3 mt-10">
             <a href={finalCta.primaryCta.href} className="ss-btn ss-btn-primary">
               {finalCta.primaryCta.label}
-              <span aria-hidden style={{ fontSize: 16 }}>→</span>
+              <span
+                aria-hidden
+                style={{
+                  display: 'inline-block',
+                  width: 6,
+                  height: 6,
+                  borderRadius: 999,
+                  background: 'var(--ss-accent)',
+                }}
+              />
             </a>
             <a href={finalCta.secondaryCta.href} className="ss-btn ss-btn-ghost">
               {finalCta.secondaryCta.label}
             </a>
           </div>
+
           <p
             className="ss-mono mt-10"
-            style={{ color: 'var(--ss-text-faint)' }}
+            style={{ color: 'var(--ss-text-faint)', fontSize: 11.5 }}
           >
-            审核制 · {event.capacity} · 录取后支付 {event.price}
+            {finalCta.fineprint}
           </p>
         </div>
       </div>
