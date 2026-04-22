@@ -21,7 +21,7 @@ export const nav = {
     { label: '活动节奏', href: '#timeline' },
     { label: 'FAQ', href: '#faq' },
   ],
-  cta: { label: '加入候补名单', href: event.applyHref },
+  cta: { label: '立即申请', href: event.applyHref },
 }
 
 export const hero = {
@@ -35,7 +35,7 @@ export const hero = {
     { label: '名额', value: event.capacity },
     { label: '价格', value: `${event.price} · ${event.priceNote}` },
   ],
-  primaryCta: { label: '加入候补名单', href: event.applyHref },
+  primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
   fineprint: '审核制 · 录取后支付 · 完成 Demo Day 后全额退还 · 申请通道开放时，候补名单优先通知',
 }
@@ -199,7 +199,7 @@ export const finalCta = {
   eyebrow: '下一步',
   headline: '下一个真的 ship 出去的项目，是不是你的？',
   sub: `Vol.1 限额 ${event.capacityShort}，审核制。申请通道开放时，候补名单会先收到通知。`,
-  primaryCta: { label: '加入候补名单', href: event.applyHref },
+  primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '先看活动节奏', href: event.timelineHref },
   fineprint: '审核制 · 录取后支付 ¥399 · 完成 Demo Day 后全额退还',
 }
@@ -209,6 +209,6 @@ export const footer = {
   links: [
     { label: '活动节奏', href: '#timeline' },
     { label: 'FAQ', href: '#faq' },
-    { label: '候补名单', href: event.applyHref },
+    { label: '立即申请', href: event.applyHref },
   ],
 }

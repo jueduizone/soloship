@@ -5,13 +5,13 @@ export function Hero() {
     <section
       id="top"
       className="relative overflow-hidden"
-      style={{ paddingTop: 72, paddingBottom: 80 }}
+      style={{ paddingTop: 48, paddingBottom: 56 }}
     >
       <div className="ss-grid-overlay" />
       <div className="ss-hero-glow" />
 
       <div className="ss-container relative">
-        <div className="flex items-center gap-3 mb-10 flex-wrap">
+        <div className="flex items-center gap-3 mb-6 flex-wrap">
           <span className="ss-eyebrow">{hero.eyebrow}</span>
           <span
             className="ss-mono inline-flex items-center gap-2"
@@ -42,19 +42,19 @@ export function Hero() {
 
         <h1
           className="ss-display"
-          style={{ fontSize: 'clamp(40px, 6.4vw, 88px)', maxWidth: 'min(15ch, 100%)' }}
+          style={{ fontSize: 'clamp(34px, 5.2vw, 72px)', maxWidth: 'min(15ch, 100%)' }}
         >
           {hero.headline}
         </h1>
 
         <p
-          className="ss-lede mt-7"
+          className="ss-lede mt-4"
           style={{ maxWidth: 580, color: 'var(--ss-text)' }}
         >
           {hero.sub}
         </p>
 
-        <div className="ss-accent-rule mt-14 mb-7" />
+        <div className="ss-accent-rule mt-8 mb-5" />
 
         <dl
           className="grid"
@@ -79,7 +79,7 @@ export function Hero() {
           ))}
         </dl>
 
-        <div className="flex flex-wrap items-center gap-3 mt-14">
+        <div className="flex flex-wrap items-center gap-3 mt-8">
           <a href={hero.primaryCta.href} className="ss-btn ss-btn-primary">
             {hero.primaryCta.label}
             <span
@@ -100,7 +100,7 @@ export function Hero() {
         </div>
 
         <div
-          className="ss-mono mt-8"
+          className="ss-mono mt-5"
           style={{ color: 'var(--ss-text-faint)', maxWidth: 600, fontSize: 11.5, lineHeight: 1.6 }}
         >
           {hero.fineprint}
