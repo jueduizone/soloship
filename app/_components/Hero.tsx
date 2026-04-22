@@ -5,7 +5,7 @@ export function Hero() {
     <section
       id="top"
       className="relative overflow-hidden"
-      style={{ paddingTop: 88, paddingBottom: 128 }}
+      style={{ paddingTop: 72, paddingBottom: 80 }}
     >
       <div className="ss-grid-overlay" />
       <div className="ss-hero-glow" />

@@ -5,13 +5,13 @@ export const event = {
   year: '2026',
   duration: '2 周',
   format: '线上 + 异步',
-  capacity: '约 30 人 · 审核制',
-  capacityShort: '30 人',
+  capacity: '约 100 人 · 审核制',
+  capacityShort: '100 人',
   price: '¥399',
-  priceNote: '录取后支付',
+  priceNote: '录取后支付 · 完成后退还',
   status: 'Vol.1 申请通道筹备中',
   statusShort: '即将开放',
-  applyHref: '#waitlist',
+  applyHref: '/apply',
   timelineHref: '#timeline',
 }
 
@@ -37,7 +37,7 @@ export const hero = {
   ],
   primaryCta: { label: '加入候补名单', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
-  fineprint: '审核制 · 录取后支付 · 申请通道开放时，候补名单优先通知',
+  fineprint: '审核制 · 录取后支付 · 完成 Demo Day 后全额退还 · 申请通道开放时，候补名单优先通知',
 }
 
 export const whyNow = {
@@ -110,7 +110,7 @@ export const timeline = {
       when: 'Week 0.5',
       points: [
         '审核申请、发放录取通知',
-        '录取后完成 ¥399 防鸽费',
+        '录取后完成 ¥399 防鸽费（完成 Demo Day 后退还）',
         '目标：cohort 集结，方向确认',
       ],
     },
@@ -170,7 +170,7 @@ export const faq = {
     },
     {
       q: '¥399 什么时候收？',
-      a: '录取之后才收。先申请、再审核，通过了才收款——这样对双方都更干净。',
+      a: '录取之后才收。先申请、再审核，通过了才收款——这样对双方都更干净。¥399 是防鸽费，完成全流程（到达 Demo Day）后全额退还。',
     },
     {
       q: '需要已经有项目吗？',
@@ -201,7 +201,7 @@ export const finalCta = {
   sub: `Vol.1 限额 ${event.capacityShort}，审核制。申请通道开放时，候补名单会先收到通知。`,
   primaryCta: { label: '加入候补名单', href: event.applyHref },
   secondaryCta: { label: '先看活动节奏', href: event.timelineHref },
-  fineprint: '审核制 · 录取后支付 ¥399',
+  fineprint: '审核制 · 录取后支付 ¥399 · 完成 Demo Day 后全额退还',
 }
 
 export const footer = {
