@@ -109,6 +109,23 @@ export function PaymentActions({
   const canNotify = status === 'admitted'
   const canConfirm = status === 'payment_pending' && payment?.status === 'pending'
 
+  const quickConfirm = () => {
+    setError(null)
+    startTransition(async () => {
+      const res = await fetch(`/api/admin/registrations/${registrationId}/payment`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'confirmed' }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(data?.error ?? '操作失败')
+        return
+      }
+      router.refresh()
+    })
+  }
+
   if (!canNotify && !canConfirm && status !== 'paid') {
     return (
       <div style={{ color: 'var(--ss-text-dim)', fontSize: 13 }}>
@@ -220,6 +237,16 @@ export function PaymentActions({
 
       {canConfirm && (
         <>
+          <div className="ss-action-row" style={{ marginBottom: 12 }}>
+            <button
+              type="button"
+              className="ss-btn-action is-primary"
+              onClick={quickConfirm}
+              disabled={pending}
+            >
+              确认付款（→ paid）
+            </button>
+          </div>
           <div className="ss-field">
             <label>应付金额</label>
             <div style={{ color: 'var(--ss-text-strong)' }}>

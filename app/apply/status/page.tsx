@@ -6,6 +6,7 @@ import { getRegistrationByUser } from '@/lib/db/registrations'
 import { getLatestPaymentForRegistration } from '@/lib/db/payments'
 import type { RegistrationStatus } from '@/lib/db/types'
 import { t } from '@/lib/i18n'
+import { PaymentBox } from './PaymentBox'
 
 export const dynamic = 'force-dynamic'
 
@@ -60,6 +61,7 @@ export default async function StatusPage() {
   const payment = ['payment_pending', 'paid'].includes(reg.status)
     ? await getLatestPaymentForRegistration(supabase, reg.id)
     : null
+  const showPaymentBox = reg.status === 'admitted'
 
   return (
     <div className="ss-apply-container">
@@ -89,14 +91,39 @@ export default async function StatusPage() {
           <dd>{new Date(reg.submitted_at).toLocaleString('zh-CN')}</dd>
         </dl>
 
-        {payment && (
+        {showPaymentBox && (
+          <PaymentBox
+            registrationId={reg.id}
+            amountCents={event.price_cents}
+            currency={event.currency}
+          />
+        )}
+
+        {reg.status === 'payment_pending' && (
+          <div style={{ marginTop: 24 }}>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>付款</div>
+            <div className="ss-callout" style={{ marginTop: 0 }}>
+              我们已记录你的付款，请等待后台确认。确认后状态会变为「已入营」。
+            </div>
+            {payment && (
+              <dl className="ss-kv">
+                <dt>金额</dt>
+                <dd>¥{(payment.amount_cents / 100).toFixed(2)} {payment.currency}</dd>
+                <dt>状态</dt>
+                <dd>等待后台确认</dd>
+              </dl>
+            )}
+          </div>
+        )}
+
+        {reg.status === 'paid' && payment && (
           <div style={{ marginTop: 24 }}>
             <div className="ss-eyebrow" style={{ marginBottom: 8 }}>付款</div>
             <dl className="ss-kv">
               <dt>金额</dt>
               <dd>¥{(payment.amount_cents / 100).toFixed(2)} {payment.currency}</dd>
               <dt>状态</dt>
-              <dd>{payment.status === 'confirmed' ? '已确认到账' : '待主办方确认'}</dd>
+              <dd>已确认到账</dd>
               {payment.confirmed_at && (
                 <>
                   <dt>确认时间</dt>
