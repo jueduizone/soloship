@@ -9,7 +9,7 @@ export function FinalCTA() {
         background: 'var(--ss-bg-deep)',
         position: 'relative',
         overflow: 'hidden',
-        borderTop: '1px solid var(--ss-border-dark-soft)',
+        borderTop: '1px solid var(--ss-border-dark)',
       }}
     >
       <div
@@ -27,7 +27,7 @@ export function FinalCTA() {
           <h2
             className="ss-display"
             style={{
-              fontSize: 'clamp(34px, 5.2vw, 60px)',
+              fontSize: 'clamp(28px, 3.5vw, 48px)',
               letterSpacing: '-0.02em',
               maxWidth: 'min(20ch, 100%)',
             }}

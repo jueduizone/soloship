@@ -73,7 +73,7 @@ export function Footer() {
             className="ss-mono"
             style={{ color: 'var(--ss-text-faint)', fontSize: 11 }}
           >
-            © {new Date().getFullYear()} {event.name}
+            © 2026 {event.name}
           </span>
           <span
             className="ss-mono"

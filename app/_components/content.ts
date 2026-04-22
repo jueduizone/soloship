@@ -9,7 +9,7 @@ export const event = {
   capacityShort: '100 人',
   price: '¥399',
   priceNote: '录取后支付 · 完成后退还',
-  status: 'Vol.1 申请通道筹备中',
+  status: 'Vol.1 申请通道现已开启',
   statusShort: '即将开放',
   applyHref: '/apply',
   timelineHref: '#timeline',
@@ -200,7 +200,7 @@ export const finalCta = {
   headline: '下一个真的 ship 出去的项目，是不是你的？',
   sub: `Vol.1 限额 ${event.capacityShort}，审核制。申请通道开放时，候补名单会先收到通知。`,
   primaryCta: { label: '立即申请', href: event.applyHref },
-  secondaryCta: { label: '先看活动节奏', href: event.timelineHref },
+  secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
   fineprint: '审核制 · 录取后支付 ¥399 · 完成 Demo Day 后全额退还',
 }
 

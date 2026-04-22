@@ -185,7 +185,7 @@
   padding: 28px;
   transition: border-color 180ms ease, transform 180ms ease;
 }
-.ss-card:hover { border-color: #333847; }
+.ss-card:hover { border-color: var(--ss-accent); }
 
 .ss-card.is-light {
   background: var(--ss-light-surface);
