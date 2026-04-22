@@ -2,12 +2,12 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import '../forms.css'
 import './admin.css'
-import { requireAdmin } from '@/lib/auth/require-admin'
+import { requireOrganizer } from '@/lib/auth/require-organizer'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const user = await requireAdmin()
+  const user = await requireOrganizer()
   return (
     <div className="ss-admin-shell">
       <header className="ss-admin-topbar">

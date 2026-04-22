@@ -1,6 +1,12 @@
 import { event, nav } from './content'
+import { createClient } from '@/lib/supabase/server'
+import { isOrganizerUser } from '@/lib/auth/require-organizer'
 
-export function Nav() {
+export async function Nav() {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const showAdmin = user ? isOrganizerUser(user) : false
+
   return (
     <nav
       className="sticky top-0 z-20"
@@ -67,6 +73,22 @@ export function Nav() {
               {l.label}
             </a>
           ))}
+
+          {showAdmin && (
+            <a
+              href="/admin/registrations"
+              className="hidden md:inline-flex items-center"
+              style={{
+                color: 'var(--ss-accent-hi)',
+                fontSize: 13.5,
+                fontWeight: 500,
+                letterSpacing: '-0.005em',
+                padding: '6px 4px',
+              }}
+            >
+              后台
+            </a>
+          )}
 
           <a
             href={nav.cta.href}
