@@ -51,6 +51,7 @@ export interface RegistrationRow {
   name: string
   email: string
   city: string | null
+  contact: string | null
   bio: string | null
   build_direction: string | null
   project_idea: string | null

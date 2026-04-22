@@ -11,6 +11,7 @@ export interface RegistrationInput {
   name: string
   email: string
   city?: string | null
+  contact?: string | null
   bio?: string | null
   build_direction?: string | null
   project_idea?: string | null
@@ -50,6 +51,7 @@ export async function upsertRegistration(
         user_id: input.user_id ?? existing.user_id,
         name: input.name,
         city: input.city ?? null,
+        contact: input.contact ?? null,
         bio: input.bio ?? null,
         build_direction: input.build_direction ?? null,
         project_idea: input.project_idea ?? null,
@@ -71,6 +73,7 @@ export async function upsertRegistration(
       name: input.name,
       email: input.email,
       city: input.city ?? null,
+      contact: input.contact ?? null,
       bio: input.bio ?? null,
       build_direction: input.build_direction ?? null,
       project_idea: input.project_idea ?? null,

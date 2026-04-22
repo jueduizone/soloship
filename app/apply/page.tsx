@@ -49,6 +49,7 @@ export default async function ApplyPage() {
           initial={existing ? {
             name: existing.name,
             city: existing.city ?? '',
+            contact: existing.contact ?? '',
             bio: existing.bio ?? '',
             build_direction: existing.build_direction ?? '',
             project_idea: existing.project_idea ?? '',
@@ -58,6 +59,7 @@ export default async function ApplyPage() {
               ?? (user.user_metadata as Record<string, string>)?.name
               ?? '',
             city: '',
+            contact: '',
             bio: '',
             build_direction: '',
             project_idea: '',

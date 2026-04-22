@@ -7,6 +7,7 @@ import { t } from '@/lib/i18n'
 type FormState = {
   name: string
   city: string
+  contact: string
   bio: string
   build_direction: string
   project_idea: string
@@ -50,6 +51,7 @@ export function ApplyForm({
           email,
           name: form.name,
           city: form.city || null,
+          contact: form.contact || null,
           bio: form.bio || null,
           build_direction: form.build_direction || null,
           project_idea: form.project_idea || null,
@@ -93,8 +95,21 @@ export function ApplyForm({
         <input
           id="city"
           className="ss-input"
+          required
           value={form.city}
           onChange={e => set('city', e.target.value)}
+        />
+      </div>
+
+      <div className="ss-field">
+        <label htmlFor="contact">{t.apply.form.contact}</label>
+        <input
+          id="contact"
+          className="ss-input"
+          required
+          value={form.contact}
+          onChange={e => set('contact', e.target.value)}
+          placeholder="微信号 / 手机号"
         />
       </div>
 
@@ -103,9 +118,10 @@ export function ApplyForm({
         <input
           id="bio"
           className="ss-input"
+          required
           value={form.bio}
           onChange={e => set('bio', e.target.value)}
-          placeholder="比如：独立开发者，做过 XX 工具"
+          placeholder="一句话介绍自己，比如：做了 3 年 iOS 开发，现在想独立 ship"
         />
       </div>
 
@@ -125,7 +141,6 @@ export function ApplyForm({
         <textarea
           id="idea"
           className="ss-textarea"
-          required
           value={form.project_idea}
           onChange={e => set('project_idea', e.target.value)}
           placeholder="用一两段话讲清楚你想做什么、目标用户是谁、你觉得为什么值得做"

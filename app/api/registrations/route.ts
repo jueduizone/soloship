@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
       name,
       email,
       city: typeof body.city === 'string' ? body.city : null,
+      contact: typeof body.contact === 'string' ? body.contact : null,
       bio: typeof body.bio === 'string' ? body.bio : null,
       build_direction:
         typeof body.build_direction === 'string' ? body.build_direction : null,
