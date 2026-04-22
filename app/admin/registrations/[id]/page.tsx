@@ -68,9 +68,10 @@ export default async function RegistrationDetailPage({
           <dl className="ss-kv">
             <dt>姓名</dt><dd>{reg.name}</dd>
             <dt>邮箱</dt><dd>{reg.email}</dd>
-            {reg.city && (<><dt>城市</dt><dd>{reg.city}</dd></>)}
-            {reg.bio && (<><dt>自我介绍</dt><dd>{reg.bio}</dd></>)}
-            {reg.build_direction && (<><dt>方向</dt><dd>{reg.build_direction}</dd></>)}
+            <dt>城市</dt><dd>{reg.city ?? '—'}</dd>
+            <dt>联系方式</dt><dd>{reg.contact ?? '—'}</dd>
+            <dt>自我介绍</dt><dd>{reg.bio ?? '—'}</dd>
+            <dt>方向</dt><dd>{reg.build_direction ?? '—'}</dd>
             <dt>提交时间</dt>
             <dd>{new Date(reg.submitted_at).toLocaleString('zh-CN')}</dd>
           </dl>

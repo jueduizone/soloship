@@ -19,12 +19,12 @@ const STATUS_LABEL: Record<RegistrationStatus, string> = {
 
 const STATUS_FILTERS: Array<{ key: string; label: string; values?: RegistrationStatus[] }> = [
   { key: 'all', label: '全部' },
-  { key: 'pending', label: '待处理', values: ['submitted', 'reviewing'] },
+  { key: 'pending', label: '待审核', values: ['submitted', 'reviewing'] },
   { key: 'admitted', label: '已录取', values: ['admitted'] },
   { key: 'payment_pending', label: '待付款', values: ['payment_pending'] },
-  { key: 'paid', label: '已入营', values: ['paid'] },
+  { key: 'paid', label: '已付款', values: ['paid'] },
   { key: 'waitlisted', label: '候补', values: ['waitlisted'] },
-  { key: 'rejected', label: '未录取', values: ['rejected'] },
+  { key: 'rejected', label: '已拒绝', values: ['rejected'] },
 ]
 
 const PAGE_SIZE = 50
@@ -97,9 +97,10 @@ export default async function RegistrationsListPage({
         <table className="ss-table">
           <thead>
             <tr>
-              <th>姓名 / 邮箱</th>
-              <th>方向</th>
-              <th>项目</th>
+              <th>姓名</th>
+              <th>邮箱</th>
+              <th>城市</th>
+              <th>联系方式</th>
               <th>状态</th>
               <th>提交时间</th>
             </tr>
@@ -110,17 +111,11 @@ export default async function RegistrationsListPage({
                 <td>
                   <Link href={`/admin/registrations/${r.id}`}>
                     <div style={{ color: 'var(--ss-text-strong)', fontWeight: 500 }}>{r.name}</div>
-                    <div style={{ color: 'var(--ss-text-faint)', fontSize: 12 }}>{r.email}</div>
                   </Link>
                 </td>
-                <td>{r.build_direction ?? '—'}</td>
-                <td style={{ maxWidth: 360, color: 'var(--ss-text-dim)' }}>
-                  {r.project_idea
-                    ? r.project_idea.length > 80
-                      ? r.project_idea.slice(0, 80) + '…'
-                      : r.project_idea
-                    : '—'}
-                </td>
+                <td style={{ color: 'var(--ss-text-dim)', fontSize: 13 }}>{r.email}</td>
+                <td style={{ color: 'var(--ss-text-dim)', fontSize: 13 }}>{r.city ?? '—'}</td>
+                <td style={{ color: 'var(--ss-text-dim)', fontSize: 13 }}>{r.contact ?? '—'}</td>
                 <td>
                   <span className="ss-status-pill" data-kind={r.status}>
                     {STATUS_LABEL[r.status]}
