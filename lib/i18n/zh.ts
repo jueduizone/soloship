@@ -20,7 +20,15 @@ export const zh = {
         body: '申请通道需要账号来保存你的申请进度与录取结果。没有账号？下方选择 Google、GitHub 或邮箱即可快速注册，登录后会自动回到申请表。',
       },
       errors: {
+        rateLimit: '邮件发送频率过高，请稍后再试（约 60 秒后重试）。',
         rateLimitOAuthHint: '提示：你也可以直接使用上方的 Google 或 GitHub 登录，无需邮件验证即可进入。',
+        invalidCredentials: '邮箱或密码不正确。',
+        userAlreadyRegistered: '该邮箱已注册，请直接登录。',
+        weakPassword: '密码强度不足，请使用至少 6 位，包含字母和数字。',
+        invalidEmail: '请输入有效的邮箱地址。',
+        emailNotConfirmed: '邮箱尚未验证，请先查收验证邮件并完成确认。',
+        network: '网络异常，请检查连接后重试。',
+        generic: '登录失败，请稍后再试。',
       },
     },
     verify: {

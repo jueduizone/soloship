@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { t } from '@/lib/i18n'
-import { mapAuthError } from '@/lib/i18n/auth-errors'
+import { mapAuthError, type MappedAuthError } from '@/lib/i18n/auth-errors'
 
 type Mode = 'signin' | 'signup'
 
@@ -18,7 +18,7 @@ function LoginForm() {
   const [mode, setMode] = useState<Mode>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<MappedAuthError | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
@@ -60,12 +60,12 @@ function LoginForm() {
         // data.user 带空 identities 数组（且无 session）。必须手动识别，
         // 否则会误导用户「注册成功，请查邮件」。
         if (!data?.user) {
-          setError(mapAuthError(new Error('signup failed')))
+          setError({ message: t.auth.login.signUpFailedGeneric, suggestOAuth: false })
           return
         }
         const identities = data.user.identities ?? []
         if (identities.length === 0 && !data.session) {
-          setError(mapAuthError(new Error('user already registered')))
+          setError({ message: t.auth.errors.userAlreadyRegistered, suggestOAuth: false })
           return
         }
         setNotice(t.auth.login.verifyHint)
@@ -85,7 +85,32 @@ function LoginForm() {
         </div>
       )}
 
-      {error && <div className="ss-auth-error">{error}</div>}
+      {error && (
+        <div className="ss-auth-error" role="alert">
+          <div>{error.message}</div>
+          {error.suggestOAuth && (
+            <div className="ss-auth-error-hint">
+              {t.auth.login.errors.rateLimitOAuthHint}
+              <div className="ss-auth-error-actions">
+                <button
+                  type="button"
+                  className="ss-btn ss-btn-ghost ss-btn-sm"
+                  onClick={() => handleOAuth('google')}
+                >
+                  <GoogleMark /> {t.auth.login.google}
+                </button>
+                <button
+                  type="button"
+                  className="ss-btn ss-btn-ghost ss-btn-sm"
+                  onClick={() => handleOAuth('github')}
+                >
+                  <GitHubMark /> {t.auth.login.github}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {notice && <div className="ss-auth-success">{notice}</div>}
 
       <div className="ss-oauth-row">

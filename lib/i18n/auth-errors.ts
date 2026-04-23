@@ -2,47 +2,74 @@
 // 未识别的错误落到 errors.unknown，避免英文直接露出到中文界面。
 import { t } from './index'
 
-export function mapAuthError(err: unknown): string {
-  const raw =
-    (err && typeof err === 'object' && 'message' in err && typeof (err as { message: unknown }).message === 'string'
-      ? (err as { message: string }).message
-      : typeof err === 'string'
-        ? err
-        : '') || ''
+export interface MappedAuthError {
+  /** 中文错误提示 */
+  message: string
+  /** 是否建议用户改用 OAuth（限流等场景） */
+  suggestOAuth: boolean
+}
+
+function extractMessage(err: unknown): string {
+  if (err && typeof err === 'object' && 'message' in err) {
+    const m = (err as { message: unknown }).message
+    if (typeof m === 'string') return m
+  }
+  if (typeof err === 'string') return err
+  return ''
+}
+function extractStatus(err: unknown): number {
+  if (err && typeof err === 'object' && 'status' in err) {
+    const s = (err as { status: unknown }).status
+    if (typeof s === 'number') return s
+  }
+  return 0
+}
+function extractCode(err: unknown): string {
+  if (err && typeof err === 'object' && 'code' in err) {
+    const c = (err as { code: unknown }).code
+    if (typeof c === 'string') return c.toLowerCase()
+  }
+  return ''
+}
+
+export function mapAuthError(err: unknown): MappedAuthError {
+  const raw = extractMessage(err)
   const msg = raw.toLowerCase()
+  const code = extractCode(err)
+  const status = extractStatus(err)
   const E = t.auth.errors
 
-  // 邮箱/密码错误
   if (msg.includes('invalid login credentials') || msg.includes('invalid email or password')) {
-    return E.invalidCredentials
+    return { message: E.invalidCredentials, suggestOAuth: false }
   }
-  // 邮箱格式错误： "Email address xxx is invalid"
   if (msg.includes('email') && msg.includes('invalid')) {
-    return E.invalidEmail
+    return { message: E.invalidEmail, suggestOAuth: false }
   }
-  // 已注册
   if (msg.includes('already registered') || msg.includes('user already') || msg.includes('already exists')) {
-    return E.userAlreadyRegistered
+    return { message: E.userAlreadyRegistered, suggestOAuth: false }
   }
-  // 弱密码
   if (msg.includes('password') && (msg.includes('short') || msg.includes('at least') || msg.includes('weak'))) {
-    return E.weakPassword
+    return { message: E.weakPassword, suggestOAuth: false }
   }
-  // 邮箱未验证
   if (msg.includes('email not confirmed') || msg.includes('not confirmed')) {
-    return E.emailNotConfirmed
+    return { message: E.emailNotConfirmed, suggestOAuth: false }
   }
-  // 限流
-  if (msg.includes('rate limit') || msg.includes('too many') || msg.includes('for security purposes')) {
-    return E.rateLimited
+  // Supabase 邮件限流：status 429 或 code over_email_send_rate_limit；消息含 rate limit / for security purposes
+  if (
+    status === 429 ||
+    code === 'over_email_send_rate_limit' ||
+    code === 'over_request_rate_limit' ||
+    msg.includes('rate limit') ||
+    msg.includes('too many') ||
+    msg.includes('for security purposes')
+  ) {
+    return { message: E.rateLimited, suggestOAuth: true }
   }
-  // 注册关闭
   if (msg.includes('signups not allowed') || msg.includes('signup is disabled') || msg.includes('signups disabled')) {
-    return E.signupDisabled
+    return { message: E.signupDisabled, suggestOAuth: false }
   }
-  // OAuth 类
   if (msg.includes('oauth') || msg.includes('provider')) {
-    return E.oauthFailed
+    return { message: E.oauthFailed, suggestOAuth: false }
   }
-  return E.unknown
+  return { message: E.unknown, suggestOAuth: false }
 }
