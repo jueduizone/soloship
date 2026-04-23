@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useState, useTransition } from 'react'
+import { Suspense, useEffect, useState, useTransition } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -13,6 +13,7 @@ function LoginForm() {
   const router = useRouter()
   const search = useSearchParams()
   const next = search.get('next') ?? '/apply'
+  const callbackError = search.get('error')
   const supabase = createClient()
 
   const [mode, setMode] = useState<Mode>('signin')
@@ -21,6 +22,15 @@ function LoginForm() {
   const [error, setError] = useState<MappedAuthError | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+
+  // OAuth/email callback pushes us back with ?error=<english>. Translate it
+  // through the same mapper so users never see raw Supabase English strings
+  // like "Invalid login credentials" / "Email address ... is invalid".
+  useEffect(() => {
+    if (callbackError) {
+      setError(mapAuthError({ message: callbackError }))
+    }
+  }, [callbackError])
 
   const originRedirect = () => {
     const base = typeof window !== 'undefined' ? window.location.origin : ''
@@ -57,15 +67,35 @@ function LoginForm() {
             options: { emailRedirectTo: originRedirect() },
           })
           if (error) { setError(mapAuthError(error)); return }
-          // Supabase 的「邮箱已注册」防枚举行为：不会返回 error，而是返回
-          // data.user 带空 identities 数组（且无 session）。必须手动识别，
-          // 否则会误导用户「注册成功，请查邮件」。
           if (!data?.user) {
             setError({ message: t.auth.login.signUpFailedGeneric, suggestOAuth: false })
             return
           }
-          const identities = data.user.identities ?? []
-          if (identities.length === 0 && !data.session) {
+          // Only redirect to the verify page when we have POSITIVE proof the
+          // signup actually went through. Supabase's anti-enumeration masks
+          // already-registered emails by returning a fake user with no
+          // session, no confirmation_sent_at, and (in some configurations)
+          // no identities. Checking for any single signal (e.g. identities
+          // alone) is fragile — different Supabase versions surface the
+          // fake response differently, which caused OPE-61.
+          const user = data.user as typeof data.user & {
+            confirmation_sent_at?: string | null
+            email_confirmed_at?: string | null
+          }
+          const hasSession = !!data.session
+          const confirmationSent = !!user.confirmation_sent_at
+          const hasIdentity = (user.identities ?? []).length > 0
+          const autoConfirmed = !!user.email_confirmed_at
+
+          if (!hasSession && !confirmationSent && !autoConfirmed && !hasIdentity) {
+            setError({ message: t.auth.errors.userAlreadyRegistered, suggestOAuth: false })
+            return
+          }
+          // If no confirmation email was dispatched and there's no session,
+          // we're likely hitting a partial/fake response — don't claim
+          // success. This also covers the case where Supabase's SDK swallows
+          // a 400 into a data shape without throwing.
+          if (!hasSession && !confirmationSent && !autoConfirmed) {
             setError({ message: t.auth.errors.userAlreadyRegistered, suggestOAuth: false })
             return
           }

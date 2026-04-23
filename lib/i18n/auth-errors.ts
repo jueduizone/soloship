@@ -41,9 +41,13 @@ export function mapAuthError(err: unknown): MappedAuthError {
 
   if (
     code === 'invalid_credentials' ||
+    code === 'invalid_grant' ||
     msg.includes('invalid login credentials') ||
     msg.includes('invalid email or password') ||
-    msg.includes('invalid credentials')
+    msg.includes('invalid credentials') ||
+    msg.includes('invalid_credentials') ||
+    msg.includes('wrong password') ||
+    msg.includes('incorrect password')
   ) {
     return { message: E.invalidCredentials, suggestOAuth: false }
   }
@@ -55,7 +59,15 @@ export function mapAuthError(err: unknown): MappedAuthError {
   if (
     code === 'email_address_invalid' ||
     code === 'email_address_not_authorized' ||
-    (msg.includes('email') && (msg.includes('is invalid') || msg.includes('not authorized') || msg.includes('not allowed')))
+    code === 'validation_failed' ||
+    (msg.includes('email') && (
+      msg.includes('is invalid') ||
+      msg.includes('not authorized') ||
+      msg.includes('not allowed') ||
+      msg.includes('invalid format') ||
+      msg.includes('address is invalid') ||
+      /email.*invalid/.test(msg)
+    ))
   ) {
     return { message: E.emailAddressUnsupported, suggestOAuth: true }
   }
