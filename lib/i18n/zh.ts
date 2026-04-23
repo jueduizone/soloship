@@ -38,6 +38,7 @@ export const zh = {
     errors: {
       invalidCredentials: '邮箱或密码错误，请重试。',
       invalidEmail: '邮箱格式不正确，请检查后重试。',
+      emailAddressUnsupported: '该邮箱地址暂不支持（可能是域名限制或无法接收验证邮件），请更换邮箱，或直接使用 Google / GitHub 登录。',
       userAlreadyRegistered: '该邮箱已注册，请直接登录。',
       weakPassword: '密码至少需要 6 位。',
       emailNotConfirmed: '邮箱尚未验证，请先点击验证邮件中的链接。',

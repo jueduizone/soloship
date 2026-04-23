@@ -47,6 +47,18 @@ export function mapAuthError(err: unknown): MappedAuthError {
   ) {
     return { message: E.invalidCredentials, suggestOAuth: false }
   }
+  // Supabase 有两种"邮箱相关"错误：
+  // 1) email_address_invalid / 消息含 "is invalid" — 这是 Supabase 拒绝了该邮箱地址
+  //    （例如 @example.com 等占位域名、或被判定为无效的地址），并非语法问题。
+  //    前端 <input type="email" required> 已拦截语法级错误，所以走到这里基本都是地址拒绝。
+  // 2) 真·格式错误（理论上几乎不会到这里）— 走通用 invalidEmail。
+  if (
+    code === 'email_address_invalid' ||
+    code === 'email_address_not_authorized' ||
+    (msg.includes('email') && (msg.includes('is invalid') || msg.includes('not authorized') || msg.includes('not allowed')))
+  ) {
+    return { message: E.emailAddressUnsupported, suggestOAuth: true }
+  }
   if (msg.includes('email') && msg.includes('invalid')) {
     return { message: E.invalidEmail, suggestOAuth: false }
   }
