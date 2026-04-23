@@ -168,3 +168,33 @@
 }
 .ss-auth-foot a { color: var(--ss-text-dim); text-decoration: underline; text-underline-offset: 3px; }
 .ss-auth-foot a:hover { color: var(--ss-text-strong); }
+
+/* OPE-83: 注册成功后 /auth/verify 的更显眼反馈 */
+.ss-auth-verify-banner {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px 14px;
+}
+.ss-auth-verify-email {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  padding: 10px 12px;
+  background: var(--ss-bg-alt);
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 10px;
+  margin: 12px 0 14px;
+  font-size: 13px;
+}
+.ss-auth-verify-label { color: var(--ss-text-faint); }
+.ss-auth-verify-addr { color: var(--ss-text-strong); font-weight: 600; word-break: break-all; }
+.ss-auth-verify-steps { margin: 14px 0 6px; font-size: 13px; line-height: 1.65; color: var(--ss-text-dim); }
+.ss-auth-verify-steps-title { color: var(--ss-text-strong); font-weight: 600; margin-bottom: 6px; }
+.ss-auth-verify-steps ol { margin: 0; padding-left: 20px; }
+.ss-auth-verify-steps li { margin-bottom: 2px; }
+.ss-auth-verify-help { margin-top: 14px; font-size: 12.5px; color: var(--ss-text-dim); }
+.ss-auth-verify-help summary { cursor: pointer; color: var(--ss-text-dim); padding: 4px 0; }
+.ss-auth-verify-help summary:hover { color: var(--ss-text-strong); }
+.ss-auth-verify-help-body { padding: 8px 0 4px; line-height: 1.6; color: var(--ss-text-faint); }

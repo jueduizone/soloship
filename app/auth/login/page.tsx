@@ -69,7 +69,9 @@ function LoginForm() {
             setError({ message: t.auth.errors.userAlreadyRegistered, suggestOAuth: false })
             return
           }
-          setNotice(t.auth.login.verifyHint)
+          // 注册成功：跳转到 /auth/verify 显眼落地页，避免用户停在原表单
+          // 上以为没反应（OPE-83）。邮箱通过 query 透传用于提示。
+          router.push(`/auth/verify?email=${encodeURIComponent(email)}`)
         } catch (err) {
           setError(mapAuthError(err))
         }

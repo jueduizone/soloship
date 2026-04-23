@@ -32,8 +32,16 @@ export const zh = {
       },
     },
     verify: {
-      title: '请查收验证邮件',
+      title: '验证邮件已发送',
       body: '验证链接已发送到你的邮箱。点击邮件中的链接后，会自动跳回这里。',
+      sentTo: '已发送至：',
+      nextSteps: '接下来请：',
+      step1: '打开邮箱（别忘了看垃圾邮件 / 推广箱）',
+      step2: '点击邮件里的「确认邮箱」链接',
+      step3: '页面会自动跳回 SoloShip 并登录完成',
+      noEmail: '没收到邮件？',
+      noEmailHint: '邮件一般 1–2 分钟内送达。如仍未收到，请检查垃圾箱，或返回登录页改用 Google / GitHub 继续。',
+      backToLogin: '返回登录页',
     },
     errors: {
       invalidCredentials: '邮箱或密码错误，请重试。',
