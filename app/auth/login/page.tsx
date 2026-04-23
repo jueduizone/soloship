@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { t } from '@/lib/i18n'
+import { mapAuthError } from '@/lib/i18n/auth-errors'
 
 type Mode = 'signin' | 'signup'
 
@@ -35,7 +36,7 @@ function LoginForm() {
       provider,
       options: { redirectTo: originRedirect() },
     })
-    if (error) setError(error.message)
+    if (error) setError(mapAuthError(error))
   }
 
   const handleEmail = async (e: React.FormEvent) => {
@@ -45,16 +46,28 @@ function LoginForm() {
     startTransition(async () => {
       if (mode === 'signin') {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
-        if (error) { setError(error.message); return }
+        if (error) { setError(mapAuthError(error)); return }
         router.push(next)
         router.refresh()
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: { emailRedirectTo: originRedirect() },
         })
-        if (error) { setError(error.message); return }
+        if (error) { setError(mapAuthError(error)); return }
+        // Supabase 的「邮箱已注册」防枚举行为：不会返回 error，而是返回
+        // data.user 带空 identities 数组（且无 session）。必须手动识别，
+        // 否则会误导用户「注册成功，请查邮件」。
+        if (!data?.user) {
+          setError(mapAuthError(new Error('signup failed')))
+          return
+        }
+        const identities = data.user.identities ?? []
+        if (identities.length === 0 && !data.session) {
+          setError(mapAuthError(new Error('user already registered')))
+          return
+        }
         setNotice(t.auth.login.verifyHint)
       }
     })
@@ -64,6 +77,13 @@ function LoginForm() {
     <div className="ss-auth-card">
       <div className="ss-auth-title">{t.auth.login.title}</div>
       <div className="ss-auth-sub">{t.auth.login.subtitle}</div>
+
+      {next.startsWith('/apply') && (
+        <div className="ss-auth-context">
+          <div className="ss-auth-context-title">{t.auth.login.applyNotice.title}</div>
+          <div className="ss-auth-context-body">{t.auth.login.applyNotice.body}</div>
+        </div>
+      )}
 
       {error && <div className="ss-auth-error">{error}</div>}
       {notice && <div className="ss-auth-success">{notice}</div>}
