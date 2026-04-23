@@ -39,7 +39,12 @@ export function mapAuthError(err: unknown): MappedAuthError {
   const status = extractStatus(err)
   const E = t.auth.errors
 
-  if (msg.includes('invalid login credentials') || msg.includes('invalid email or password')) {
+  if (
+    code === 'invalid_credentials' ||
+    msg.includes('invalid login credentials') ||
+    msg.includes('invalid email or password') ||
+    msg.includes('invalid credentials')
+  ) {
     return { message: E.invalidCredentials, suggestOAuth: false }
   }
   if (msg.includes('email') && msg.includes('invalid')) {

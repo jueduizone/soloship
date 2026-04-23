@@ -41,7 +41,7 @@ export const zh = {
       userAlreadyRegistered: '该邮箱已注册，请直接登录。',
       weakPassword: '密码至少需要 6 位。',
       emailNotConfirmed: '邮箱尚未验证，请先点击验证邮件中的链接。',
-      rateLimited: '操作过于频繁，请稍后再试。',
+      rateLimited: '验证邮件发送过于频繁，请稍等约 60 秒后再试。',
       signupDisabled: '当前暂不开放注册。',
       oauthFailed: '第三方登录失败，请稍后再试。',
       unknown: '登录出错，请稍后再试。',

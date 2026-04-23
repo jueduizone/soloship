@@ -50,25 +50,29 @@ function LoginForm() {
         router.push(next)
         router.refresh()
       } else {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: originRedirect() },
-        })
-        if (error) { setError(mapAuthError(error)); return }
-        // Supabase 的「邮箱已注册」防枚举行为：不会返回 error，而是返回
-        // data.user 带空 identities 数组（且无 session）。必须手动识别，
-        // 否则会误导用户「注册成功，请查邮件」。
-        if (!data?.user) {
-          setError({ message: t.auth.login.signUpFailedGeneric, suggestOAuth: false })
-          return
+        try {
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: { emailRedirectTo: originRedirect() },
+          })
+          if (error) { setError(mapAuthError(error)); return }
+          // Supabase 的「邮箱已注册」防枚举行为：不会返回 error，而是返回
+          // data.user 带空 identities 数组（且无 session）。必须手动识别，
+          // 否则会误导用户「注册成功，请查邮件」。
+          if (!data?.user) {
+            setError({ message: t.auth.login.signUpFailedGeneric, suggestOAuth: false })
+            return
+          }
+          const identities = data.user.identities ?? []
+          if (identities.length === 0 && !data.session) {
+            setError({ message: t.auth.errors.userAlreadyRegistered, suggestOAuth: false })
+            return
+          }
+          setNotice(t.auth.login.verifyHint)
+        } catch (err) {
+          setError(mapAuthError(err))
         }
-        const identities = data.user.identities ?? []
-        if (identities.length === 0 && !data.session) {
-          setError({ message: t.auth.errors.userAlreadyRegistered, suggestOAuth: false })
-          return
-        }
-        setNotice(t.auth.login.verifyHint)
       }
     })
   }
