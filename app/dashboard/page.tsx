@@ -11,6 +11,6 @@ export const dynamic = 'force-dynamic'
 export default async function DashboardRedirect() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login?next=/profile')
+  if (!user) redirect('/auth/login?next=/dashboard')
   redirect('/profile')
 }
