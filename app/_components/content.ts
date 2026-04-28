@@ -1,14 +1,14 @@
 export const event = {
   name: 'SoloShip',
   volume: 'Vol.1',
-  tagline: 'Global AI Builders',
+  tagline: 'AI OPC 共学营',
   year: '2026',
-  duration: '2 周',
-  format: '线上 + 异步',
-  capacity: '约 100 人 · 审核制',
-  capacityShort: '100 人',
-  price: '¥399',
-  priceNote: '录取后支付 · 完成后退还',
+  duration: '5.23 – 6.7',
+  format: '线下开营 + 线上共学 + 线下 Demo Day',
+  capacity: '80 人 · 40 支队伍 · 审核制',
+  capacityShort: '80 人',
+  price: '¥499',
+  priceNote: '其中 ¥399 完成任务后退还',
   status: 'Vol.1 申请通道现已开启',
   statusShort: '即将开放',
   applyHref: '/apply',
@@ -19,6 +19,8 @@ export const nav = {
   links: [
     { label: '为什么', href: '#why' },
     { label: '活动节奏', href: '#timeline' },
+    { label: '嘉宾', href: '#mentors' },
+    { label: '合作伙伴', href: '#partners' },
     { label: 'FAQ', href: '#faq' },
   ],
   cta: { label: '立即申请', href: event.applyHref },
@@ -27,8 +29,8 @@ export const nav = {
 export const hero = {
   eyebrow: `${event.volume} · ${event.year} · ${event.tagline}`,
   status: event.status,
-  headline: '两周，把手里的 idea 做成一个能上线的全球化产品。',
-  sub: '面向独立 builder 的两周 shipping sprint——带 deadline、带同伴、带 Demo Day。',
+  headline: '两周，把手里的 idea 做成一个能上线、能收款的全球化 AI 产品。',
+  sub: '1 天线下开营 + 2 周线上共学 + 1 天线下 Demo Day。给 AI 时代的 OPC 一个带 deadline、带同伴、带真实反馈的 shipping sprint。',
   meta: [
     { label: '周期', value: event.duration },
     { label: '形式', value: event.format },
@@ -37,7 +39,7 @@ export const hero = {
   ],
   primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
-  fineprint: '审核制 · 录取后支付 · 完成 Demo Day 后全额退还 · 申请通道开放时，候补名单优先通知',
+  fineprint: '审核制 · 录取后支付 ¥499 · 其中 ¥399 完成任务后退还 · 申请通道开放时，候补名单优先通知',
 }
 
 export const whyNow = {
@@ -97,41 +99,41 @@ export const timeline = {
     {
       phase: '01',
       name: '招募期',
-      when: 'Week 0',
+      when: '4.23 – 5.16',
       points: [
-        '开放申请通道',
+        '开放线上招募，预计招募 80 人 / 40 支队伍',
         '提交 idea 与 build direction',
-        '目标：筛出真正会 ship 的 cohort',
+        '看重 OPC、全球化与商业落地潜力',
       ],
     },
     {
       phase: '02',
       name: '录取期',
-      when: 'Week 0.5',
+      when: '5.18 – 5.22',
       points: [
         '审核申请、发放录取通知',
-        '录取后完成 ¥399 防鸽费（完成 Demo Day 后退还）',
+        '录取后完成 ¥499 门票，其中 ¥399 完成任务后退还',
         '目标：cohort 集结，方向确认',
       ],
     },
     {
       phase: '03',
-      name: '共学期',
-      when: 'Week 1 – 2',
+      name: '开营 + 线上共学',
+      when: '5.23 – 6.6',
       points: [
-        '每周固定节奏会 + 异步 sprint',
-        '出海 / 支付 / 增长关卡分享',
-        '目标：idea 推到 demo 可见',
+        '5.23 上海线下开营，干货分享、圆桌、分组与 Office Hour',
+        '两周线上课程：方向、MVP、上线、定价、增长与 AI 硬件出海',
+        '目标：idea 推到 demo 可见，并跑通商业闭环假设',
       ],
     },
     {
       phase: '04',
       name: 'Demo Day',
-      when: '第 2 周末',
+      when: '6.7 · 上海',
       points: [
-        '线上集中 Demo',
-        '项目上线或对外可演示',
-        '同学录与项目沉淀对外公开',
+        '上海｜长三角绿洲智谷·赵巷线下路演',
+        '每队 5 分钟 Demo + 3 分钟评委 Q&A',
+        '颁奖典礼与 Afterparty，优秀项目对外传播',
       ],
     },
   ],
@@ -160,6 +162,134 @@ export const outcome = {
   ],
 }
 
+export const mentors = {
+  eyebrow: 'Mentors & Guests',
+  headline: '不是导师天团，是正在一线 ship 的实战派。',
+  sub: '覆盖 OPC、需求验证、AI 工具栈、MVP 上线、产品品味、定价闭环、PH 打榜、AI 硬件出海等关键关卡。',
+  groups: [
+    {
+      label: 'OPC / 方向',
+      people: [
+        {
+          name: 'Luke Kim',
+          role: '独立个人创业导师，UC Berkeley 讲师',
+          bio: '$25M raised，500+ coached，聚焦 OPC 理念、定价与个人商业闭环。',
+        },
+        {
+          name: 'Cell 细胞',
+          role: '独立开发者，造物矩阵社区发起人，小火炉播客创始人',
+          bio: '2024 年发起 OPC 社区造物矩阵，社群人数 2k+；提出「BIP 订阅制真人秀」OPC 内容创业模式。',
+        },
+        {
+          name: '江昪',
+          role: 'VibeFriends 组织者，前稀土掘金联合创始人',
+          bio: '分享真实需求发现、48 小时验证与细分市场机会判断。',
+        },
+      ],
+    },
+    {
+      label: '产品 / 开发 / 上线',
+      people: [
+        {
+          name: 'AN',
+          role: 'AI Builder，慕尼黑工业大学 CS 硕士',
+          bio: 'Fintech 行业近十年经验，个人项目月度 token 消耗 $10,000+，构建端到端自动化真实业务流程。',
+        },
+        {
+          name: '章鱼',
+          role: '独立开发者，Founder of Web3Insight',
+          bio: '香港大学计算机系毕业，多年区块链开发经验，纯粹的 Web3 开发者。',
+        },
+        {
+          name: '百顺',
+          role: '华语圈出海创业者背后的冷启动导师',
+          bio: '亲手操盘超 200 个出海产品冷启动，擅长 Product Hunt 发布与运营，独立打造 HeyForm / EarlyBird 等产品。',
+        },
+        {
+          name: '辰丰',
+          role: '出海去孵化器合伙人，Design Engineer',
+          bio: '曾领导和参与 Wikipedia 全量可视化、通用知识图谱构建和交互式数据新闻开发，连接技术、设计与人文表达。',
+        },
+      ],
+    },
+    {
+      label: '增长 / 硬件 / 现场嘉宾',
+      people: [
+        {
+          name: 'Iris 生姜',
+          role: 'AFFiNE 联合创始人 & 前 COO，福布斯亚洲 30U30',
+          bio: '奇绩 S21 校友，出海运营 3 年触达 100+ 国家/地区，累计辅导 40+ 项目，覆盖 PH 打榜与可持续运营。',
+        },
+        {
+          name: '赵维奇',
+          role: '中美 AI 软硬件创业导师与连续创业者，Rokid 全球产品、工程与生态负责人',
+          bio: '深耕 AI、AR 与空间计算十余年，孵化上百个 AI 软硬件项目从 0 到 1 落地，拥有数十项国际专利。',
+        },
+        {
+          name: 'Kagehiro',
+          role: 'Lockedin AI Founder',
+          bio: 'AI 面试神器创业者，开营日分享 AI 产品出海与个人创业实战。',
+        },
+      ],
+    },
+  ],
+}
+
+export const partners = {
+  eyebrow: 'Partners',
+  headline: '社区、场地与生态伙伴一起把这条 ship 推出去。',
+  sub: '深度社区、场地与生态伙伴共同支持 SoloShip Vol.1，从招募、内容到线下场景一起形成真实的 shipping 环境。',
+  groups: [
+    {
+      label: '深度合作社区',
+      items: [
+        {
+          name: 'Startup Grind 创业磨坊',
+          logoUrl: 'https://www.google.com/s2/favicons?domain=startupgrind.com&sz=64',
+        },
+        {
+          name: 'OpenBuild',
+          logoUrl: 'https://www.google.com/s2/favicons?domain=openbuild.xyz&sz=64',
+        },
+        { name: '出海去孵化器' },
+        { name: 'VibeFriends' },
+      ],
+    },
+    {
+      label: '特邀支持',
+      items: [
+        {
+          name: '小红书科技',
+          logoUrl: 'https://www.google.com/s2/favicons?domain=xiaohongshu.com&sz=64',
+        },
+        { name: '长三角绿洲智谷·赵巷' },
+      ],
+    },
+    {
+      label: '合作社区',
+      items: [
+        { name: 'AIGCOpen' },
+        {
+          name: '少数派',
+          logoUrl: 'https://www.google.com/s2/favicons?domain=sspai.com&sz=64',
+        },
+        {
+          name: '开源社',
+          logoUrl: 'https://www.google.com/s2/favicons?domain=kaiyuanshe.cn&sz=64',
+        },
+        { name: 'Tech PodFest' },
+        { name: 'wteam' },
+        { name: '周周黑客松' },
+        { name: 'AGIVilla' },
+        {
+          name: 'Datawhale',
+          logoUrl: 'https://www.google.com/s2/favicons?domain=datawhale.club&sz=64',
+        },
+      ],
+    },
+  ],
+}
+
 export const faq = {
   eyebrow: 'FAQ',
   headline: '申请前你可能想知道的。',
@@ -169,8 +299,8 @@ export const faq = {
       a: '不是。SoloShip 是审核制 cohort。报名后会进入待审核状态，我们会基于 build 动机、idea 清晰度、可投入时间来筛选。',
     },
     {
-      q: '¥399 什么时候收？',
-      a: '录取之后才收。先申请、再审核，通过了才收款——这样对双方都更干净。¥399 是防鸽费，完成全流程（到达 Demo Day）后全额退还。',
+      q: '¥499 什么时候收？',
+      a: '录取之后才收。先申请、再审核，通过了才收款——这样对双方都更干净。¥499 为门票，其中 ¥399 在完成任务后退还。',
     },
     {
       q: '需要已经有项目吗？',
@@ -201,13 +331,15 @@ export const finalCta = {
   sub: `Vol.1 限额 ${event.capacityShort}，审核制。申请通道开放时，候补名单会先收到通知。`,
   primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
-  fineprint: '审核制 · 录取后支付 ¥399 · 完成 Demo Day 后全额退还',
+  fineprint: '审核制 · 录取后支付 ¥499 · 其中 ¥399 完成任务后退还',
 }
 
 export const footer = {
   tagline: '为真的会 ship 的 builder 准备的 cohort。',
   links: [
     { label: '活动节奏', href: '#timeline' },
+    { label: '嘉宾', href: '#mentors' },
+    { label: '合作伙伴', href: '#partners' },
     { label: 'FAQ', href: '#faq' },
     { label: '立即申请', href: event.applyHref },
   ],

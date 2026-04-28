@@ -4,6 +4,8 @@ import { WhyNow } from './_components/WhyNow'
 import { WhySoloShip } from './_components/WhySoloShip'
 import { WhoItsFor } from './_components/WhoItsFor'
 import { Timeline } from './_components/Timeline'
+import { Mentors } from './_components/Mentors'
+import { Partners } from './_components/Partners'
 import { Outcome } from './_components/Outcome'
 import { FAQ } from './_components/FAQ'
 import { FinalCTA } from './_components/FinalCTA'
@@ -18,6 +20,8 @@ export default function SoloShipPage() {
       <WhySoloShip />
       <WhoItsFor />
       <Timeline />
+      <Mentors />
+      <Partners />
       <Outcome />
       <FAQ />
       <FinalCTA />
