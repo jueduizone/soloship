@@ -42,7 +42,7 @@ export function PaymentBox({
         <dd>
           ¥{(amountCents / 100).toFixed(0)} {currency}
           <span style={{ color: 'var(--ss-text-dim)', marginLeft: 8, fontSize: 13 }}>
-            完成 30 天挑战后全额退还
+            其中 ¥399 完成任务后退还
           </span>
         </dd>
         <dt>收款方式</dt>

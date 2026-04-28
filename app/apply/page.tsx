@@ -8,7 +8,11 @@ import { ApplyForm } from './ApplyForm'
 
 export const dynamic = 'force-dynamic'
 
-export default async function ApplyPage() {
+export default async function ApplyPage({
+  searchParams,
+}: {
+  searchParams?: { edit?: string }
+}) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -18,10 +22,15 @@ export default async function ApplyPage() {
 
   const event = await getDefaultEvent(supabase)
   const existing = await getRegistrationByUser(supabase, user.id, event.id)
+  const wantsEdit = searchParams?.edit === '1'
 
-  // Already submitted and not in an editable state → go to status page
-  if (existing && !['submitted', 'reviewing'].includes(existing.status)) {
-    redirect('/apply/status')
+  // Existing registration → status page is the default landing.
+  // Submitted/reviewing applicants can still edit via an explicit ?edit=1.
+  if (existing) {
+    const editable = existing.status === 'submitted' || existing.status === 'reviewing'
+    if (!editable || !wantsEdit) {
+      redirect('/apply/status')
+    }
   }
 
   return (
@@ -53,11 +62,11 @@ export default async function ApplyPage() {
 
         {existing && (
           <div className="ss-callout" style={{ marginBottom: 24 }}>
-            你已提交过申请，当前仍可修改。若不需要修改，可直接查看
+            你正在编辑已提交的申请。改完保存后会回到
             <Link href="/apply/status" style={{ marginLeft: 4, textDecoration: 'underline' }}>
               申请状态
             </Link>
-            。
+            页查看进度。
           </div>
         )}
 

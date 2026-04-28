@@ -31,5 +31,22 @@ assert.match(
   /getRegistrationForApplicant/,
   '/apply/status must resolve registrations by authenticated user id or login email'
 )
+assert.match(
+  statusPage,
+  /href="\/apply\?edit=1"/,
+  '/apply/status must link the edit action to /apply?edit=1 so the apply route stays status-first'
+)
+
+const applyPage = read('app/apply/page.tsx')
+assert.match(
+  applyPage,
+  /searchParams\?\.edit === '1'/,
+  '/apply must opt into the edit form via ?edit=1 instead of always rendering it'
+)
+assert.match(
+  applyPage,
+  /redirect\('\/apply\/status'\)/,
+  '/apply must default existing applicants to /apply/status when ?edit=1 is absent'
+)
 
 console.log('authorization/status contract ok')

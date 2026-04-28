@@ -147,7 +147,7 @@ export default async function StatusPage() {
 
         {['submitted', 'reviewing'].includes(reg.status) && (
           <div style={{ marginTop: 24 }}>
-            <Link href="/apply" className="ss-btn ss-btn-ghost">修改申请</Link>
+            <Link href="/apply?edit=1" className="ss-btn ss-btn-ghost">修改申请</Link>
           </div>
         )}
       </div>
