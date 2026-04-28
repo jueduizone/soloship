@@ -132,6 +132,24 @@
 .ss-table tr:last-child td { border-bottom: none; }
 .ss-table tr:hover td { background: rgba(255,255,255,0.015); }
 .ss-table a { color: var(--ss-text-strong); }
+.ss-table-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  font-size: 12px;
+  font-weight: 500;
+}
+.ss-table-action:hover {
+  border-color: var(--ss-text-strong);
+  background: var(--ss-text-strong);
+  color: var(--ss-ink);
+}
 
 .ss-empty {
   padding: 48px 24px;

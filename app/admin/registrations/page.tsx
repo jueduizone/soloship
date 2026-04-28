@@ -65,7 +65,9 @@ export default async function RegistrationsListPage({
   return (
     <div className="ss-admin-container">
       <div className="ss-admin-title">报名管理</div>
-      <div className="ss-admin-sub">{event.name} · {event.subtitle} — 共 {total} 条</div>
+      <div className="ss-admin-sub">
+        {event.name} · {event.subtitle} — 共 {total} 条 · 点击「审核」进入录取 / 候补 / 拒绝 / 付款确认
+      </div>
 
       <div className="ss-filters">
         <form action="/admin/registrations" method="GET">
@@ -103,6 +105,7 @@ export default async function RegistrationsListPage({
               <th>联系方式</th>
               <th>状态</th>
               <th>提交时间</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -123,6 +126,11 @@ export default async function RegistrationsListPage({
                 </td>
                 <td style={{ color: 'var(--ss-text-faint)', fontSize: 12 }}>
                   {new Date(r.submitted_at).toLocaleString('zh-CN')}
+                </td>
+                <td>
+                  <Link className="ss-table-action" href={`/admin/registrations/${r.id}`}>
+                    审核
+                  </Link>
                 </td>
               </tr>
             ))}
