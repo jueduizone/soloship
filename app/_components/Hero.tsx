@@ -1,109 +1,75 @@
-import { hero } from './content'
+import { event, hero } from './content'
+
+const isAccentMeta = (label: string) => label === '价格'
+const isFullWidthMeta = (label: string) => label === '价格' || label === '形式'
 
 export function Hero() {
   return (
     <section
       id="top"
-      className="relative overflow-hidden"
-      style={{ paddingTop: 48, paddingBottom: 56 }}
+      className="ss-hero relative overflow-hidden"
     >
       <div className="ss-grid-overlay" />
       <div className="ss-hero-glow" />
+      <div className="ss-hero-orb" aria-hidden />
 
       <div className="ss-container relative">
-        <div className="flex items-center gap-3 mb-6 flex-wrap">
-          <span className="ss-eyebrow">{hero.eyebrow}</span>
-          <span
-            className="ss-mono inline-flex items-center gap-2"
-            style={{
-              color: 'var(--ss-text-dim)',
-              padding: '4px 10px',
-              border: '1px solid var(--ss-border-dark)',
-              borderRadius: 999,
-              fontSize: 10.5,
-              letterSpacing: '0.08em',
-              background: 'rgba(255,255,255,0.02)',
-            }}
-          >
-            <span
-              aria-hidden
-              style={{
-                display: 'inline-block',
-                width: 6,
-                height: 6,
-                borderRadius: 999,
-                background: 'var(--ss-accent-hi)',
-                boxShadow: '0 0 0 3px rgba(58,108,255,0.18)',
-              }}
-            />
-            {hero.status}
-          </span>
-        </div>
-
-        <h1
-          className="ss-display"
-          style={{ fontSize: 'clamp(34px, 5.2vw, 72px)', maxWidth: 'min(15ch, 100%)' }}
-        >
-          {hero.headline}
-        </h1>
-
-        <p
-          className="ss-lede mt-4"
-          style={{ maxWidth: 580, color: 'var(--ss-text)' }}
-        >
-          {hero.sub}
-        </p>
-
-        <div className="ss-accent-rule mt-8 mb-5" />
-
-        <dl
-          className="grid"
-          style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-            gap: '22px 40px',
-            maxWidth: 760,
-          }}
-        >
-          {hero.meta.map((m) => (
-            <div key={m.label}>
-              <dt
-                className="ss-mono"
-                style={{ color: 'var(--ss-text-faint)', marginBottom: 8, fontSize: 10.5 }}
-              >
-                {m.label.toUpperCase()}
-              </dt>
-              <dd style={{ color: 'var(--ss-text-strong)', fontSize: 15, fontWeight: 500, letterSpacing: '-0.005em' }}>
-                {m.value}
-              </dd>
+        <div className="ss-hero-grid">
+          <div className="ss-hero-main">
+            <div className="ss-hero-eyebrow-row">
+              <span className="ss-eyebrow">{hero.eyebrow}</span>
+              <span className="ss-mono ss-hero-status">
+                <span aria-hidden className="ss-hero-status-dot" />
+                {hero.status}
+              </span>
             </div>
-          ))}
-        </dl>
 
-        <div className="flex flex-wrap items-center gap-3 mt-8">
-          <a href={hero.primaryCta.href} className="ss-btn ss-btn-primary">
-            {hero.primaryCta.label}
-            <span
-              aria-hidden
-              style={{
-                display: 'inline-block',
-                width: 6,
-                height: 6,
-                borderRadius: 999,
-                background: 'var(--ss-accent)',
-              }}
-            />
-          </a>
-          <a href={hero.secondaryCta.href} className="ss-btn ss-btn-ghost">
-            {hero.secondaryCta.label}
-            <span aria-hidden style={{ fontSize: 14, color: 'var(--ss-text-dim)' }}>↘</span>
-          </a>
-        </div>
+            <h1 className="ss-display ss-hero-headline">{hero.headline}</h1>
 
-        <div
-          className="ss-mono mt-5"
-          style={{ color: 'var(--ss-text-faint)', maxWidth: 600, fontSize: 11.5, lineHeight: 1.6 }}
-        >
-          {hero.fineprint}
+            <p className="ss-lede ss-hero-sub">{hero.sub}</p>
+
+            <div className="ss-hero-cta-card">
+              <div className="ss-hero-cta-actions">
+                <a href={hero.primaryCta.href} className="ss-btn ss-btn-primary">
+                  {hero.primaryCta.label}
+                  <span aria-hidden className="ss-hero-cta-dot" />
+                </a>
+                <a href={hero.secondaryCta.href} className="ss-btn ss-btn-ghost">
+                  {hero.secondaryCta.label}
+                  <span aria-hidden style={{ fontSize: 14, color: 'var(--ss-text-dim)' }}>↘</span>
+                </a>
+              </div>
+              <div className="ss-hero-fineprint ss-mono">{hero.fineprint}</div>
+            </div>
+          </div>
+
+          <aside className="ss-hero-aside">
+            <div className="ss-hero-summary">
+              <div className="ss-hero-summary-head">
+                <span className="ss-mono ss-hero-summary-label">PROGRAM</span>
+                <span className="ss-mono ss-hero-summary-tag">
+                  {event.volume} · {event.year}
+                </span>
+              </div>
+              <dl className="ss-hero-meta-list">
+                {hero.meta.map((m) => {
+                  const cls = [
+                    'ss-hero-meta-card',
+                    isAccentMeta(m.label) ? 'is-accent' : '',
+                    isFullWidthMeta(m.label) ? 'is-full' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')
+                  return (
+                    <div key={m.label} className={cls}>
+                      <dt className="ss-mono ss-hero-meta-label">{m.label.toUpperCase()}</dt>
+                      <dd className="ss-hero-meta-value">{m.value}</dd>
+                    </div>
+                  )
+                })}
+              </dl>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

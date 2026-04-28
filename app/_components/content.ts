@@ -237,8 +237,8 @@ export const mentors = {
 
 export const partners = {
   eyebrow: 'Partners',
-  headline: '社区、场地与生态伙伴一起把这条 ship 推出去。',
-  sub: '深度社区、场地与生态伙伴共同支持 SoloShip Vol.1，从招募、内容到线下场景一起形成真实的 shipping 环境。',
+  headline: '和合作伙伴一起，把 SoloShip Vol.1 推出去。',
+  sub: '感谢每一位合作伙伴在招募、内容、场地与传播上的支持，让这次共学营真正落地。',
   groups: [
     {
       label: '深度合作社区',
