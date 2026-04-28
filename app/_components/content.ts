@@ -197,7 +197,6 @@ export const mentors = {
           name: 'AN',
           role: 'AI Builder，慕尼黑工业大学 CS 硕士',
           bio: 'Fintech 行业近十年经验，个人项目月度 token 消耗 $10,000+，构建端到端自动化真实业务流程。',
-          avatarUrl: '/assets/guests/an.jpg',
         },
         {
           name: '章鱼',
@@ -228,6 +227,7 @@ export const mentors = {
           name: '赵维奇',
           role: '中美 AI 软硬件创业导师与连续创业者，Rokid 全球产品、工程与生态负责人',
           bio: '深耕 AI、AR 与空间计算十余年，孵化上百个 AI 软硬件项目从 0 到 1 落地，拥有数十项国际专利。',
+          avatarUrl: '/assets/guests/an.jpg',
         },
         {
           name: 'Kagehiro',
