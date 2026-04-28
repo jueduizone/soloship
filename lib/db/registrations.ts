@@ -115,6 +115,39 @@ export async function getRegistrationByUser(
   return data as RegistrationRow | null
 }
 
+/**
+ * Resolve the current applicant's registration for the public status page.
+ * Prefer the explicit user_id link, then fall back to the authenticated email.
+ * This covers legacy/imported rows created before user_id was reliably attached.
+ */
+export async function getRegistrationForApplicant(
+  supabase: SupabaseClient,
+  params: { userId: string; email: string; eventId: string }
+): Promise<RegistrationRow | null> {
+  const byUser = await getRegistrationByUser(supabase, params.userId, params.eventId)
+  if (byUser) return byUser
+
+  const { data, error } = await supabase
+    .from('registrations')
+    .select('*')
+    .eq('event_id', params.eventId)
+    .eq('email', params.email)
+    .order('submitted_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (error) throw error
+
+  const row = data as RegistrationRow | null
+  if (row && !row.user_id) {
+    await supabase
+      .from('registrations')
+      .update({ user_id: params.userId })
+      .eq('id', row.id)
+      .is('user_id', null)
+  }
+  return row
+}
+
 export interface ListRegistrationsOptions {
   eventId?: string
   status?: RegistrationStatus | RegistrationStatus[]

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getAdminUser } from '@/lib/auth/require-admin'
+import { getOrganizerUser } from '@/lib/auth/require-organizer'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { recordAdmissionDecision } from '@/lib/db/admission'
 import type { AdmissionDecisionKind } from '@/lib/db/types'
@@ -12,7 +12,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const admin = await getAdminUser()
+  const admin = await getOrganizerUser()
   if (!admin) return NextResponse.json({ error: '无权限' }, { status: 403 })
 
   let body: Record<string, unknown>

@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
-import { getRegistrationByUser } from '@/lib/db/registrations'
+import { getRegistrationForApplicant } from '@/lib/db/registrations'
 import { getLatestPaymentForRegistration } from '@/lib/db/payments'
 import type { RegistrationStatus } from '@/lib/db/types'
 import { t } from '@/lib/i18n'
@@ -37,15 +38,22 @@ export default async function StatusPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login?next=/apply/status')
 
-  const event = await getDefaultEvent(supabase)
-  const reg = await getRegistrationByUser(supabase, user.id, event.id)
+  const admin = createAdminClient()
+  const event = await getDefaultEvent(admin)
+  const reg = user.email
+    ? await getRegistrationForApplicant(admin, {
+        userId: user.id,
+        email: user.email,
+        eventId: event.id,
+      })
+    : null
 
   if (!reg) {
     return (
       <div className="ss-apply-container">
         <div className="ss-topbar">
           <Link href="/">← SoloShip</Link>
-          <span>{user.email}</span>
+          <span>查询邮箱：{user.email}</span>
         </div>
         <header className="ss-apply-header">
           <h1 className="ss-apply-title">{t.apply.status.title}</h1>
@@ -67,12 +75,15 @@ export default async function StatusPage() {
     <div className="ss-apply-container">
       <div className="ss-topbar">
         <Link href="/">← SoloShip</Link>
-        <span>{user.email}</span>
+        <span>查询邮箱：{user.email}</span>
       </div>
 
       <header className="ss-apply-header">
         <span className="ss-eyebrow">{event.name} · {event.subtitle}</span>
         <h1 className="ss-apply-title">{t.apply.status.title}</h1>
+        <p className="ss-apply-sub">
+          本页按当前登录邮箱查询申请。提交后可随时从首页「申请状态」入口回来查看审核、付款和入营进度。
+        </p>
       </header>
 
       <div className="ss-apply-card">

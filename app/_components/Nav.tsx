@@ -74,6 +74,22 @@ export async function Nav() {
             </a>
           ))}
 
+          {user && (
+            <a
+              href="/apply/status"
+              className="hidden md:inline-flex items-center"
+              style={{
+                color: 'var(--ss-text-dim)',
+                fontSize: 13.5,
+                fontWeight: 450,
+                letterSpacing: '-0.005em',
+                padding: '6px 4px',
+              }}
+            >
+              申请状态
+            </a>
+          )}
+
           {showAdmin && (
             <a
               href="/admin/registrations"

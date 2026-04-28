@@ -28,7 +28,10 @@ export default async function ApplyPage() {
     <div className="ss-apply-container">
       <div className="ss-topbar">
         <Link href="/">← SoloShip</Link>
-        <span>{user.email}</span>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <Link href="/apply/status">查看申请状态</Link>
+          <span>{user.email}</span>
+        </div>
       </div>
 
       <header className="ss-apply-header">
@@ -43,6 +46,20 @@ export default async function ApplyPage() {
           <span>2 审核 / 录取</span>
           <span>3 付款 / 入营</span>
         </div>
+
+        <div className="ss-callout" style={{ marginBottom: 24 }}>
+          提交后会进入申请状态页。之后用当前登录邮箱进入「查看申请状态」即可查询审核结果、付款确认和入营进度。
+        </div>
+
+        {existing && (
+          <div className="ss-callout" style={{ marginBottom: 24 }}>
+            你已提交过申请，当前仍可修改。若不需要修改，可直接查看
+            <Link href="/apply/status" style={{ marginLeft: 4, textDecoration: 'underline' }}>
+              申请状态
+            </Link>
+            。
+          </div>
+        )}
 
         <ApplyForm
           eventId={event.id}
