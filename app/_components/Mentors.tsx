@@ -44,7 +44,9 @@ export function Mentors() {
                 className="grid gap-4 md:gap-5"
                 style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
               >
-                {group.people.map((person) => (
+                {group.people.map((person) => {
+                  const avatarUrl = (person as { avatarUrl?: string }).avatarUrl
+                  return (
                   <article key={person.name} className="ss-card" style={{ minHeight: 230 }}>
                     <div
                       style={{
@@ -55,7 +57,7 @@ export function Mentors() {
                       }}
                     >
                       <div
-                        aria-hidden
+                        aria-hidden={avatarUrl ? undefined : true}
                         style={{
                           width: 56,
                           height: 56,
@@ -63,17 +65,36 @@ export function Mentors() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          background:
-                            'linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02))',
+                          background: avatarUrl
+                            ? 'rgba(255,255,255,0.04)'
+                            : 'linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02))',
                           border: '1px solid var(--ss-border-dark-soft)',
                           color: 'var(--ss-accent-hi)',
                           fontSize: 16,
                           fontWeight: 600,
                           letterSpacing: '0.04em',
                           flex: '0 0 auto',
+                          overflow: 'hidden',
                         }}
                       >
-                        {getInitials(person.name)}
+                        {avatarUrl ? (
+                          <img
+                            src={avatarUrl}
+                            alt={person.name}
+                            width={56}
+                            height={56}
+                            loading="lazy"
+                            decoding="async"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              display: 'block',
+                            }}
+                          />
+                        ) : (
+                          getInitials(person.name)
+                        )}
                       </div>
                       <div
                         className="ss-mono"
@@ -107,7 +128,8 @@ export function Mentors() {
                       {person.bio}
                     </p>
                   </article>
-                ))}
+                  )
+                })}
               </div>
             </div>
           ))}

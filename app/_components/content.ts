@@ -174,16 +174,19 @@ export const mentors = {
           name: 'Luke Kim',
           role: '独立个人创业导师，UC Berkeley 讲师',
           bio: '$25M raised，500+ coached，聚焦 OPC 理念、定价与个人商业闭环。',
+          avatarUrl: '/assets/guests/luke-kim.jpg',
         },
         {
           name: 'Cell 细胞',
           role: '独立开发者，造物矩阵社区发起人，小火炉播客创始人',
           bio: '2024 年发起 OPC 社区造物矩阵，社群人数 2k+；提出「BIP 订阅制真人秀」OPC 内容创业模式。',
+          avatarUrl: '/assets/guests/cell.png',
         },
         {
           name: '江昪',
           role: 'VibeFriends 组织者，前稀土掘金联合创始人',
           bio: '分享真实需求发现、48 小时验证与细分市场机会判断。',
+          avatarUrl: '/assets/guests/jiang-bian.png',
         },
       ],
     },
@@ -194,6 +197,7 @@ export const mentors = {
           name: 'AN',
           role: 'AI Builder，慕尼黑工业大学 CS 硕士',
           bio: 'Fintech 行业近十年经验，个人项目月度 token 消耗 $10,000+，构建端到端自动化真实业务流程。',
+          avatarUrl: '/assets/guests/an.jpg',
         },
         {
           name: '章鱼',
@@ -245,13 +249,16 @@ export const partners = {
       items: [
         {
           name: 'Startup Grind 创业磨坊',
-          logoUrl: 'https://www.google.com/s2/favicons?domain=startupgrind.com&sz=64',
+          logoUrl: '/assets/partners/startup-grind.png',
         },
         {
           name: 'OpenBuild',
-          logoUrl: 'https://www.google.com/s2/favicons?domain=openbuild.xyz&sz=64',
+          logoUrl: '/assets/partners/openbuild.png',
         },
-        { name: '出海去孵化器' },
+        {
+          name: '出海去孵化器',
+          logoUrl: '/assets/partners/chuhaiqu.png',
+        },
         { name: 'VibeFriends' },
       ],
     },
@@ -260,7 +267,7 @@ export const partners = {
       items: [
         {
           name: '小红书科技',
-          logoUrl: 'https://www.google.com/s2/favicons?domain=xiaohongshu.com&sz=64',
+          logoUrl: '/assets/partners/xiaohongshu.png',
         },
         { name: '长三角绿洲智谷·赵巷' },
       ],
@@ -268,22 +275,31 @@ export const partners = {
     {
       label: '合作社区',
       items: [
-        { name: 'AIGCOpen' },
+        {
+          name: 'AIGCOpen',
+          logoUrl: '/assets/partners/aigcopen.png',
+        },
         {
           name: '少数派',
-          logoUrl: 'https://www.google.com/s2/favicons?domain=sspai.com&sz=64',
+          logoUrl: '/assets/partners/sspai.png',
         },
         {
           name: '开源社',
-          logoUrl: 'https://www.google.com/s2/favicons?domain=kaiyuanshe.cn&sz=64',
+          logoUrl: '/assets/partners/kaiyuanshe.png',
         },
-        { name: 'Tech PodFest' },
+        {
+          name: 'Tech PodFest',
+          logoUrl: '/assets/partners/techpodfest.png',
+        },
         { name: 'wteam' },
-        { name: '周周黑客松' },
+        {
+          name: '周周黑客松',
+          logoUrl: '/assets/partners/hackathonweekly.png',
+        },
         { name: 'AGIVilla' },
         {
           name: 'Datawhale',
-          logoUrl: 'https://www.google.com/s2/favicons?domain=datawhale.club&sz=64',
+          logoUrl: '/assets/partners/datawhale.png',
         },
       ],
     },
