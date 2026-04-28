@@ -49,4 +49,21 @@ assert.match(
   '/apply must default existing applicants to /apply/status when ?edit=1 is absent'
 )
 
+const signoutRoute = read('app/api/auth/signout/route.ts')
+assert.match(
+  signoutRoute,
+  /export\s+async\s+function\s+GET\s*\(request:\s*NextRequest\)/,
+  '/api/auth/signout must handle direct browser navigation (GET)'
+)
+assert.match(
+  signoutRoute,
+  /await\s+supabase\.auth\.signOut\(\)/,
+  '/api/auth/signout GET/POST handlers must clear the Supabase session before redirecting'
+)
+assert.match(
+  signoutRoute,
+  /NextResponse\.redirect\(new URL\('\/', request\.url\), \{ status: 303 \}\)/,
+  '/api/auth/signout must redirect to / after signout so users do not see a blank page'
+)
+
 console.log('authorization/status contract ok')
