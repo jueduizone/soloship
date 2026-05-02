@@ -49,6 +49,40 @@ assert.match(
   '/apply must default existing applicants to /apply/status when ?edit=1 is absent'
 )
 
+const fellowsListPage = read('app/fellows/page.tsx')
+assert.match(
+  fellowsListPage,
+  /canViewFellow/,
+  '/fellows must filter service-role results through an explicit visibility gate'
+)
+assert.match(
+  fellowsListPage,
+  /registration\?\.status === 'paid'/,
+  '/fellows must only show cohort_only profiles to paid cohort members'
+)
+assert.match(
+  fellowsListPage,
+  /fellow\.visibility === 'public'/,
+  '/fellows must keep public profiles visible to anonymous visitors'
+)
+assert.match(
+  fellowsListPage,
+  /fellow\.registration\?\.user_id === viewer\.userId/,
+  '/fellows must allow private profiles only to their owner unless organizer/admin'
+)
+
+const fellowDetailPage = read('app/fellows/[id]/page.tsx')
+assert.match(
+  fellowDetailPage,
+  /canViewFellow/,
+  '/fellows/[id] must use the same visibility gate as the list page'
+)
+assert.match(
+  fellowDetailPage,
+  /if \(!canViewFellow\([^)]*\)\) notFound\(\)/s,
+  '/fellows/[id] must return notFound for unauthorized cohort/private profile guesses'
+)
+
 const signoutRoute = read('app/api/auth/signout/route.ts')
 assert.match(
   signoutRoute,

@@ -16,7 +16,11 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           <span className="ss-admin-tag">admin</span>
         </div>
         <nav>
+          <Link href="/admin">Dashboard</Link>
           <Link href="/admin/registrations">报名</Link>
+          <Link href="/admin/fellows">同学录</Link>
+          <Link href="/admin/resources">资料库</Link>
+          <Link href="/admin/events">活动配置</Link>
         </nav>
         <div className="ss-user">{user.email}</div>
       </header>

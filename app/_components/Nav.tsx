@@ -1,11 +1,26 @@
 import { event, nav } from './content'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { isOrganizerUser } from '@/lib/auth/require-organizer'
+import { getDefaultEvent } from '@/lib/db/events'
+import { getRegistrationForApplicant } from '@/lib/db/registrations'
 
 export async function Nav() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const showAdmin = user ? isOrganizerUser(user) : false
+  let showFellows = showAdmin
+
+  if (user?.email && !showFellows) {
+    const admin = createAdminClient()
+    const currentEvent = await getDefaultEvent(admin)
+    const registration = await getRegistrationForApplicant(admin, {
+      userId: user.id,
+      email: user.email,
+      eventId: currentEvent.id,
+    })
+    showFellows = registration?.status === 'paid'
+  }
 
   return (
     <nav
@@ -75,8 +90,39 @@ export async function Nav() {
           ))}
 
           {user && (
+            <>
+              <a
+                href="/apply/status"
+                className="hidden md:inline-flex items-center"
+                style={{
+                  color: 'var(--ss-text-dim)',
+                  fontSize: 13.5,
+                  fontWeight: 450,
+                  letterSpacing: '-0.005em',
+                  padding: '6px 4px',
+                }}
+              >
+                申请状态
+              </a>
+              <a
+                href="/resources"
+                className="hidden md:inline-flex items-center"
+                style={{
+                  color: 'var(--ss-text-dim)',
+                  fontSize: 13.5,
+                  fontWeight: 450,
+                  letterSpacing: '-0.005em',
+                  padding: '6px 4px',
+                }}
+              >
+                资料库
+              </a>
+            </>
+          )}
+
+          {showFellows && (
             <a
-              href="/apply/status"
+              href="/fellows"
               className="hidden md:inline-flex items-center"
               style={{
                 color: 'var(--ss-text-dim)',
@@ -86,7 +132,7 @@ export async function Nav() {
                 padding: '6px 4px',
               }}
             >
-              申请状态
+              同学录
             </a>
           )}
 

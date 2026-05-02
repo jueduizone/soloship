@@ -29,7 +29,7 @@ const STATUS_EXPLAIN: Record<RegistrationStatus, string> = {
   waitlisted: '你目前在候补名单中。如前序录取名额释放，我们会第一时间通知你。',
   rejected: '很遗憾，本期没有足够的匹配度。我们会保留你的资料，在后续招募时再联系。',
   payment_pending: '我们已经发送付款信息，请按邮件指引完成付款。到账后本页会自动变为「已入营」。',
-  paid: '你已正式入营。资料和同学录入口会在开营前放出。',
+  paid: '你已正式入营。资料库和同学录已开放，可以完善你的同学录资料。',
   withdrawn: '你已退出本期。',
 }
 
@@ -127,21 +127,42 @@ export default async function StatusPage() {
           </div>
         )}
 
-        {reg.status === 'paid' && payment && (
+        {reg.status === 'paid' && (
           <div style={{ marginTop: 24 }}>
-            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>付款</div>
-            <dl className="ss-kv">
-              <dt>金额</dt>
-              <dd>¥{(payment.amount_cents / 100).toFixed(2)} {payment.currency}</dd>
-              <dt>状态</dt>
-              <dd>已确认到账</dd>
-              {payment.confirmed_at && (
-                <>
-                  <dt>确认时间</dt>
-                  <dd>{new Date(payment.confirmed_at).toLocaleString('zh-CN')}</dd>
-                </>
-              )}
-            </dl>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>入营</div>
+            <div className="ss-callout" style={{ marginTop: 0 }}>
+              你已正式入营，可以编辑个人资料并查看同学录。
+            </div>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 14 }}>
+              <Link href="/profile" className="ss-btn ss-btn-primary">编辑个人资料</Link>
+              <Link href="/fellows" className="ss-btn ss-btn-ghost">进入同学录</Link>
+            </div>
+            {payment && (
+              <dl className="ss-kv">
+                <dt>金额</dt>
+                <dd>¥{(payment.amount_cents / 100).toFixed(2)} {payment.currency}</dd>
+                <dt>状态</dt>
+                <dd>已确认到账</dd>
+                {payment.confirmed_at && (
+                  <>
+                    <dt>确认时间</dt>
+                    <dd>{new Date(payment.confirmed_at).toLocaleString('zh-CN')}</dd>
+                  </>
+                )}
+              </dl>
+            )}
+          </div>
+        )}
+
+        {['admitted', 'payment_pending', 'paid'].includes(reg.status) && (
+          <div style={{ marginTop: 24 }}>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>入营资料</div>
+            <div className="ss-callout" style={{ marginTop: 0 }}>
+              资料库已开放。Public 资料和入营专属资料会按阶段持续更新。
+            </div>
+            <div style={{ marginTop: 16 }}>
+              <Link href="/resources" className="ss-btn ss-btn-primary">进入资料库</Link>
+            </div>
           </div>
         )}
 

@@ -8,6 +8,18 @@ import type { LinkEntry, ProfileVisibility } from '@/lib/db/types'
 
 export const dynamic = 'force-dynamic'
 
+function normalizeHttpUrl(value: string): string | null {
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  try {
+    const url = new URL(trimmed)
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return null
+    return url.toString()
+  } catch {
+    return null
+  }
+}
+
 export async function PATCH(request: NextRequest) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -37,16 +49,25 @@ export async function PATCH(request: NextRequest) {
   }
 
   const rawLinks = Array.isArray(body.links) ? body.links : []
-  const links: LinkEntry[] = rawLinks
-    .map((l): LinkEntry | null => {
-      if (!l || typeof l !== 'object') return null
-      const obj = l as Record<string, unknown>
-      const url = typeof obj.url === 'string' ? obj.url.trim() : ''
-      if (!url) return null
-      const label = typeof obj.label === 'string' && obj.label.trim() ? obj.label.trim() : url
-      return { label, url }
-    })
-    .filter((l): l is LinkEntry => l !== null)
+  const links: LinkEntry[] = []
+  for (const l of rawLinks) {
+    if (!l || typeof l !== 'object') continue
+    const obj = l as Record<string, unknown>
+    const rawUrl = typeof obj.url === 'string' ? obj.url : ''
+    const url = normalizeHttpUrl(rawUrl)
+    if (url === null) {
+      return NextResponse.json({ error: `链接格式不正确：${rawUrl}` }, { status: 400 })
+    }
+    if (!url) continue
+    const label = typeof obj.label === 'string' && obj.label.trim() ? obj.label.trim() : url
+    links.push({ label, url })
+  }
+
+  const avatarRaw = typeof body.avatar_url === 'string' ? body.avatar_url : ''
+  const avatarUrl = normalizeHttpUrl(avatarRaw)
+  if (avatarUrl === null) {
+    return NextResponse.json({ error: '头像 URL 格式不正确' }, { status: 400 })
+  }
 
   const tags = Array.isArray(body.tags)
     ? (body.tags as unknown[])
@@ -71,6 +92,7 @@ export async function PATCH(request: NextRequest) {
           typeof body.display_name === 'string' && body.display_name.trim()
             ? body.display_name.trim()
             : undefined,
+        avatar_url: avatarUrl || null,
         one_liner: typeof body.one_liner === 'string' ? body.one_liner : undefined,
         city: typeof body.city === 'string' ? body.city : undefined,
         tags,

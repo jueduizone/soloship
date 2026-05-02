@@ -1,11 +1,14 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { ProfileVisibility } from '@/lib/db/types'
 
 type FormState = {
+  id?: string
   display_name: string
+  avatar_url: string
   one_liner: string
   city: string
   tags: string
@@ -15,11 +18,23 @@ type FormState = {
   visibility: ProfileVisibility
 }
 
+function normalizeUrl(value: string) {
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  try {
+    const url = new URL(trimmed)
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return null
+    return url.toString()
+  } catch {
+    return null
+  }
+}
+
 export function ProfileForm({ initial }: { initial: FormState }) {
   const router = useRouter()
   const [form, setForm] = useState<FormState>(initial)
   const [error, setError] = useState<string | null>(null)
-  const [ok, setOk] = useState(false)
+  const [savedId, setSavedId] = useState<string | null>(initial.id ?? null)
   const [pending, startTransition] = useTransition()
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
@@ -28,14 +43,26 @@ export function ProfileForm({ initial }: { initial: FormState }) {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    setOk(false)
+    setSavedId(null)
 
     startTransition(async () => {
-      const links = form.links
-        .split('\n')
-        .map(s => s.trim())
-        .filter(Boolean)
-        .map(url => ({ label: url, url }))
+      const parsedLinks = []
+      for (const raw of form.links.split('\n')) {
+        const value = raw.trim()
+        if (!value) continue
+        const normalized = normalizeUrl(value)
+        if (!normalized) {
+          setError(`链接格式不正确：${value}。请使用 http(s) URL。`)
+          return
+        }
+        parsedLinks.push({ label: normalized.replace(/^https?:\/\//, '').replace(/\/$/, ''), url: normalized })
+      }
+
+      const avatarUrl = normalizeUrl(form.avatar_url)
+      if (avatarUrl === null) {
+        setError('头像 URL 格式不正确。请使用 http(s) URL，或留空。')
+        return
+      }
 
       const tags = form.tags
         .split(/[,，、]/)
@@ -47,22 +74,24 @@ export function ProfileForm({ initial }: { initial: FormState }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           display_name: form.display_name,
+          avatar_url: avatarUrl || null,
           one_liner: form.one_liner || null,
           city: form.city || null,
           tags,
           project_name: form.project_name || null,
           project_intro: form.project_intro || null,
-          links,
+          links: parsedLinks,
           visibility: form.visibility,
         }),
       })
 
+      const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
         setError(data?.error ?? '保存失败')
         return
       }
-      setOk(true)
+      const id = typeof data?.profile?.id === 'string' ? data.profile.id : null
+      setSavedId(id)
       router.refresh()
     })
   }
@@ -70,7 +99,11 @@ export function ProfileForm({ initial }: { initial: FormState }) {
   return (
     <form onSubmit={onSubmit}>
       {error && <div className="ss-form-error">{error}</div>}
-      {ok && <div className="ss-form-success">已保存。</div>}
+      {savedId && (
+        <div className="ss-form-success">
+          已保存。<Link href={`/fellows/${savedId}`}>查看我的同学录页面</Link>
+        </div>
+      )}
 
       <div className="ss-field">
         <label htmlFor="display_name">展示名</label>
@@ -81,6 +114,19 @@ export function ProfileForm({ initial }: { initial: FormState }) {
           value={form.display_name}
           onChange={e => set('display_name', e.target.value)}
         />
+      </div>
+
+      <div className="ss-field">
+        <label htmlFor="avatar_url">头像 URL</label>
+        <input
+          id="avatar_url"
+          className="ss-input"
+          type="url"
+          value={form.avatar_url}
+          onChange={e => set('avatar_url', e.target.value)}
+          placeholder="https://example.com/avatar.jpg"
+        />
+        <p className="ss-field-hint">暂不上传图片。留空时会用展示名首字母作为头像。</p>
       </div>
 
       <div className="ss-field">
@@ -145,6 +191,7 @@ export function ProfileForm({ initial }: { initial: FormState }) {
           onChange={e => set('links', e.target.value)}
           placeholder={'https://github.com/yourname\nhttps://x.com/yourname'}
         />
+        <p className="ss-field-hint">每行必须是 http(s) URL。保存后详情页会自动展示可点击链接。</p>
       </div>
 
       <div className="ss-field">

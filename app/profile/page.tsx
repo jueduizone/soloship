@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
-import { getRegistrationByUser } from '@/lib/db/registrations'
+import { getRegistrationForApplicant } from '@/lib/db/registrations'
 import { getFellowByRegistration } from '@/lib/db/fellows'
 import type { RegistrationStatus } from '@/lib/db/types'
 import { ProfileForm } from './ProfileForm'
@@ -28,7 +28,13 @@ export default async function ProfilePage() {
 
   const admin = createAdminClient()
   const event = await getDefaultEvent(admin)
-  const reg = await getRegistrationByUser(admin, user.id, event.id)
+  const reg = user.email
+    ? await getRegistrationForApplicant(admin, {
+        userId: user.id,
+        email: user.email,
+        eventId: event.id,
+      })
+    : null
   const fellow = reg ? await getFellowByRegistration(admin, reg.id) : null
   const canEdit = Boolean(reg && ['admitted', 'payment_pending', 'paid'].includes(reg.status))
 
@@ -43,7 +49,7 @@ export default async function ProfilePage() {
         <span className="ss-eyebrow">{event.name} · 个人资料</span>
         <h1 className="ss-apply-title">个人资料</h1>
         <p className="ss-apply-sub">
-          管理你的同学录档案和可见性。
+          管理你的同学录档案和可见性。正式入营后，同学录会按你的可见性设置展示。
         </p>
       </header>
 
@@ -67,12 +73,26 @@ export default async function ProfilePage() {
           </div>
         )}
 
+        {fellow && (
+          <div className="ss-callout" style={{ marginTop: 16 }}>
+            已有同学录档案。<Link href={`/fellows/${fellow.id}`}>查看我的页面</Link>
+          </div>
+        )}
+
+        {reg?.status === 'paid' && (
+          <div className="ss-callout">
+            资料库已开放。<Link href="/resources">进入资料库</Link>
+          </div>
+        )}
+
         {canEdit && (
           <div style={{ marginTop: 28 }}>
             <div className="ss-eyebrow" style={{ marginBottom: 12 }}>同学录档案</div>
             <ProfileForm
               initial={{
+                id: fellow?.id,
                 display_name: fellow?.display_name ?? reg!.name,
+                avatar_url: fellow?.avatar_url ?? '',
                 one_liner: fellow?.one_liner ?? '',
                 city: fellow?.city ?? reg!.city ?? '',
                 tags: (fellow?.tags ?? []).join(', '),
