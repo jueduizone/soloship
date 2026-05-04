@@ -32,7 +32,7 @@ export async function Nav() {
         borderBottom: '1px solid var(--ss-border-dark-soft)',
       }}
     >
-      <div className="ss-container flex items-center justify-between" style={{ height: 60 }}>
+      <div className="ss-container flex items-center justify-between" style={{ height: 52 }}>
         <a href="#top" className="flex items-center gap-3" aria-label={`${event.name} ${event.volume}`}>
           <img
             src="/assets/brand/soloship-logo.svg"
