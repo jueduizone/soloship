@@ -9,7 +9,7 @@ import { mapAuthError, type MappedAuthError } from '@/lib/i18n/auth-errors'
 
 type Mode = 'signin' | 'signup'
 
-const enableGitHubOAuth = process.env.NEXT_PUBLIC_ENABLE_GITHUB_OAUTH === 'true'
+const enableGitHubOAuth = true
 
 function LoginForm() {
   const router = useRouter()
