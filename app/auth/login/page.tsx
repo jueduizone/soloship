@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useRef, useState, useTransition } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import Script from 'next/script'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -53,7 +53,7 @@ function LoginForm() {
   const search = useSearchParams()
   const next = search.get('next') ?? '/apply'
   const callbackError = search.get('error')
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const googleButtonRef = useRef<HTMLDivElement | null>(null)
 
   const [mode, setMode] = useState<Mode>('signin')
@@ -63,10 +63,10 @@ function LoginForm() {
   const [notice, setNotice] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
-  const completeLogin = () => {
+  const completeLogin = useCallback(() => {
     router.push(next)
     router.refresh()
-  }
+  }, [next, router])
 
   // OAuth/email callback pushes us back with ?error=<english>. Translate it
   // through the same mapper so users never see raw Supabase English strings
@@ -83,7 +83,7 @@ function LoginForm() {
     return `${base}/auth/callback?next=${encodeURIComponent(next)}`
   }
 
-  const handleGoogleCredential = async (response: GoogleCredentialResponse) => {
+  const handleGoogleCredential = useCallback(async (response: GoogleCredentialResponse) => {
     setError(null)
     const token = response.credential
     if (!token) {
@@ -99,11 +99,11 @@ function LoginForm() {
       return
     }
     completeLogin()
-  }
+  }, [completeLogin, supabase])
 
   const handleGoogle = async () => {
     setError(null)
-    setNotice('Google 登录按钮还在加载，请 1 秒后再点一次。')
+    setNotice('Google 登录按钮还在加载，请稍后再试。')
   }
 
   useEffect(() => {
@@ -132,7 +132,7 @@ function LoginForm() {
         theme: 'filled_black',
         size: 'large',
         text: 'continue_with',
-        shape: 'pill',
+        shape: 'rectangular',
         logo_alignment: 'left',
         width: Math.min(376, container.offsetWidth || 376),
       })
@@ -256,10 +256,11 @@ function LoginForm() {
       {notice && <div className="ss-auth-success">{notice}</div>}
 
       <div className="ss-oauth-row">
-        <div className="ss-google-button" ref={googleButtonRef} aria-label={t.auth.login.google}>
-          <button type="button" className="ss-oauth-btn" onClick={handleGoogle}>
+        <div className="ss-google-button" aria-label={t.auth.login.google} onClick={handleGoogle}>
+          <button type="button" className="ss-oauth-btn ss-google-visual-btn" tabIndex={-1} aria-hidden="true">
             <GoogleMark /> {t.auth.login.google}
           </button>
+          <div className="ss-google-native-button" ref={googleButtonRef} />
         </div>
         {enableGitHubOAuth && (
           <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('github')}>
