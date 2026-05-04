@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useState, useTransition } from 'react'
+import { Suspense, useEffect, useRef, useState, useTransition } from 'react'
 import Script from 'next/script'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -25,6 +25,15 @@ type GoogleIdentityServices = {
         cancel_on_tap_outside?: boolean
         use_fedcm_for_prompt?: boolean
       }) => void
+      renderButton: (parent: HTMLElement, options: {
+        type?: 'standard' | 'icon'
+        theme?: 'outline' | 'filled_blue' | 'filled_black'
+        size?: 'large' | 'medium' | 'small'
+        text?: 'signin_with' | 'signup_with' | 'continue_with' | 'signin'
+        shape?: 'rectangular' | 'pill' | 'circle' | 'square'
+        logo_alignment?: 'left' | 'center'
+        width?: number
+      }) => void
       prompt: (listener?: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean }) => void) => void
     }
   }
@@ -45,6 +54,7 @@ function LoginForm() {
   const next = search.get('next') ?? '/apply'
   const callbackError = search.get('error')
   const supabase = createClient()
+  const googleButtonRef = useRef<HTMLDivElement | null>(null)
 
   const [mode, setMode] = useState<Mode>('signin')
   const [email, setEmail] = useState('')
@@ -93,24 +103,47 @@ function LoginForm() {
 
   const handleGoogle = async () => {
     setError(null)
-    const google = window.google?.accounts?.id
-    if (!google) {
-      setError({ message: 'Google 登录组件还在加载，请稍后再试。', suggestOAuth: false })
-      return
-    }
-    google.initialize({
-      client_id: googleClientId,
-      callback: handleGoogleCredential,
-      auto_select: false,
-      cancel_on_tap_outside: true,
-      use_fedcm_for_prompt: true,
-    })
-    google.prompt((notification) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        setNotice('如果没有弹出 Google 账号选择器，请检查浏览器是否拦截第三方登录弹窗。')
-      }
-    })
+    setNotice('Google 登录按钮还在加载，请 1 秒后再点一次。')
   }
+
+  useEffect(() => {
+    let cancelled = false
+    let timer: ReturnType<typeof setTimeout> | null = null
+
+    const renderGoogleButton = () => {
+      if (cancelled) return
+      const google = window.google?.accounts?.id
+      const container = googleButtonRef.current
+      if (!google || !container) {
+        timer = setTimeout(renderGoogleButton, 150)
+        return
+      }
+
+      google.initialize({
+        client_id: googleClientId,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+        use_fedcm_for_prompt: true,
+      })
+      container.innerHTML = ''
+      google.renderButton(container, {
+        type: 'standard',
+        theme: 'outline',
+        size: 'large',
+        text: 'continue_with',
+        shape: 'rectangular',
+        logo_alignment: 'left',
+        width: Math.min(376, container.offsetWidth || 376),
+      })
+    }
+
+    renderGoogleButton()
+    return () => {
+      cancelled = true
+      if (timer) clearTimeout(timer)
+    }
+  }, [handleGoogleCredential])
 
   const handleOAuth = async (provider: 'github') => {
     setError(null)
@@ -223,9 +256,11 @@ function LoginForm() {
       {notice && <div className="ss-auth-success">{notice}</div>}
 
       <div className="ss-oauth-row">
-        <button type="button" className="ss-oauth-btn" onClick={handleGoogle}>
-          <GoogleMark /> {t.auth.login.google}
-        </button>
+        <div className="ss-google-button" ref={googleButtonRef} aria-label={t.auth.login.google}>
+          <button type="button" className="ss-oauth-btn" onClick={handleGoogle}>
+            <GoogleMark /> {t.auth.login.google}
+          </button>
+        </div>
         {enableGitHubOAuth && (
           <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('github')}>
             <GitHubMark /> {t.auth.login.github}

@@ -42,6 +42,16 @@
   margin-bottom: 18px;
 }
 
+.ss-google-button,
+.ss-google-button > div,
+.ss-google-button iframe {
+  width: 100% !important;
+}
+
+.ss-google-button {
+  min-height: 44px;
+}
+
 .ss-oauth-btn {
   width: 100%;
   display: flex;
