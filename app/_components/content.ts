@@ -29,7 +29,7 @@ export const nav = {
 export const hero = {
   eyebrow: `${event.volume} · ${event.year} · ${event.tagline}`,
   status: event.status,
-  headline: '两周内，把 idea ship 成能上线、能收款的全球 AI 产品。',
+  headline: '3 周内，把 idea ship 成能上线、能收款的全球 AI 产品。',
   sub: '1 天线下开营 + 2 周线上共学 + 1 天线下 Demo Day。给 AI 时代的 OPC 一个带 deadline、带同伴、带真实反馈的 shipping sprint。',
   meta: [
     { label: '周期', value: event.duration },
