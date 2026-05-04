@@ -315,9 +315,14 @@
   transition: border-color 140ms ease, background 140ms ease;
   padding: 0 16px;
   font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 .ss-btn-action:hover { border-color: #394056; background: var(--ss-surface-hi); }
-.ss-btn-action:disabled { opacity: 0.4; cursor: not-allowed; }
+.ss-btn-action:disabled { opacity: 0.55; cursor: wait; }
+.ss-btn-action[aria-busy="true"] { opacity: 0.78; }
 
 .ss-btn-action.is-primary {
   background: var(--ss-accent);

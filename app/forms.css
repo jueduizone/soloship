@@ -40,6 +40,34 @@
 
 .ss-btn-block { width: 100%; margin-top: 8px; }
 
+.ss-btn:disabled,
+.ss-btn[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
+.ss-loading-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ss-auth-spinner {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  border: 2px solid rgba(0, 251, 135, 0.22);
+  border-top-color: var(--ss-accent);
+  animation: ss-auth-spin 720ms linear infinite;
+}
+
+@keyframes ss-auth-spin {
+  to { transform: rotate(360deg); }
+}
+
 .ss-form-error {
   background: rgba(255, 90, 90, 0.08);
   border: 1px solid rgba(255, 90, 90, 0.22);

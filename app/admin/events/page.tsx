@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { updateEventAction } from '../_actions'
+import { AdminSubmitButton } from '../AdminSubmitButton'
 import type { EventStatus } from '@/lib/db/types'
 
 export const dynamic = 'force-dynamic'
@@ -24,7 +25,7 @@ export default async function AdminEventsPage() {
           <div className="ss-field"><label>开始日期</label><input className="ss-input" name="start_date" type="date" defaultValue={event.start_date ?? ''} /></div>
           <div className="ss-field"><label>结束日期</label><input className="ss-input" name="end_date" type="date" defaultValue={event.end_date ?? ''} /></div>
           <div className="ss-field"><label>Demo Day</label><input className="ss-input" name="demo_day_date" type="date" defaultValue={event.demo_day_date ?? ''} /></div>
-          <button className="ss-btn-action is-primary" type="submit">保存配置</button>
+          <AdminSubmitButton idleLabel="保存配置" pendingLabel="正在保存…" />
         </form>
       </section>
     </div>

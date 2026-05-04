@@ -64,6 +64,10 @@
   cursor: pointer;
 }
 
+.ss-google-button.is-pending {
+  cursor: wait;
+}
+
 .ss-google-visual-btn {
   position: absolute;
   inset: 0;
@@ -79,6 +83,10 @@
   height: 44px;
   overflow: hidden;
   cursor: pointer;
+}
+
+.ss-google-button.is-pending .ss-google-native-button {
+  pointer-events: none;
 }
 
 .ss-google-native-button,
@@ -110,6 +118,15 @@
 .ss-oauth-btn:hover {
   border-color: #394056;
   background: var(--ss-surface-hi);
+}
+
+.ss-oauth-btn:disabled,
+.ss-oauth-btn[aria-busy="true"],
+.ss-google-button.is-pending .ss-oauth-btn {
+  color: var(--ss-text-dim);
+  cursor: wait;
+  border-color: rgba(0, 251, 135, 0.2);
+  background: rgba(0, 251, 135, 0.06);
 }
 
 .ss-google-button:hover .ss-oauth-btn,

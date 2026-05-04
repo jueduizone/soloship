@@ -16,6 +16,7 @@ export function AdmissionActions({
 }) {
   const router = useRouter()
   const [note, setNote] = useState('')
+  const [pendingDecision, setPendingDecision] = useState<'admit' | 'waitlist' | 'reject' | null>(null)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
@@ -26,6 +27,7 @@ export function AdmissionActions({
 
   const act = (decision: 'admit' | 'waitlist' | 'reject') => {
     setError(null)
+    setPendingDecision(decision)
     startTransition(async () => {
       const res = await fetch(`/api/admin/registrations/${registrationId}/decision`, {
         method: 'POST',
@@ -34,6 +36,7 @@ export function AdmissionActions({
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
+        setPendingDecision(null)
         setError(data?.error ?? '操作失败')
         return
       }
@@ -61,24 +64,27 @@ export function AdmissionActions({
           className="ss-btn-action is-primary"
           onClick={() => act('admit')}
           disabled={pending}
+          aria-busy={pendingDecision === 'admit'}
         >
-          录取（admit）
+          {pendingDecision === 'admit' ? <span className="ss-loading-label"><span className="ss-auth-spinner" />正在录取…</span> : '录取（admit）'}
         </button>
         <button
           type="button"
           className="ss-btn-action"
           onClick={() => act('waitlist')}
           disabled={pending}
+          aria-busy={pendingDecision === 'waitlist'}
         >
-          放入候补
+          {pendingDecision === 'waitlist' ? <span className="ss-loading-label"><span className="ss-auth-spinner" />处理中…</span> : '放入候补'}
         </button>
         <button
           type="button"
           className="ss-btn-action is-danger"
           onClick={() => act('reject')}
           disabled={pending}
+          aria-busy={pendingDecision === 'reject'}
         >
-          拒绝
+          {pendingDecision === 'reject' ? <span className="ss-loading-label"><span className="ss-auth-spinner" />正在拒绝…</span> : '拒绝'}
         </button>
       </div>
     </>
@@ -103,6 +109,7 @@ export function PaymentActions({
   const [channel, setChannel] = useState(payment?.channel ?? 'wechat')
   const [externalRef, setExternalRef] = useState(payment?.external_ref ?? '')
   const [note, setNote] = useState(payment?.note ?? '')
+  const [pendingAction, setPendingAction] = useState<'quickConfirm' | 'notify' | 'confirm' | null>(null)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
@@ -111,6 +118,7 @@ export function PaymentActions({
 
   const quickConfirm = () => {
     setError(null)
+    setPendingAction('quickConfirm')
     startTransition(async () => {
       const res = await fetch(`/api/admin/registrations/${registrationId}/payment`, {
         method: 'PATCH',
@@ -119,6 +127,7 @@ export function PaymentActions({
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
+        setPendingAction(null)
         setError(data?.error ?? '操作失败')
         return
       }
@@ -159,9 +168,11 @@ export function PaymentActions({
 
   const notify = () => {
     setError(null)
+    setPendingAction('notify')
     startTransition(async () => {
       const cents = Math.round(Number(amount) * 100)
       if (!Number.isFinite(cents) || cents <= 0) {
+        setPendingAction(null)
         setError('金额无效'); return
       }
       const res = await fetch(`/api/admin/registrations/${registrationId}/payment`, {
@@ -171,6 +182,7 @@ export function PaymentActions({
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
+        setPendingAction(null)
         setError(data?.error ?? '操作失败')
         return
       }
@@ -181,6 +193,7 @@ export function PaymentActions({
   const confirm = () => {
     if (!payment) return
     setError(null)
+    setPendingAction('confirm')
     startTransition(async () => {
       const res = await fetch(`/api/admin/registrations/${registrationId}/payment`, {
         method: 'POST',
@@ -195,6 +208,7 @@ export function PaymentActions({
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
+        setPendingAction(null)
         setError(data?.error ?? '操作失败')
         return
       }
@@ -228,8 +242,9 @@ export function PaymentActions({
               className="ss-btn-action is-primary"
               onClick={notify}
               disabled={pending}
+              aria-busy={pendingAction === 'notify'}
             >
-              通知付款（→ payment_pending）
+              {pendingAction === 'notify' ? <span className="ss-loading-label"><span className="ss-auth-spinner" />正在通知…</span> : '通知付款（→ payment_pending）'}
             </button>
           </div>
         </>
@@ -243,8 +258,9 @@ export function PaymentActions({
               className="ss-btn-action is-primary"
               onClick={quickConfirm}
               disabled={pending}
+              aria-busy={pendingAction === 'quickConfirm'}
             >
-              确认付款（→ paid）
+              {pendingAction === 'quickConfirm' ? <span className="ss-loading-label"><span className="ss-auth-spinner" />正在确认…</span> : '确认付款（→ paid）'}
             </button>
           </div>
           <div className="ss-field">
@@ -292,8 +308,9 @@ export function PaymentActions({
               className="ss-btn-action is-primary"
               onClick={confirm}
               disabled={pending}
+              aria-busy={pendingAction === 'confirm'}
             >
-              确认到账（→ paid）
+              {pendingAction === 'confirm' ? <span className="ss-loading-label"><span className="ss-auth-spinner" />正在确认…</span> : '确认到账（→ paid）'}
             </button>
           </div>
         </>

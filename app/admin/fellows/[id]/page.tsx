@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getFellowById } from '@/lib/db/fellows'
 import { updateFellowAction } from '../../_actions'
+import { AdminSubmitButton } from '../../AdminSubmitButton'
 import type { ProfileVisibility } from '@/lib/db/types'
 
 export const dynamic = 'force-dynamic'
@@ -49,7 +50,7 @@ export default async function AdminFellowDetailPage({ params }: { params: { id: 
                 <option value="false">已隐藏</option>
               </select>
             </div>
-            <button className="ss-btn-action is-primary" type="submit">保存</button>
+            <AdminSubmitButton idleLabel="保存" pendingLabel="正在保存…" />
           </form>
         </aside>
       </div>

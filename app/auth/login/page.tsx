@@ -9,6 +9,7 @@ import { t } from '@/lib/i18n'
 import { mapAuthError, type MappedAuthError } from '@/lib/i18n/auth-errors'
 
 type Mode = 'signin' | 'signup'
+type OAuthProvider = 'google' | 'github'
 
 type GoogleCredentialResponse = {
   credential?: string
@@ -63,6 +64,7 @@ function LoginForm() {
   const [error, setError] = useState<MappedAuthError | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [googleButtonReady, setGoogleButtonReady] = useState(false)
+  const [oauthPending, setOauthPending] = useState<OAuthProvider | null>(null)
   const [pending, startTransition] = useTransition()
 
   const completeLogin = useCallback(() => {
@@ -87,8 +89,11 @@ function LoginForm() {
 
   const handleGoogleCredential = useCallback(async (response: GoogleCredentialResponse) => {
     setError(null)
+    setNotice(null)
+    setOauthPending('google')
     const token = response.credential
     if (!token) {
+      setOauthPending(null)
       setError({ message: 'Google 登录没有返回有效凭证，请重试。', suggestOAuth: false })
       return
     }
@@ -97,6 +102,7 @@ function LoginForm() {
       token,
     })
     if (error) {
+      setOauthPending(null)
       setError(mapAuthError(error))
       return
     }
@@ -154,11 +160,16 @@ function LoginForm() {
 
   const handleOAuth = async (provider: 'github') => {
     setError(null)
+    setNotice(null)
+    setOauthPending(provider)
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo: originRedirect() },
     })
-    if (error) setError(mapAuthError(error))
+    if (error) {
+      setOauthPending(null)
+      setError(mapAuthError(error))
+    }
   }
 
   const handleEmail = async (e: React.FormEvent) => {
@@ -263,15 +274,17 @@ function LoginForm() {
       {notice && <div className="ss-auth-success">{notice}</div>}
 
       <div className="ss-oauth-row">
-        <div className={`ss-google-button ${googleButtonReady ? 'is-ready' : 'is-loading'}`} aria-label={t.auth.login.google}>
+        <div className={`ss-google-button ${googleButtonReady ? 'is-ready' : 'is-loading'} ${oauthPending === 'google' ? 'is-pending' : ''}`} aria-label={t.auth.login.google} aria-busy={oauthPending === 'google'}>
           <div className="ss-oauth-btn ss-google-visual-btn" aria-hidden="true">
-            <GoogleMark /> {googleButtonReady ? t.auth.login.google : 'Google 登录加载中'}
+            {oauthPending === 'google' ? <span className="ss-auth-spinner" /> : <GoogleMark />}
+            {oauthPending === 'google' ? '正在登录…' : googleButtonReady ? t.auth.login.google : 'Google 登录加载中'}
           </div>
           <div className="ss-google-native-button" ref={googleButtonRef} />
         </div>
         {enableGitHubOAuth && (
-          <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('github')}>
-            <GitHubMark /> {t.auth.login.github}
+          <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('github')} disabled={oauthPending !== null} aria-busy={oauthPending === 'github'}>
+            {oauthPending === 'github' ? <span className="ss-auth-spinner" /> : <GitHubMark />}
+            {oauthPending === 'github' ? '正在跳转 GitHub…' : t.auth.login.github}
           </button>
         )}
       </div>
@@ -321,8 +334,10 @@ function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending}>
-          {pending ? '…' : mode === 'signin' ? t.auth.login.submitLogin : t.auth.login.submitSignUp}
+        <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending || oauthPending !== null} aria-busy={pending}>
+          {pending ? (
+            <span className="ss-loading-label"><span className="ss-auth-spinner" />{mode === 'signin' ? '正在登录…' : '正在注册…'}</span>
+          ) : mode === 'signin' ? t.auth.login.submitLogin : t.auth.login.submitSignUp}
         </button>
       </form>
 

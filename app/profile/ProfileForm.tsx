@@ -208,8 +208,10 @@ export function ProfileForm({ initial }: { initial: FormState }) {
         </select>
       </div>
 
-      <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending}>
-        {pending ? '…' : '保存'}
+      <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending} aria-busy={pending}>
+        {pending ? (
+          <span className="ss-loading-label"><span className="ss-auth-spinner" />正在保存…</span>
+        ) : '保存'}
       </button>
     </form>
   )

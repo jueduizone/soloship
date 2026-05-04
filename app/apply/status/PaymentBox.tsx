@@ -62,8 +62,11 @@ export function PaymentBox({
         style={{ marginTop: 20 }}
         onClick={submit}
         disabled={pending}
+        aria-busy={pending}
       >
-        {pending ? '…' : '我已付款，等待确认'}
+        {pending ? (
+          <span className="ss-loading-label"><span className="ss-auth-spinner" />正在提交…</span>
+        ) : '我已付款，等待确认'}
       </button>
     </div>
   )

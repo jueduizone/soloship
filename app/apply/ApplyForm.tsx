@@ -159,8 +159,10 @@ export function ApplyForm({
         <div className="ss-field-hint">一行一个链接，选填。</div>
       </div>
 
-      <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending}>
-        {pending ? '…' : isUpdate ? '更新申请' : t.apply.form.submit}
+      <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending} aria-busy={pending}>
+        {pending ? (
+          <span className="ss-loading-label"><span className="ss-auth-spinner" />正在提交…</span>
+        ) : isUpdate ? '更新申请' : t.apply.form.submit}
       </button>
     </form>
   )
