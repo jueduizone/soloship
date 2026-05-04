@@ -1,5 +1,9 @@
 import { event, footer } from './content'
 
+function resolveHomeAnchor(href: string) {
+  return href.startsWith('#') ? `/${href}` : href
+}
+
 export function Footer() {
   return (
     <footer
@@ -46,7 +50,7 @@ export function Footer() {
             {footer.links.map((l) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={resolveHomeAnchor(l.href)}
                 style={{
                   color: 'var(--ss-text-dim)',
                   fontSize: 13,

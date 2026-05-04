@@ -5,6 +5,10 @@ import { isOrganizerUser } from '@/lib/auth/require-organizer'
 import { getDefaultEvent } from '@/lib/db/events'
 import { getRegistrationForApplicant } from '@/lib/db/registrations'
 
+function resolveHomeAnchor(href: string) {
+  return href.startsWith('#') ? `/${href}` : href
+}
+
 export async function Nav() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -33,7 +37,7 @@ export async function Nav() {
       }}
     >
       <div className="ss-container flex items-center justify-between" style={{ height: 52 }}>
-        <a href="#top" className="flex items-center gap-3" aria-label={`${event.name} ${event.volume}`}>
+        <a href="/#top" className="flex items-center gap-3" aria-label={`${event.name} ${event.volume}`}>
           <img
             src="/assets/brand/soloship-logo.svg"
             alt={event.name}
@@ -60,7 +64,7 @@ export async function Nav() {
           {nav.links.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              href={resolveHomeAnchor(l.href)}
               className="hidden md:inline-flex items-center"
               style={{
                 color: 'var(--ss-text-dim)',

@@ -46,6 +46,10 @@
 
 .ss-admin-topbar .ss-user {
   font-size: 12px; color: var(--ss-text-dim);
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ss-admin-container {
@@ -65,6 +69,96 @@
   color: var(--ss-text-dim);
   font-size: 13px;
   margin-bottom: 24px;
+}
+
+.ss-admin-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.ss-admin-metric-card {
+  display: flex;
+  min-height: 104px;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--ss-border-dark);
+  background:
+    radial-gradient(circle at 80% 0%, rgba(0,251,135,0.10), transparent 32%),
+    var(--ss-surface);
+  border-radius: 16px;
+  padding: 16px;
+  color: var(--ss-text-dim);
+  text-decoration: none;
+  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+}
+
+.ss-admin-metric-card:hover {
+  border-color: rgba(0,251,135,0.55);
+  transform: translateY(-1px);
+}
+
+.ss-admin-metric-card span {
+  font-size: 12px;
+  color: var(--ss-text-faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ss-admin-metric-card strong {
+  display: block;
+  margin-top: 16px;
+  color: var(--ss-text-strong);
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+
+.ss-admin-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.ss-admin-quick-card {
+  display: block;
+  min-height: 160px;
+  color: var(--ss-text);
+  text-decoration: none;
+  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+}
+
+.ss-admin-quick-card:hover {
+  border-color: rgba(0,251,135,0.50);
+  background: var(--ss-surface-hi);
+  transform: translateY(-1px);
+}
+
+.ss-admin-quick-card h3 {
+  margin: 0 0 12px;
+  color: var(--ss-text-strong);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+.ss-admin-quick-card p {
+  margin: 0;
+  color: var(--ss-text-dim);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.ss-admin-quick-card span {
+  display: inline-flex;
+  margin-top: 20px;
+  color: var(--ss-accent-hi);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .ss-filters {
@@ -346,9 +440,16 @@
   font-size: 13px;
 }
 @media (max-width: 1100px) {
+  .ss-admin-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ss-admin-quick-grid { grid-template-columns: 1fr; }
   .ss-resource-form { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
   .ss-admin-topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .ss-admin-topbar nav { flex-wrap: wrap; gap: 10px 14px; }
+  .ss-admin-container { padding: 24px 16px; }
+  .ss-admin-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ss-admin-metric-card { min-height: 92px; }
+  .ss-admin-metric-card strong { font-size: 28px; }
   .ss-resource-form { grid-template-columns: 1fr; }
 }
