@@ -29,8 +29,8 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
         padding: '5px 12px 5px 5px',
         borderRadius: 999,
         border: '1px solid var(--ss-border-light)',
-        background: 'rgba(255,255,255,0.62)',
-        color: 'var(--ss-ink)',
+        background: 'rgba(255,255,255,0.035)',
+        color: 'var(--ss-text)',
         fontSize: 14,
         fontWeight: 500,
       }}
@@ -45,10 +45,10 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
           alignItems: 'center',
           justifyContent: 'center',
           background: showLogo
-            ? '#fff'
-            : 'linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02))',
+            ? 'rgba(242,255,249,0.92)'
+            : 'linear-gradient(135deg, rgba(0,251,135,0.12), rgba(255,255,255,0.03))',
           border: '1px solid var(--ss-border-light)',
-          color: 'var(--ss-ink)',
+          color: 'var(--ss-accent-hi)',
           fontSize: 11,
           fontWeight: 600,
           letterSpacing: '0.02em',

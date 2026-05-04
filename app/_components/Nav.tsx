@@ -26,35 +26,21 @@ export async function Nav() {
     <nav
       className="sticky top-0 z-20"
       style={{
-        background: 'rgba(10,11,14,0.78)',
+        background: 'rgba(3,7,5,0.78)',
         backdropFilter: 'saturate(140%) blur(14px)',
         WebkitBackdropFilter: 'saturate(140%) blur(14px)',
         borderBottom: '1px solid var(--ss-border-dark-soft)',
       }}
     >
       <div className="ss-container flex items-center justify-between" style={{ height: 60 }}>
-        <a href="#top" className="flex items-center gap-2.5" aria-label={`${event.name} ${event.volume}`}>
-          <span
-            aria-hidden
-            style={{
-              display: 'inline-block',
-              width: 8,
-              height: 8,
-              borderRadius: 2,
-              background: 'var(--ss-accent)',
-              boxShadow: '0 0 0 3px rgba(58,108,255,0.14)',
-            }}
+        <a href="#top" className="flex items-center gap-3" aria-label={`${event.name} ${event.volume}`}>
+          <img
+            src="/assets/brand/soloship-logo.svg"
+            alt={event.name}
+            width={138}
+            height={30}
+            style={{ display: 'block', width: 120, height: 'auto' }}
           />
-          <span
-            style={{
-              color: 'var(--ss-text-strong)',
-              fontWeight: 600,
-              fontSize: 15,
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {event.name}
-          </span>
           <span
             className="ss-mono hidden sm:inline-flex items-center"
             style={{
@@ -165,7 +151,7 @@ export async function Nav() {
                 height: 6,
                 borderRadius: 999,
                 background: 'var(--ss-accent-hi)',
-                boxShadow: '0 0 0 3px rgba(58,108,255,0.18)',
+                boxShadow: '0 0 0 3px rgba(0,251,135,0.16), 0 0 18px rgba(0,251,135,0.52)',
               }}
             />
             {nav.cta.label}

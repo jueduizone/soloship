@@ -21,9 +21,10 @@
   font-weight: 600; color: var(--ss-text-strong);
   letter-spacing: -0.01em;
 }
-.ss-admin-topbar .ss-brand::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--ss-accent);
+.ss-admin-topbar .ss-brand img {
+  display: block;
+  width: 104px;
+  height: auto;
 }
 
 .ss-admin-topbar .ss-admin-tag {
@@ -146,9 +147,9 @@
   font-weight: 500;
 }
 .ss-table-action:hover {
-  border-color: var(--ss-text-strong);
-  background: var(--ss-text-strong);
-  color: var(--ss-ink);
+  border-color: var(--ss-accent);
+  background: var(--ss-accent);
+  color: #03110a;
 }
 
 .ss-empty {
@@ -225,11 +226,11 @@
 .ss-btn-action:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .ss-btn-action.is-primary {
-  background: var(--ss-text-strong);
-  color: var(--ss-ink);
-  border-color: var(--ss-text-strong);
+  background: var(--ss-accent);
+  color: #03110a;
+  border-color: var(--ss-accent);
 }
-.ss-btn-action.is-primary:hover { background: #fff; border-color: #fff; }
+.ss-btn-action.is-primary:hover { background: var(--ss-accent-hi); border-color: var(--ss-accent-hi); }
 
 .ss-btn-action.is-danger {
   color: #ff9e9e;

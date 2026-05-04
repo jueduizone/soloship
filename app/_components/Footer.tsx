@@ -12,20 +12,14 @@ export function Footer() {
       <div className="ss-container">
         <div className="grid gap-10 md:gap-6 md:grid-cols-[1fr_auto]">
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <span
-                aria-hidden
-                style={{
-                  display: 'inline-block',
-                  width: 8,
-                  height: 8,
-                  borderRadius: 2,
-                  background: 'var(--ss-accent)',
-                }}
+            <div className="flex items-center gap-3 mb-4">
+              <img
+                src="/assets/brand/soloship-logo.svg"
+                alt={event.name}
+                width={128}
+                height={28}
+                style={{ display: 'block', width: 112, height: 'auto' }}
               />
-              <span style={{ color: 'var(--ss-text-strong)', fontWeight: 600, fontSize: 15 }}>
-                {event.name}
-              </span>
               <span
                 className="ss-mono"
                 style={{ color: 'var(--ss-text-faint)', fontSize: 11 }}

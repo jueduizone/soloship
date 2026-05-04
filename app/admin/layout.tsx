@@ -12,7 +12,14 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <div className="ss-admin-shell">
       <header className="ss-admin-topbar">
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span className="ss-brand">SoloShip</span>
+          <Link href="/" className="ss-brand" aria-label="SoloShip home">
+            <img
+              src="/assets/brand/soloship-logo.svg"
+              alt="SoloShip"
+              width={112}
+              height={24}
+            />
+          </Link>
           <span className="ss-admin-tag">admin</span>
         </div>
         <nav>

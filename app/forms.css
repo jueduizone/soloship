@@ -51,8 +51,8 @@
 }
 
 .ss-form-success {
-  background: rgba(58, 108, 255, 0.08);
-  border: 1px solid rgba(58, 108, 255, 0.24);
+  background: rgba(0, 251, 135, 0.08);
+  border: 1px solid rgba(0, 251, 135, 0.24);
   color: var(--ss-accent-hi);
   border-radius: 10px;
   padding: 10px 12px;
@@ -101,6 +101,6 @@
 }
 .ss-status-pill[data-kind="payment_pending"] {
   color: var(--ss-accent-hi);
-  border-color: rgba(58,108,255,0.25);
-  background: rgba(58,108,255,0.06);
+  border-color: rgba(0,251,135,0.25);
+  background: rgba(0,251,135,0.06);
 }

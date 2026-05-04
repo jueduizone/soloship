@@ -79,7 +79,7 @@
 
 .ss-resource-pill[data-visibility="admitted_only"] {
   color: var(--ss-accent-hi);
-  border-color: rgba(92, 131, 255, 0.35);
+  border-color: rgba(0, 251, 135, 0.35);
   background: var(--ss-accent-soft);
 }
 
