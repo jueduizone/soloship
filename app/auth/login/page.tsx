@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState, useTransition } from 'react'
+import Script from 'next/script'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -9,7 +10,34 @@ import { mapAuthError, type MappedAuthError } from '@/lib/i18n/auth-errors'
 
 type Mode = 'signin' | 'signup'
 
+type GoogleCredentialResponse = {
+  credential?: string
+  select_by?: string
+}
+
+type GoogleIdentityServices = {
+  accounts: {
+    id: {
+      initialize: (options: {
+        client_id: string
+        callback: (response: GoogleCredentialResponse) => void
+        auto_select?: boolean
+        cancel_on_tap_outside?: boolean
+        use_fedcm_for_prompt?: boolean
+      }) => void
+      prompt: (listener?: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean }) => void) => void
+    }
+  }
+}
+
+declare global {
+  interface Window {
+    google?: GoogleIdentityServices
+  }
+}
+
 const enableGitHubOAuth = true
+const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '280149383110-1tng3ht7524o2qlq0oaq7k7bkkn6j0pl.apps.googleusercontent.com'
 
 function LoginForm() {
   const router = useRouter()
@@ -24,6 +52,11 @@ function LoginForm() {
   const [error, setError] = useState<MappedAuthError | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+
+  const completeLogin = () => {
+    router.push(next)
+    router.refresh()
+  }
 
   // OAuth/email callback pushes us back with ?error=<english>. Translate it
   // through the same mapper so users never see raw Supabase English strings
@@ -40,10 +73,47 @@ function LoginForm() {
     return `${base}/auth/callback?next=${encodeURIComponent(next)}`
   }
 
-  const handleOAuth = async (provider: 'google' | 'github') => {
+  const handleGoogleCredential = async (response: GoogleCredentialResponse) => {
     setError(null)
-    // TODO(supabase): 确认 Dashboard → Authentication → Providers 里
-    // 已开启对应 provider 并填好 client_id / client_secret。
+    const token = response.credential
+    if (!token) {
+      setError({ message: 'Google 登录没有返回有效凭证，请重试。', suggestOAuth: false })
+      return
+    }
+    const { error } = await supabase.auth.signInWithIdToken({
+      provider: 'google',
+      token,
+    })
+    if (error) {
+      setError(mapAuthError(error))
+      return
+    }
+    completeLogin()
+  }
+
+  const handleGoogle = async () => {
+    setError(null)
+    const google = window.google?.accounts?.id
+    if (!google) {
+      setError({ message: 'Google 登录组件还在加载，请稍后再试。', suggestOAuth: false })
+      return
+    }
+    google.initialize({
+      client_id: googleClientId,
+      callback: handleGoogleCredential,
+      auto_select: false,
+      cancel_on_tap_outside: true,
+      use_fedcm_for_prompt: true,
+    })
+    google.prompt((notification) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        setNotice('如果没有弹出 Google 账号选择器，请检查浏览器是否拦截第三方登录弹窗。')
+      }
+    })
+  }
+
+  const handleOAuth = async (provider: 'github') => {
+    setError(null)
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo: originRedirect() },
@@ -59,8 +129,7 @@ function LoginForm() {
       if (mode === 'signin') {
         const { error } = await supabase.auth.signInWithPassword({ email, password })
         if (error) { setError(mapAuthError(error)); return }
-        router.push(next)
-        router.refresh()
+        completeLogin()
       } else {
         try {
           const { data, error } = await supabase.auth.signUp({
@@ -133,7 +202,7 @@ function LoginForm() {
                 <button
                   type="button"
                   className="ss-btn ss-btn-ghost ss-btn-sm"
-                  onClick={() => handleOAuth('google')}
+                  onClick={handleGoogle}
                 >
                   <GoogleMark /> {t.auth.login.google}
                 </button>
@@ -154,7 +223,7 @@ function LoginForm() {
       {notice && <div className="ss-auth-success">{notice}</div>}
 
       <div className="ss-oauth-row">
-        <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('google')}>
+        <button type="button" className="ss-oauth-btn" onClick={handleGoogle}>
           <GoogleMark /> {t.auth.login.google}
         </button>
         {enableGitHubOAuth && (
@@ -224,6 +293,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={<div className="ss-auth-card">{t.common.loading}</div>}>
+      <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
       <LoginForm />
     </Suspense>
   )
