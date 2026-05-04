@@ -9,6 +9,8 @@ import { mapAuthError, type MappedAuthError } from '@/lib/i18n/auth-errors'
 
 type Mode = 'signin' | 'signup'
 
+const enableGitHubOAuth = process.env.NEXT_PUBLIC_ENABLE_GITHUB_OAUTH === 'true'
+
 function LoginForm() {
   const router = useRouter()
   const search = useSearchParams()
@@ -135,13 +137,15 @@ function LoginForm() {
                 >
                   <GoogleMark /> {t.auth.login.google}
                 </button>
-                <button
-                  type="button"
-                  className="ss-btn ss-btn-ghost ss-btn-sm"
-                  onClick={() => handleOAuth('github')}
-                >
-                  <GitHubMark /> {t.auth.login.github}
-                </button>
+                {enableGitHubOAuth && (
+                  <button
+                    type="button"
+                    className="ss-btn ss-btn-ghost ss-btn-sm"
+                    onClick={() => handleOAuth('github')}
+                  >
+                    <GitHubMark /> {t.auth.login.github}
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -153,9 +157,11 @@ function LoginForm() {
         <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('google')}>
           <GoogleMark /> {t.auth.login.google}
         </button>
-        <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('github')}>
-          <GitHubMark /> {t.auth.login.github}
-        </button>
+        {enableGitHubOAuth && (
+          <button type="button" className="ss-oauth-btn" onClick={() => handleOAuth('github')}>
+            <GitHubMark /> {t.auth.login.github}
+          </button>
+        )}
       </div>
 
       <div className="ss-divider-labeled">or</div>

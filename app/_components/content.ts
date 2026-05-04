@@ -30,7 +30,7 @@ export const hero = {
   eyebrow: `${event.volume} · ${event.year} · ${event.tagline}`,
   status: event.status,
   headline: '3 周，把 idea ship 成能上线、能收款的全球 AI 产品。',
-  sub: '1 天线下开营 + 2 周线上共学 + 1 天线下 Demo Day。给 AI 时代的 OPC 一个带 deadline、带同伴、带真实反馈的 shipping sprint。',
+  sub: '1 天线下开营 + 3 周线上共学 + 1 天线下 Demo Day。给 AI 时代的 OPC 一个带 deadline、带同伴、带真实反馈的 shipping sprint。',
   meta: [
     { label: '周期', value: event.duration },
     { label: '形式', value: event.format },
@@ -48,7 +48,7 @@ export const whyNow = {
   body: [
     'AI 基础设施第一次让一个人完整覆盖一款产品的每一环——写代码、做设计、跑增长、做客服。',
     '真正卡住的早就不是技术，而是出海、支付、增长，以及把一个项目做完的执行力。',
-    'SoloShip 把这几件事压进两周。在同伴密度和 deadline 之下，让项目真的 ship 出去。',
+    'SoloShip 把这几件事压进 3 周。在同伴密度和 deadline 之下，让项目真的 ship 出去。',
   ],
 }
 
@@ -58,7 +58,7 @@ export const whySoloship = {
   cards: [
     {
       title: 'Builder-only',
-      body: '两周高密度 cohort，所有人都在同一条 ship 上。没有旁观者，也没有纯内容消费。',
+      body: '3 周高密度 cohort，所有人都在同一条 ship 上。没有旁观者，也没有纯内容消费。',
     },
     {
       title: 'Deadline-driven',
@@ -86,7 +86,7 @@ export const whoFor = {
   ],
   notSuits: [
     '只想听课、收藏课件的学习者',
-    '两周内没法每天投入数小时的人',
+    '无法在 3 周里每天投入数小时的人',
     '当下并不打算做全球化产品的人',
     '期待有人手把手带你走完全程的人',
   ],
@@ -122,7 +122,7 @@ export const timeline = {
       when: '5.23 – 6.6',
       points: [
         '5.23 上海线下开营，干货分享、圆桌、分组与 Office Hour',
-        '两周线上课程：方向、MVP、上线、定价、增长与 AI 硬件出海',
+        '3 周线上课程：方向、MVP、上线、定价、增长与 AI 硬件出海',
         '目标：idea 推到 demo 可见，并跑通商业闭环假设',
       ],
     },
@@ -141,7 +141,7 @@ export const timeline = {
 
 export const outcome = {
   eyebrow: '你最后会带走什么',
-  headline: '两周之后，不是笔记，是结果。',
+  headline: '3 周之后，不是笔记，是结果。',
   items: [
     {
       title: '一个真实可展示的项目',
@@ -320,7 +320,7 @@ export const faq = {
     },
     {
       q: '需要已经有项目吗？',
-      a: '不强制，但需要有明确的方向和 idea。SoloShip 不是帮你从 0 想题目，是帮你把手里的 idea 两周内 ship 出去。',
+      a: '不强制，但需要有明确的方向和 idea。SoloShip 不是帮你从 0 想题目，是帮你用 3 周把手里的 idea ship 出去。',
     },
     {
       q: '线上还是线下？',

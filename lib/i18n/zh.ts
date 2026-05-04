@@ -17,11 +17,11 @@ export const zh = {
       backToHome: '返回首页',
       applyNotice: {
         title: '申请 SoloShip Vol.1 前请先登录',
-        body: '申请通道需要账号来保存你的申请进度与录取结果。没有账号？下方选择 Google、GitHub 或邮箱即可快速注册，登录后会自动回到申请表。',
+        body: '申请通道需要账号来保存你的申请进度与录取结果。没有账号？下方选择 Google 或邮箱即可快速注册，登录后会自动回到申请表。',
       },
       errors: {
         rateLimit: '邮件发送频率过高，请稍后再试（约 60 秒后重试）。',
-        rateLimitOAuthHint: '提示：你也可以直接使用上方的 Google 或 GitHub 登录，无需邮件验证即可进入。',
+        rateLimitOAuthHint: '提示：你也可以直接使用上方的 Google 登录，无需邮件验证即可进入。',
         invalidCredentials: '邮箱或密码不正确。',
         userAlreadyRegistered: '该邮箱已注册，请直接登录。',
         weakPassword: '密码强度不足，请使用至少 6 位，包含字母和数字。',
@@ -40,13 +40,13 @@ export const zh = {
       step2: '点击邮件里的「确认邮箱」链接',
       step3: '页面会自动跳回 SoloShip 并登录完成',
       noEmail: '没收到邮件？',
-      noEmailHint: '邮件一般 1–2 分钟内送达。如仍未收到，请检查垃圾箱，或返回登录页改用 Google / GitHub 继续。',
+      noEmailHint: '邮件一般 1–2 分钟内送达。如仍未收到，请检查垃圾箱，或返回登录页改用 Google 继续。',
       backToLogin: '返回登录页',
     },
     errors: {
       invalidCredentials: '邮箱或密码错误，请重试。',
       invalidEmail: '邮箱格式不正确，请检查后重试。',
-      emailAddressUnsupported: '该邮箱地址暂不支持（可能是域名限制或无法接收验证邮件），请更换邮箱，或直接使用 Google / GitHub 登录。',
+      emailAddressUnsupported: '该邮箱地址暂不支持（可能是域名限制或无法接收验证邮件），请更换邮箱，或直接使用 Google 登录。',
       userAlreadyRegistered: '该邮箱已注册，请直接登录。',
       weakPassword: '密码至少需要 6 位。',
       emailNotConfirmed: '邮箱尚未验证，请先点击验证邮件中的链接。',
@@ -58,7 +58,7 @@ export const zh = {
   },
   apply: {
     title: '报名 SoloShip Vol.1',
-    subtitle: '两周高压 shipping sprint。先提交申请，录取后再付款。',
+    subtitle: '3 周高压 shipping sprint。先提交申请，录取后再付款。',
     form: {
       name: '姓名 / 英文名',
       email: '邮箱',
