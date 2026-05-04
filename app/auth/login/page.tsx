@@ -129,10 +129,10 @@ function LoginForm() {
       container.innerHTML = ''
       google.renderButton(container, {
         type: 'standard',
-        theme: 'outline',
+        theme: 'filled_black',
         size: 'large',
         text: 'continue_with',
-        shape: 'rectangular',
+        shape: 'pill',
         logo_alignment: 'left',
         width: Math.min(376, container.offsetWidth || 376),
       })

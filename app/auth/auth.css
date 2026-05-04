@@ -50,6 +50,9 @@
 
 .ss-google-button {
   min-height: 44px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #0b0f14;
 }
 
 .ss-oauth-btn {
