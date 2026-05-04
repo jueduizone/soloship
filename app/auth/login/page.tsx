@@ -32,6 +32,7 @@ type GoogleIdentityServices = {
         text?: 'signin_with' | 'signup_with' | 'continue_with' | 'signin'
         shape?: 'rectangular' | 'pill' | 'circle' | 'square'
         logo_alignment?: 'left' | 'center'
+        locale?: string
         width?: number
       }) => void
       prompt: (listener?: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean }) => void) => void
@@ -61,6 +62,7 @@ function LoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<MappedAuthError | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
+  const [googleButtonReady, setGoogleButtonReady] = useState(false)
   const [pending, startTransition] = useTransition()
 
   const completeLogin = useCallback(() => {
@@ -101,11 +103,6 @@ function LoginForm() {
     completeLogin()
   }, [completeLogin, supabase])
 
-  const handleGoogle = async () => {
-    setError(null)
-    setNotice('Google 登录按钮还在加载，请稍后再试。')
-  }
-
   useEffect(() => {
     let cancelled = false
     let timer: ReturnType<typeof setTimeout> | null = null
@@ -127,6 +124,7 @@ function LoginForm() {
         use_fedcm_for_prompt: true,
       })
       container.innerHTML = ''
+      setGoogleButtonReady(false)
       google.renderButton(container, {
         type: 'standard',
         theme: 'filled_black',
@@ -134,8 +132,17 @@ function LoginForm() {
         text: 'continue_with',
         shape: 'rectangular',
         logo_alignment: 'left',
+        locale: 'zh_CN',
         width: Math.min(376, container.offsetWidth || 376),
       })
+
+      const markReady = () => {
+        if (!cancelled && container.querySelector('iframe')) {
+          setGoogleButtonReady(true)
+        }
+      }
+      requestAnimationFrame(markReady)
+      setTimeout(markReady, 250)
     }
 
     renderGoogleButton()
@@ -235,9 +242,9 @@ function LoginForm() {
                 <button
                   type="button"
                   className="ss-btn ss-btn-ghost ss-btn-sm"
-                  onClick={handleGoogle}
+                  disabled={!googleButtonReady}
                 >
-                  <GoogleMark /> {t.auth.login.google}
+                  <GoogleMark /> {googleButtonReady ? t.auth.login.google : 'Google 登录加载中'}
                 </button>
                 {enableGitHubOAuth && (
                   <button
@@ -256,10 +263,12 @@ function LoginForm() {
       {notice && <div className="ss-auth-success">{notice}</div>}
 
       <div className="ss-oauth-row">
-        <div className="ss-google-button" aria-label={t.auth.login.google} onClick={handleGoogle}>
-          <button type="button" className="ss-oauth-btn ss-google-visual-btn" tabIndex={-1} aria-hidden="true">
-            <GoogleMark /> {t.auth.login.google}
-          </button>
+        <div className={`ss-google-button ${googleButtonReady ? 'is-ready' : 'is-loading'}`} aria-label={t.auth.login.google}>
+          {!googleButtonReady && (
+            <button type="button" className="ss-oauth-btn ss-google-visual-btn" tabIndex={-1} aria-hidden="true">
+              <GoogleMark /> Google 登录加载中
+            </button>
+          )}
           <div className="ss-google-native-button" ref={googleButtonRef} />
         </div>
         {enableGitHubOAuth && (
