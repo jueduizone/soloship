@@ -5,7 +5,7 @@ import { event } from "./_components/content";
 
 export const metadata: Metadata = {
   title: `${event.name} ${event.volume} · ${event.tagline}`,
-  description: "5.23-6.7 SoloShip Vol.1 AI OPC 共学营：1 天线下开营 + 3 周线上共学 + 1 天 Demo Day，把 idea 做成能上线、能收款的全球化 AI 产品。",
+  description: "SoloShip Vol.1 AI OPC 共学营：1 天线下开营 + 3 周线上共学 + 1 天 Demo Day，把 idea 做成能上线、能收款的全球化 AI 产品。",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

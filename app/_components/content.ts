@@ -3,7 +3,7 @@ export const event = {
   volume: 'Vol.1',
   tagline: 'AI OPC 共学营',
   year: '2026',
-  duration: '5.23 – 6.7',
+  duration: '3 周',
   format: '线下开营 + 线上共学 + 线下 Demo Day',
   capacity: '80 人 · 40 支队伍 · 审核制',
   capacityShort: '80 人',
@@ -119,7 +119,7 @@ export const timeline = {
     {
       phase: '03',
       name: '开营 + 线上共学',
-      when: '5.23 – 6.6',
+      when: '5.23 起 · 3 周',
       points: [
         '5.23 上海线下开营，干货分享、圆桌、分组与 Office Hour',
         '3 周线上课程：方向、MVP、上线、定价、增长与 AI 硬件出海',
@@ -129,7 +129,7 @@ export const timeline = {
     {
       phase: '04',
       name: 'Demo Day',
-      when: '6.7 · 上海',
+      when: '第 3 周末 · 上海',
       points: [
         '上海｜长三角绿洲智谷·赵巷线下路演',
         '每队 5 分钟 Demo + 3 分钟评委 Q&A',
