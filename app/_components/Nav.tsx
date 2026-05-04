@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { event, nav } from './content'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -37,7 +39,7 @@ export async function Nav() {
       }}
     >
       <div className="ss-container flex items-center justify-between" style={{ height: 52 }}>
-        <a href="/#top" className="flex items-center gap-3" aria-label={`${event.name} ${event.volume}`}>
+        <Link href="/#top" className="flex items-center gap-3" aria-label={`${event.name} ${event.volume}`}>
           <img
             src="/assets/brand/soloship-logo.svg"
             alt={event.name}
@@ -58,11 +60,11 @@ export async function Nav() {
           >
             {event.volume}
           </span>
-        </a>
+        </Link>
 
         <div className="flex items-center gap-1 sm:gap-6">
           {nav.links.map((l) => (
-            <a
+            <Link
               key={l.href}
               href={resolveHomeAnchor(l.href)}
               className="hidden md:inline-flex items-center"
@@ -76,12 +78,12 @@ export async function Nav() {
               }}
             >
               {l.label}
-            </a>
+            </Link>
           ))}
 
           {user && (
             <>
-              <a
+              <Link
                 href="/apply/status"
                 className="hidden md:inline-flex items-center"
                 style={{
@@ -93,8 +95,8 @@ export async function Nav() {
                 }}
               >
                 申请状态
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/resources"
                 className="hidden md:inline-flex items-center"
                 style={{
@@ -106,12 +108,12 @@ export async function Nav() {
                 }}
               >
                 资料库
-              </a>
+              </Link>
             </>
           )}
 
           {showFellows && (
-            <a
+            <Link
               href="/fellows"
               className="hidden md:inline-flex items-center"
               style={{
@@ -123,11 +125,11 @@ export async function Nav() {
               }}
             >
               同学录
-            </a>
+            </Link>
           )}
 
           {showAdmin && (
-            <a
+            <Link
               href="/admin/registrations"
               className="hidden md:inline-flex items-center"
               style={{
@@ -139,10 +141,10 @@ export async function Nav() {
               }}
             >
               后台
-            </a>
+            </Link>
           )}
 
-          <a
+          <Link
             href={nav.cta.href}
             className="ss-btn ss-btn-ghost group"
             style={{ height: 34, padding: '0 14px', fontSize: 12.5 }}
@@ -159,7 +161,7 @@ export async function Nav() {
               }}
             />
             {nav.cta.label}
-          </a>
+          </Link>
         </div>
       </div>
     </nav>
