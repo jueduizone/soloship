@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { NavCta } from './NavCta'
 import { event, nav } from './content'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -144,24 +145,10 @@ export async function Nav() {
             </Link>
           )}
 
-          <Link
-            href={nav.cta.href}
-            className="ss-btn ss-btn-ghost group"
-            style={{ height: 34, padding: '0 14px', fontSize: 12.5 }}
-          >
-            <span
-              aria-hidden
-              style={{
-                display: 'inline-block',
-                width: 6,
-                height: 6,
-                borderRadius: 999,
-                background: 'var(--ss-accent-hi)',
-                boxShadow: '0 0 0 3px rgba(0,251,135,0.16), 0 0 18px rgba(0,251,135,0.52)',
-              }}
-            />
-            {nav.cta.label}
-          </Link>
+          <NavCta
+            href={user ? nav.cta.href : `/auth/login?next=${encodeURIComponent(nav.cta.href)}`}
+            label={nav.cta.label}
+          />
         </div>
       </div>
     </nav>
