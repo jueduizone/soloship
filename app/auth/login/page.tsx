@@ -264,11 +264,9 @@ function LoginForm() {
 
       <div className="ss-oauth-row">
         <div className={`ss-google-button ${googleButtonReady ? 'is-ready' : 'is-loading'}`} aria-label={t.auth.login.google}>
-          {!googleButtonReady && (
-            <button type="button" className="ss-oauth-btn ss-google-visual-btn" tabIndex={-1} aria-hidden="true">
-              <GoogleMark /> Google 登录加载中
-            </button>
-          )}
+          <div className="ss-oauth-btn ss-google-visual-btn" aria-hidden="true">
+            <GoogleMark /> {googleButtonReady ? t.auth.login.google : 'Google 登录加载中'}
+          </div>
           <div className="ss-google-native-button" ref={googleButtonRef} />
         </div>
         {enableGitHubOAuth && (
