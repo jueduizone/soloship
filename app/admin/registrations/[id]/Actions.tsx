@@ -7,6 +7,17 @@ import type {
   RegistrationStatus,
 } from '@/lib/db/types'
 
+const STATUS_LABEL: Record<RegistrationStatus, string> = {
+  submitted: '待审核',
+  reviewing: '审核中',
+  admitted: '已录取',
+  waitlisted: '候补',
+  rejected: '未录取',
+  payment_pending: '待付款',
+  paid: '已入营',
+  withdrawn: '已退出',
+}
+
 export function AdmissionActions({
   registrationId,
   status,
@@ -19,6 +30,7 @@ export function AdmissionActions({
   const [pendingDecision, setPendingDecision] = useState<'admit' | 'waitlist' | 'reject' | null>(null)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
   const terminal: RegistrationStatus[] = ['paid', 'withdrawn']
   if (terminal.includes(status)) {
@@ -27,6 +39,7 @@ export function AdmissionActions({
 
   const act = (decision: 'admit' | 'waitlist' | 'reject') => {
     setError(null)
+    setSuccess(null)
     setPendingDecision(decision)
     startTransition(async () => {
       const res = await fetch(`/api/admin/registrations/${registrationId}/decision`, {
@@ -34,13 +47,16 @@ export function AdmissionActions({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ decision, note: note || null }),
       })
+      const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
         setPendingDecision(null)
         setError(data?.error ?? '操作失败')
         return
       }
+      const nextStatus = (data?.status ?? data?.registration?.status) as RegistrationStatus | undefined
       setNote('')
+      setPendingDecision(null)
+      setSuccess(nextStatus ? `已更新为「${STATUS_LABEL[nextStatus]}」。` : '审核操作已保存。')
       router.refresh()
     })
   }
@@ -48,6 +64,7 @@ export function AdmissionActions({
   return (
     <>
       {error && <div className="ss-form-error">{error}</div>}
+      {success && <div className="ss-form-success">{success}</div>}
       <div className="ss-field">
         <label htmlFor="note">备注（可选）</label>
         <textarea

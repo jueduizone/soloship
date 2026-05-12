@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getOrganizerUser } from '@/lib/auth/require-organizer'
+import { getAdminUser } from '@/lib/auth/require-admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
   confirmPayment,
@@ -13,7 +13,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const admin = await getOrganizerUser()
+  const admin = await getAdminUser()
   if (!admin) return NextResponse.json({ error: '无权限' }, { status: 403 })
 
   let body: Record<string, unknown>
@@ -62,7 +62,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const admin = await getOrganizerUser()
+  const admin = await getAdminUser()
   if (!admin) return NextResponse.json({ error: '无权限' }, { status: 403 })
 
   let body: Record<string, unknown>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { LogoutButton } from './LogoutButton'
 import { NavCta } from './NavCta'
 import { event, nav } from './content'
 import { createClient } from '@/lib/supabase/server'
@@ -149,6 +150,8 @@ export async function Nav() {
             href={user ? nav.cta.href : `/auth/login?next=${encodeURIComponent(nav.cta.href)}`}
             label={nav.cta.label}
           />
+
+          {user && <LogoutButton />}
         </div>
       </div>
     </nav>

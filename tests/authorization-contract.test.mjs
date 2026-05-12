@@ -10,15 +10,48 @@ for (const route of [
   const source = read(route)
   assert.match(
     source,
-    /getOrganizerUser/,
-    `${route} must authorize the same organizer/admin audience as /admin pages`
+    /getAdminUser/,
+    `${route} must require true admin access for privacy-sensitive registration actions`
   )
   assert.doesNotMatch(
     source,
-    /getAdminUser/,
-    `${route} must not be stricter than /admin page guards`
+    /getOrganizerUser/,
+    `${route} must not allow organizer-only users to access registration actions`
   )
 }
+
+for (const page of [
+  'app/admin/registrations/page.tsx',
+  'app/admin/registrations/[id]/page.tsx',
+]) {
+  assert.match(
+    read(page),
+    /requireAdmin/,
+    `${page} must require true admin access because registrations contain applicant-private data`
+  )
+}
+
+const adminHelper = read('lib/auth/require-admin.ts')
+assert.match(
+  adminHelper,
+  /user\.app_metadata/,
+  'admin detection must prefer server-controlled app_metadata'
+)
+assert.match(
+  adminHelper,
+  /appMeta\.is_admin === true \|\| appMeta\.role === 'admin'/,
+  'admin detection must accept app_metadata.is_admin or app_metadata.role'
+)
+assert.match(
+  adminHelper,
+  /userMeta\.is_admin === true \|\| userMeta\.role === 'admin'/,
+  'admin detection must retain temporary user_metadata admin fallback for existing admin accounts'
+)
+assert.doesNotMatch(
+  adminHelper,
+  /userMeta\.role === 'organizer'/,
+  'admin detection must deny ordinary organizer users'
+)
 
 const statusPage = read('app/apply/status/page.tsx')
 assert.match(
@@ -71,6 +104,28 @@ assert.match(
   '/fellows must allow private profiles only to their owner unless organizer/admin'
 )
 
+const fellowsApi = read('app/api/fellows/route.ts')
+assert.match(
+  fellowsApi,
+  /canViewFellow/,
+  '/api/fellows must filter service-role results through an explicit visibility gate'
+)
+assert.match(
+  fellowsApi,
+  /registration\?\.status === 'paid'/,
+  '/api/fellows must only return cohort_only profiles to paid cohort members or admins'
+)
+assert.match(
+  fellowsApi,
+  /fellow\.visibility === 'public'/,
+  '/api/fellows must keep public profiles visible to anonymous visitors'
+)
+assert.match(
+  fellowsApi,
+  /fellow\.registration\?\.user_id === viewer\.userId/,
+  '/api/fellows must allow private profiles only to their owner unless admin'
+)
+
 const fellowDetailPage = read('app/fellows/[id]/page.tsx')
 assert.match(
   fellowDetailPage,
@@ -81,6 +136,23 @@ assert.match(
   fellowDetailPage,
   /if \(!canViewFellow\([^)]*\)\) notFound\(\)/s,
   '/fellows/[id] must return notFound for unauthorized cohort/private profile guesses'
+)
+
+const admissionDb = read('lib/db/admission.ts')
+assert.match(
+  admissionDb,
+  /const registration = await updateRegistrationStatus[\s\S]*\.from\('admission_decisions'\)/,
+  'admission decisions must update registration status before inserting the decision when no DB transaction is available'
+)
+assert.match(
+  admissionDb,
+  /previous\.status/,
+  'admission decision failure path must attempt to roll registration status back'
+)
+assert.match(
+  read('app/api/admin/registrations/[id]/decision/route.ts'),
+  /status: result\.registration\.status/,
+  'decision route must return updated registration status for the UI'
 )
 
 const signoutRoute = read('app/api/auth/signout/route.ts')

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/auth/require-admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { listRegistrations } from '@/lib/db/registrations'
 import type { RegistrationStatus } from '@/lib/db/types'
@@ -34,6 +35,7 @@ export default async function RegistrationsListPage({
 }: {
   searchParams: { filter?: string; q?: string; page?: string }
 }) {
+  await requireAdmin()
   const admin = createAdminClient()
   const event = await getDefaultEvent(admin)
 

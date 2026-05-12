@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getOrganizerUser } from '@/lib/auth/require-organizer'
+import { getAdminUser } from '@/lib/auth/require-admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { recordAdmissionDecision } from '@/lib/db/admission'
 import type { AdmissionDecisionKind } from '@/lib/db/types'
@@ -12,7 +12,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const admin = await getOrganizerUser()
+  const admin = await getAdminUser()
   if (!admin) return NextResponse.json({ error: '无权限' }, { status: 403 })
 
   let body: Record<string, unknown>
@@ -27,13 +27,18 @@ export async function POST(
 
   const client = createAdminClient()
   try {
-    const row = await recordAdmissionDecision(client, {
+    const result = await recordAdmissionDecision(client, {
       registrationId: params.id,
       reviewerId: admin.id,
       decision,
       note,
     })
-    return NextResponse.json({ ok: true, decision: row })
+    return NextResponse.json({
+      ok: true,
+      decision: result.decision,
+      registration: result.registration,
+      status: result.registration.status,
+    })
   } catch (err) {
     const message = err instanceof Error ? err.message : '未知错误'
     return NextResponse.json({ error: message }, { status: 400 })

@@ -2,9 +2,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   AdmissionDecisionKind,
   AdmissionDecisionRow,
+  RegistrationRow,
   RegistrationStatus,
 } from './types'
-import { updateRegistrationStatus } from './registrations'
+import { getRegistrationById, updateRegistrationStatus } from './registrations'
 
 const STATUS_BY_DECISION: Record<AdmissionDecisionKind, RegistrationStatus> = {
   admit: 'admitted',
@@ -24,7 +25,17 @@ export async function recordAdmissionDecision(
     decision: AdmissionDecisionKind
     note?: string | null
   }
-): Promise<AdmissionDecisionRow> {
+): Promise<{ decision: AdmissionDecisionRow; registration: RegistrationRow }> {
+  const previous = await getRegistrationById(supabase, params.registrationId)
+  if (!previous) throw new Error('报名不存在')
+
+  const registration = await updateRegistrationStatus(
+    supabase,
+    params.registrationId,
+    STATUS_BY_DECISION[params.decision],
+    params.note ?? null
+  )
+
   const { data, error } = await supabase
     .from('admission_decisions')
     .insert({
@@ -35,16 +46,20 @@ export async function recordAdmissionDecision(
     })
     .select('*')
     .single()
-  if (error) throw error
+  if (error) {
+    await updateRegistrationStatus(
+      supabase,
+      params.registrationId,
+      previous.status,
+      previous.reviewer_note
+    ).catch(() => null)
+    throw error
+  }
 
-  await updateRegistrationStatus(
-    supabase,
-    params.registrationId,
-    STATUS_BY_DECISION[params.decision],
-    params.note ?? null
-  )
-
-  return data as AdmissionDecisionRow
+  return {
+    decision: data as AdmissionDecisionRow,
+    registration,
+  }
 }
 
 export async function listAdmissionDecisions(

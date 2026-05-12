@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/auth/require-admin'
 import { getRegistrationById } from '@/lib/db/registrations'
 import { listAdmissionDecisions } from '@/lib/db/admission'
 import { getLatestPaymentForRegistration } from '@/lib/db/payments'
@@ -32,6 +33,7 @@ export default async function RegistrationDetailPage({
 }: {
   params: { id: string }
 }) {
+  await requireAdmin()
   const admin = createAdminClient()
   const reg = await getRegistrationById(admin, params.id)
   if (!reg) notFound()
