@@ -42,15 +42,27 @@ assert.match(
   /appMeta\.is_admin === true \|\| appMeta\.role === 'admin'/,
   'admin detection must accept app_metadata.is_admin or app_metadata.role'
 )
-assert.match(
+assert.doesNotMatch(
   adminHelper,
-  /userMeta\.is_admin === true \|\| userMeta\.role === 'admin'/,
-  'admin detection must retain temporary user_metadata admin fallback for existing admin accounts'
+  /user\.user_metadata|userMeta/,
+  'admin detection must not trust user_metadata for privileged access'
 )
 assert.doesNotMatch(
   adminHelper,
   /userMeta\.role === 'organizer'/,
   'admin detection must deny ordinary organizer users'
+)
+
+const organizerHelper = read('lib/auth/require-organizer.ts')
+assert.match(
+  organizerHelper,
+  /user\.app_metadata/,
+  'organizer detection must use server-controlled app_metadata'
+)
+assert.doesNotMatch(
+  organizerHelper,
+  /user\.user_metadata/,
+  'organizer detection must not trust user_metadata for privileged access'
 )
 
 const statusPage = read('app/apply/status/page.tsx')
@@ -170,6 +182,35 @@ assert.match(
   signoutRoute,
   /NextResponse\.redirect\(new URL\('\/', request\.url\), \{ status: 303 \}\)/,
   '/api/auth/signout must redirect to / after signout so users do not see a blank page'
+)
+
+const callbackRoute = read('app/auth/callback/route.ts')
+assert.match(
+  callbackRoute,
+  /sanitizeNextPath/,
+  '/auth/callback must sanitize next before redirecting'
+)
+assert.match(
+  callbackRoute,
+  /!value\.startsWith\('\/'\) \|\| value\.startsWith\('\/\/'\)/,
+  '/auth/callback must reject external URLs and protocol-relative URLs'
+)
+
+const registrationsRoute = read('app/api/registrations/route.ts')
+assert.match(
+  registrationsRoute,
+  /getDefaultEvent/,
+  '/api/registrations must choose the active event on the server'
+)
+assert.doesNotMatch(
+  registrationsRoute,
+  /String\(body\.event_id/,
+  '/api/registrations must not trust client-provided event_id'
+)
+assert.match(
+  registrationsRoute,
+  /event\.status !== 'recruiting'/,
+  '/api/registrations must reject submissions when the event is not recruiting'
 )
 
 console.log('authorization/status contract ok')

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getDefaultEvent } from '@/lib/db/events'
 import { upsertRegistration } from '@/lib/db/registrations'
 import type { LinkEntry } from '@/lib/db/types'
 
@@ -20,9 +21,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: '无效的请求体' }, { status: 400 })
   }
 
-  const event_id = String(body.event_id ?? '').trim()
   const name = String(body.name ?? '').trim()
-  if (!event_id || !name) {
+  if (!name) {
     return NextResponse.json({ error: '缺少必填字段' }, { status: 400 })
   }
 
@@ -46,8 +46,13 @@ export async function POST(request: NextRequest) {
 
   const admin = createAdminClient()
   try {
+    const event = await getDefaultEvent(admin)
+    if (event.status !== 'recruiting') {
+      return NextResponse.json({ error: '当前活动暂未开放申请' }, { status: 400 })
+    }
+
     const row = await upsertRegistration(admin, {
-      event_id,
+      event_id: event.id,
       user_id: user.id,
       name,
       email,

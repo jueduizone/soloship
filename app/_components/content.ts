@@ -10,7 +10,7 @@ export const event = {
   price: '¥499',
   priceNote: '其中 ¥399 完成任务后退还',
   status: 'Vol.1 申请通道现已开启',
-  statusShort: '即将开放',
+  statusShort: '开放申请',
   applyHref: '/apply',
   timelineHref: '#timeline',
 }
@@ -39,7 +39,7 @@ export const hero = {
   ],
   primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
-  fineprint: '审核制 · 录取后支付 ¥499 · 其中 ¥399 完成任务后退还 · 申请通道开放时，候补名单优先通知',
+  fineprint: '审核制 · 录取后支付 ¥499 · 其中 ¥399 完成任务后退还 · 名额有限，提交后进入审核',
 }
 
 export const whyNow = {
@@ -99,7 +99,7 @@ export const timeline = {
     {
       phase: '01',
       name: '招募期',
-      when: '4.23 – 5.16',
+      when: '4.23 – 5.23',
       points: [
         '开放线上招募，预计招募 80 人 / 40 支队伍',
         '提交 idea 与 build direction',
@@ -109,7 +109,7 @@ export const timeline = {
     {
       phase: '02',
       name: '录取期',
-      when: '5.18 – 5.22',
+      when: '5.18 – 5.23',
       points: [
         '审核申请、发放录取通知',
         '录取后完成 ¥499 门票，其中 ¥399 完成任务后退还',
@@ -194,24 +194,22 @@ export const mentors = {
       label: '产品 / 开发 / 上线',
       people: [
         {
-          name: 'AN',
-          role: 'AI Builder，慕尼黑工业大学 CS 硕士',
-          bio: 'Fintech 行业近十年经验，个人项目月度 token 消耗 $10,000+，构建端到端自动化真实业务流程。',
-        },
-        {
           name: '章鱼',
           role: '独立开发者，Founder of Web3Insight',
           bio: '香港大学计算机系毕业，多年区块链开发经验，纯粹的 Web3 开发者。',
+          avatarUrl: '/assets/guests/zhangyu.jpg',
         },
         {
           name: '百顺',
           role: '华语圈出海创业者背后的冷启动导师',
           bio: '亲手操盘超 200 个出海产品冷启动，擅长 Product Hunt 发布与运营，独立打造 HeyForm / EarlyBird 等产品。',
+          avatarUrl: '/assets/guests/baishun.png',
         },
         {
           name: '辰丰',
           role: '出海去孵化器合伙人，Design Engineer',
           bio: '曾领导和参与 Wikipedia 全量可视化、通用知识图谱构建和交互式数据新闻开发，连接技术、设计与人文表达。',
+          avatarUrl: '/assets/guests/chenfeng.png',
         },
       ],
     },
@@ -222,12 +220,13 @@ export const mentors = {
           name: 'Iris 生姜',
           role: 'AFFiNE 联合创始人 & 前 COO，福布斯亚洲 30U30',
           bio: '奇绩 S21 校友，出海运营 3 年触达 100+ 国家/地区，累计辅导 40+ 项目，覆盖 PH 打榜与可持续运营。',
+          avatarUrl: '/assets/guests/iris-jiang.png',
         },
         {
           name: '赵维奇',
           role: '中美 AI 软硬件创业导师与连续创业者，Rokid 全球产品、工程与生态负责人',
           bio: '深耕 AI、AR 与空间计算十余年，孵化上百个 AI 软硬件项目从 0 到 1 落地，拥有数十项国际专利。',
-          avatarUrl: '/assets/guests/an.jpg',
+          avatarUrl: '/assets/guests/zhao-weiqi.jpg',
         },
         {
           name: 'Kagehiro',
@@ -244,6 +243,19 @@ export const partners = {
   headline: '和合作伙伴一起，把 SoloShip Vol.1 推出去。',
   sub: '感谢每一位合作伙伴在招募、内容、场地与传播上的支持，让这次共学营真正落地。',
   groups: [
+    {
+      label: '主办方',
+      items: [
+        {
+          name: 'PROPELLER',
+          logoUrl: '/assets/partners/propeller.svg',
+        },
+        {
+          name: 'AI搞什么',
+          logoUrl: '/assets/partners/ai-gaoshenme.svg',
+        },
+      ],
+    },
     {
       label: '深度合作社区',
       items: [
@@ -291,12 +303,38 @@ export const partners = {
           name: 'Tech PodFest',
           logoUrl: '/assets/partners/techpodfest.png',
         },
-        { name: 'wteam' },
+        {
+          name: '硅星人',
+          logoUrl: '/assets/partners/guixingren.svg',
+        },
+        {
+          name: '京城一灯',
+          logoUrl: '/assets/partners/jingchengyideng.svg',
+        },
+        {
+          name: 'AI 不神秘',
+          logoUrl: '/assets/partners/ai-bushenmi.svg',
+        },
+        {
+          name: 'AI 工坊',
+          logoUrl: '/assets/partners/aiworkshop.png',
+        },
+        {
+          name: '去探索',
+          logoUrl: '/assets/partners/waytoagi.png',
+        },
+        {
+          name: 'WTeam',
+          logoUrl: '/assets/partners/wteam.png',
+        },
         {
           name: '周周黑客松',
           logoUrl: '/assets/partners/hackathonweekly.png',
         },
-        { name: 'AGIVilla' },
+        {
+          name: 'AGI Villa',
+          logoUrl: '/assets/partners/agivilla.svg',
+        },
         {
           name: 'Datawhale',
           logoUrl: '/assets/partners/datawhale.png',
@@ -336,7 +374,7 @@ export const faq = {
     },
     {
       q: '现在能申请吗？',
-      a: 'Vol.1 申请通道筹备中，先以候补名单形式收集意向。开放后会优先通知名单上的 builder。',
+      a: '可以。Vol.1 申请通道现已开启，提交申请后会进入审核流程，审核结果会在申请状态页更新。',
     },
   ],
 }
@@ -344,7 +382,7 @@ export const faq = {
 export const finalCta = {
   eyebrow: '下一步',
   headline: '下一个真的 ship 出去的项目，是不是你的？',
-  sub: `Vol.1 限额 ${event.capacityShort}，审核制。申请通道开放时，候补名单会先收到通知。`,
+  sub: `Vol.1 限额 ${event.capacityShort}，审核制。现在可以提交申请，录取后再完成付款。`,
   primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
   fineprint: '审核制 · 录取后支付 ¥499 · 其中 ¥399 完成任务后退还',

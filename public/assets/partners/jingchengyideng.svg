@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" role="img" aria-label="京城一灯">
+  <rect width="320" height="120" rx="26" fill="#0b1020"/>
+  <path d="M61 24c18 0 32 14 32 32 0 21-16 28-16 39H45c0-11-16-18-16-39 0-18 14-32 32-32Z" fill="#ffd166"/>
+  <path d="M47 99h29" stroke="#f2fff9" stroke-width="7" stroke-linecap="round"/>
+  <path d="M45 56h32" stroke="#0b1020" stroke-width="7" stroke-linecap="round"/>
+  <text x="118" y="72" fill="#f2fff9" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="34" font-weight="800">京城一灯</text>
+</svg>

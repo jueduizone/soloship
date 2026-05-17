@@ -167,6 +167,101 @@
   border: 0;
 }
 
+.ss-wechat-notice {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: max(88px, env(safe-area-inset-top) + 72px) 18px 24px;
+  background: rgba(2, 7, 5, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ss-wechat-notice-arrow {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top) + 10px);
+  right: 22px;
+  width: 62px;
+  height: 72px;
+  border-top: 2px solid var(--ss-accent-hi);
+  border-right: 2px solid var(--ss-accent-hi);
+  border-radius: 0 22px 0 0;
+  transform: rotate(-6deg);
+  box-shadow: 12px -12px 22px -22px var(--ss-accent);
+}
+
+.ss-wechat-notice-arrow::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: -7px;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid var(--ss-accent-hi);
+  border-right: 2px solid var(--ss-accent-hi);
+  transform: rotate(4deg);
+}
+
+.ss-wechat-notice-panel {
+  width: min(100%, 420px);
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 12px;
+  padding: 24px;
+  color: var(--ss-text);
+  background:
+    linear-gradient(135deg, rgba(104,255,184,0.12), transparent 42%),
+    rgba(7, 17, 13, 0.96);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.06) inset,
+    0 28px 80px rgba(0,0,0,0.42);
+}
+
+.ss-wechat-notice-kicker {
+  margin-bottom: 10px;
+  font-family: var(--ss-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--ss-accent-hi);
+}
+
+.ss-wechat-notice-panel h2 {
+  margin: 0;
+  color: var(--ss-text-strong);
+  font-size: 24px;
+  line-height: 1.18;
+  letter-spacing: 0;
+}
+
+.ss-wechat-notice-panel p {
+  margin: 12px 0 0;
+  color: var(--ss-text);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.ss-wechat-notice-button {
+  margin-top: 18px;
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--ss-accent);
+  border-radius: 999px;
+  background: var(--ss-accent);
+  color: #03110a;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .ss-wechat-notice {
+    justify-content: flex-end;
+    padding: 94px 32px 32px;
+  }
+}
+
 .ss-skeleton-page {
   width: min(1040px, calc(100vw - 48px));
   margin: 0 auto;

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" role="img" aria-label="AI搞什么">
+  <rect width="320" height="120" rx="26" fill="#07110d"/>
+  <rect x="30" y="28" width="64" height="64" rx="18" fill="#00fb87"/>
+  <path d="M47 75 61 44h8l14 31h-9l-2.5-6H58.2l-2.4 6H47Zm14-13h8l-4-10-4 10ZM86 44h9v31h-9V44Z" fill="#03110a"/>
+  <text x="116" y="72" fill="#f2fff9" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="32" font-weight="800">搞什么</text>
+</svg>

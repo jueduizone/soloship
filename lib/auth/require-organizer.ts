@@ -5,7 +5,7 @@ import { isAdminUser } from './require-admin'
 
 /**
  * Gate server components / route handlers to organizers + admins.
- * Organizer = user_metadata.role === 'organizer'. Admins also pass.
+ * Organizer = app_metadata.role === 'organizer'. Admins also pass.
  *
  * 非授权用户 → 踢去 /。未登录 → 踢去 /auth/login。
  */
@@ -27,6 +27,6 @@ export async function getOrganizerUser(): Promise<User | null> {
 
 export function isOrganizerUser(user: User): boolean {
   if (isAdminUser(user)) return true
-  const meta = (user.user_metadata ?? {}) as Record<string, unknown>
+  const meta = (user.app_metadata ?? {}) as Record<string, unknown>
   return meta.role === 'organizer' || meta.role === 'admin'
 }

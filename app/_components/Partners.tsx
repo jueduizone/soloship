@@ -40,7 +40,8 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
         style={{
           width: 28,
           height: 28,
-          borderRadius: 7,
+          minWidth: showLogo ? 44 : 28,
+          borderRadius: showLogo ? 8 : 7,
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -60,9 +61,9 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
           <img
             src={logoUrl}
             alt=""
-            width={20}
-            height={20}
-            style={{ width: 20, height: 20, objectFit: 'contain', display: 'block' }}
+            width={40}
+            height={22}
+            style={{ width: 40, height: 22, objectFit: 'contain', display: 'block' }}
             onError={() => setLogoFailed(true)}
           />
         ) : (

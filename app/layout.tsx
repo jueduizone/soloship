@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./soloship.css";
 import { event } from "./_components/content";
+import { WeChatBrowserNotice } from "./_components/WeChatBrowserNotice";
 
 export const metadata: Metadata = {
   title: `${event.name} ${event.volume} · ${event.tagline}`,
@@ -12,7 +13,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="zh-CN">
       <body>
-        <div className="ss-scope">{children}</div>
+        <div className="ss-scope">
+          <WeChatBrowserNotice />
+          {children}
+        </div>
       </body>
     </html>
   );

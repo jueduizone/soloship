@@ -4,8 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 
 /**
  * Gate a server component / route handler to admin users only.
- * Admin is server-controlled via app_metadata when present.
- * Temporary fallback keeps legacy user_metadata admin flags working.
+ * Admin is server-controlled via app_metadata only.
  *
  * 非 admin 登录用户 → 踢去 /。未登录 → 踢去 /auth/login。
  * Route handlers 想返回 401/403 的话，请用 getAdminUser 自行判断。
@@ -28,8 +27,5 @@ export async function getAdminUser(): Promise<User | null> {
 
 export function isAdminUser(user: User): boolean {
   const appMeta = (user.app_metadata ?? {}) as Record<string, unknown>
-  if (appMeta.is_admin === true || appMeta.role === 'admin') return true
-
-  const userMeta = (user.user_metadata ?? {}) as Record<string, unknown>
-  return userMeta.is_admin === true || userMeta.role === 'admin'
+  return appMeta.is_admin === true || appMeta.role === 'admin'
 }

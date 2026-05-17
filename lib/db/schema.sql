@@ -17,7 +17,7 @@
 --   - 大部分写入走 service_role（API routes），绕 RLS
 --   - 用户侧读，用 RLS policy 限制到「我自己的报名」
 --   - events / fellow_profiles(public) / resources(public) 允许匿名读
---   - admin 判定：auth.users.raw_user_meta_data->>'is_admin' = 'true'
+--   - admin 判定：auth.jwt()->'app_metadata' 中的 is_admin / role
 -- =====================================================================
 
 -- ------------------------------------------------------------------
@@ -78,7 +78,7 @@ create table if not exists public.events (
   start_date      date,
   end_date        date,
   demo_day_date   date,
-  price_cents     integer not null default 39900,  -- ¥399
+  price_cents     integer not null default 49900,  -- ¥499
   currency        text not null default 'CNY',
   capacity        integer,
   status          event_status not null default 'draft',
@@ -252,7 +252,7 @@ end $$;
 
 
 -- ------------------------------------------------------------------
--- is_admin() helper —— 看当前 JWT 里的 user_metadata.is_admin
+-- is_admin() helper —— 只看服务端控制的 app_metadata
 -- ------------------------------------------------------------------
 create or replace function public.is_admin()
 returns boolean
@@ -260,9 +260,9 @@ language sql
 stable
 as $$
   select coalesce(
-    (auth.jwt() -> 'user_metadata' ->> 'is_admin')::boolean,
+    (auth.jwt() -> 'app_metadata' ->> 'is_admin')::boolean,
     false
-  );
+  ) or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'admin';
 $$;
 
 
@@ -378,7 +378,11 @@ values (
   'vol-1',
   'SoloShip Vol.1',
   '全球化 AI OPC 共学营',
-  39900,
+  49900,
   'recruiting'
 )
-on conflict (slug) do nothing;
+on conflict (slug) do update
+set
+  price_cents = excluded.price_cents,
+  currency = excluded.currency,
+  updated_at = now();

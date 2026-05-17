@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" role="img" aria-label="AGI Villa">
+  <rect width="320" height="120" rx="26" fill="#000000"/>
+  <g transform="translate(30 30)">
+    <rect width="60" height="60" rx="16" fill="#111111"/>
+    <path d="M0 16A16 16 0 0 1 16 0h14v30H0V16Z" fill="#ea4335"/>
+    <path d="M30 0h14a16 16 0 0 1 16 16v14H30V0Z" fill="#4285f4"/>
+    <path d="M0 30h30v30H16A16 16 0 0 1 0 44V30Z" fill="#34a853"/>
+    <path d="M30 30h30v14a16 16 0 0 1-16 16H30V30Z" fill="#fbbc05"/>
+    <rect x="18" y="18" width="24" height="24" rx="7" fill="#000000"/>
+  </g>
+  <text x="112" y="70" fill="#f5f5f7" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800" letter-spacing=".2">AGI Villa</text>
+</svg>
