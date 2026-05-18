@@ -227,6 +227,71 @@
 .ss-table tr:last-child td { border-bottom: none; }
 .ss-table tr:hover td { background: rgba(255,255,255,0.015); }
 .ss-table a { color: var(--ss-text-strong); }
+
+.ss-admin-shell .ss-status-pill {
+  min-width: 74px;
+  justify-content: center;
+  border-width: 1px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+
+.ss-admin-shell .ss-status-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 12px currentColor;
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="submitted"] {
+  color: #8fb0ff;
+  border-color: rgba(143,176,255,0.36);
+  background: rgba(83,119,255,0.12);
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="reviewing"] {
+  color: #8fe8ff;
+  border-color: rgba(143,232,255,0.36);
+  background: rgba(58,196,255,0.11);
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="admitted"] {
+  color: #7cffb9;
+  border-color: rgba(124,255,185,0.38);
+  background: rgba(0,251,135,0.12);
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="payment_pending"] {
+  color: #ffcf7c;
+  border-color: rgba(255,207,124,0.38);
+  background: rgba(255,188,72,0.12);
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="paid"] {
+  color: #b7ff7c;
+  border-color: rgba(183,255,124,0.4);
+  background: rgba(136,255,64,0.12);
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="waitlisted"] {
+  color: #d7b6ff;
+  border-color: rgba(215,182,255,0.38);
+  background: rgba(154,98,255,0.12);
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="rejected"] {
+  color: #ff9e9e;
+  border-color: rgba(255,120,120,0.38);
+  background: rgba(255,80,80,0.11);
+}
+
+.ss-admin-shell .ss-status-pill[data-kind="withdrawn"] {
+  color: #9aa8a0;
+  border-color: rgba(154,168,160,0.3);
+  background: rgba(154,168,160,0.08);
+}
+
 .ss-table-action {
   display: inline-flex;
   align-items: center;

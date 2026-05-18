@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" role="img" aria-label="硅星人">
-  <rect width="320" height="120" rx="26" fill="#f8fbff"/>
-  <circle cx="62" cy="60" r="34" fill="#1a73e8"/>
-  <circle cx="75" cy="47" r="8" fill="#f8fbff"/>
-  <path d="M39 67c20 15 46 15 66 0" fill="none" stroke="#f8fbff" stroke-width="7" stroke-linecap="round"/>
-  <text x="118" y="72" fill="#111827" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="34" font-weight="800">硅星人</text>
-</svg>

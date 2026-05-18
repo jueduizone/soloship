@@ -24,9 +24,9 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 8,
-        minHeight: 38,
-        padding: '5px 12px 5px 5px',
+        gap: 10,
+        minHeight: 48,
+        padding: '6px 14px 6px 6px',
         borderRadius: 999,
         border: '1px solid var(--ss-border-light)',
         background: 'rgba(255,255,255,0.035)',
@@ -38,15 +38,15 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
       <span
         aria-hidden
         style={{
-          width: 28,
-          height: 28,
-          minWidth: showLogo ? 44 : 28,
-          borderRadius: showLogo ? 8 : 7,
+          width: showLogo ? 78 : 30,
+          height: 34,
+          minWidth: showLogo ? 78 : 30,
+          borderRadius: 10,
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           background: showLogo
-            ? 'rgba(242,255,249,0.92)'
+            ? 'rgba(2, 8, 5, 0.72)'
             : 'linear-gradient(135deg, rgba(0,251,135,0.12), rgba(255,255,255,0.03))',
           border: '1px solid var(--ss-border-light)',
           color: 'var(--ss-accent-hi)',
@@ -61,9 +61,14 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
           <img
             src={logoUrl}
             alt=""
-            width={40}
-            height={22}
-            style={{ width: 40, height: 22, objectFit: 'contain', display: 'block' }}
+            width={68}
+            height={28}
+            style={{
+              width: 68,
+              height: 28,
+              objectFit: 'contain',
+              display: 'block',
+            }}
             onError={() => setLogoFailed(true)}
           />
         ) : (

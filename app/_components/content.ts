@@ -8,7 +8,7 @@ export const event = {
   capacity: '80 人 · 40 支队伍 · 审核制',
   capacityShort: '80 人',
   price: '¥499',
-  priceNote: '其中 ¥399 完成任务后退还',
+  priceNote: '¥399 任务完成后退还，¥100 进入公共奖金池',
   status: 'Vol.1 申请通道现已开启',
   statusShort: '开放申请',
   applyHref: '/apply',
@@ -39,7 +39,7 @@ export const hero = {
   ],
   primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
-  fineprint: '审核制 · 录取后支付 ¥499 · 其中 ¥399 完成任务后退还 · 名额有限，提交后进入审核',
+  fineprint: '审核制 · 录取后支付 ¥499 · 完成任务返还 ¥399 · 余下 ¥100 用于公共奖金池与讲师补贴 · 赞助商 Token 权益另行发放，价值已超过 ¥100',
 }
 
 export const whyNow = {
@@ -112,7 +112,9 @@ export const timeline = {
       when: '5.18 – 5.23',
       points: [
         '审核申请、发放录取通知',
-        '录取后完成 ¥499 门票，其中 ¥399 完成任务后退还',
+        '录取后支付 ¥499：¥399 作为任务保证金，完成任务后退还',
+        '剩余 ¥100 进入公共奖金池，用于 Demo Day 奖金与讲师补贴',
+        '大模型赞助商提供额外 Token 奖励，权益价值已超过 ¥100',
         '目标：cohort 集结，方向确认',
       ],
     },
@@ -271,7 +273,14 @@ export const partners = {
           name: '出海去孵化器',
           logoUrl: '/assets/partners/chuhaiqu.png',
         },
-        { name: 'VibeFriends' },
+        {
+          name: 'VibeFriends',
+          logoUrl: '/assets/partners/vibefriends.png',
+        },
+        {
+          name: '造物矩阵',
+          logoUrl: '/assets/partners/zaowujuzhen.png',
+        },
       ],
     },
     {
@@ -281,7 +290,56 @@ export const partners = {
           name: '小红书科技',
           logoUrl: '/assets/partners/xiaohongshu.png',
         },
-        { name: '长三角绿洲智谷·赵巷' },
+        {
+          name: '长三角绿洲智谷·赵巷',
+          logoUrl: '/assets/partners/changsanjiao.png',
+        },
+      ],
+    },
+    {
+      label: '模型与生态支持',
+      items: [
+        {
+          name: 'AWS',
+          logoUrl: '/assets/partners/aws.png',
+        },
+        {
+          name: 'Gingiris',
+          logoUrl: '/assets/partners/gingiris.png',
+        },
+      ],
+    },
+    {
+      label: '高校与机构支持',
+      items: [
+        {
+          name: 'ECNU',
+          logoUrl: '/assets/partners/ecnu.png',
+        },
+        {
+          name: '复旦',
+          logoUrl: '/assets/partners/fudan.png',
+        },
+        {
+          name: '中国科学技术大学',
+          logoUrl: '/assets/partners/ustc.png',
+        },
+        {
+          name: 'SIEA',
+          logoUrl: '/assets/partners/siea.png',
+        },
+        {
+          name: '交慧',
+          logoUrl: '/assets/partners/jiaohui.png',
+        },
+        {
+          name: '创业协会',
+          logoUrl: '/assets/partners/chuangyexiehui.png',
+        },
+        {
+          name: '博远',
+          logoUrl: '/assets/partners/boyuan.png',
+        },
       ],
     },
     {
@@ -305,15 +363,15 @@ export const partners = {
         },
         {
           name: '硅星人',
-          logoUrl: '/assets/partners/guixingren.svg',
+          logoUrl: '/assets/partners/guixingren.png',
         },
         {
           name: '京城一灯',
-          logoUrl: '/assets/partners/jingchengyideng.svg',
+          logoUrl: '/assets/partners/jingchengyideng.png',
         },
         {
           name: 'AI 不神秘',
-          logoUrl: '/assets/partners/ai-bushenmi.svg',
+          logoUrl: '/assets/partners/ai-bushenmi.png',
         },
         {
           name: 'AI 工坊',
@@ -335,10 +393,6 @@ export const partners = {
           name: 'AGI Villa',
           logoUrl: '/assets/partners/agivilla.svg',
         },
-        {
-          name: 'Datawhale',
-          logoUrl: '/assets/partners/datawhale.png',
-        },
       ],
     },
   ],
@@ -354,7 +408,7 @@ export const faq = {
     },
     {
       q: '¥499 什么时候收？',
-      a: '录取之后才收。先申请、再审核，通过了才收款——这样对双方都更干净。¥499 为门票，其中 ¥399 在完成任务后退还。',
+      a: '录取之后才收。¥499 更接近一笔任务保证金：完成任务后退还 ¥399，剩余 ¥100 进入公共奖金池，用于 Demo Day 奖金和讲师补贴。赞助商提供的大模型 Token、开发资源等权益会额外发放，目前 Token 奖励价值已超过 ¥100。',
     },
     {
       q: '需要已经有项目吗？',
@@ -385,7 +439,7 @@ export const finalCta = {
   sub: `Vol.1 限额 ${event.capacityShort}，审核制。现在可以提交申请，录取后再完成付款。`,
   primaryCta: { label: '立即申请', href: event.applyHref },
   secondaryCta: { label: '查看活动节奏', href: event.timelineHref },
-  fineprint: '审核制 · 录取后支付 ¥499 · 其中 ¥399 完成任务后退还',
+  fineprint: '审核制 · 录取后支付 ¥499 · 完成任务返还 ¥399 · ¥100 进入公共奖金池 · Token 权益另计',
 }
 
 export const footer = {

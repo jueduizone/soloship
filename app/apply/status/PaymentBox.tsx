@@ -42,7 +42,7 @@ export function PaymentBox({
         <dd>
           ¥{(amountCents / 100).toFixed(0)} {currency}
           <span style={{ color: 'var(--ss-text-dim)', marginLeft: 8, fontSize: 13 }}>
-            其中 ¥399 完成任务后退还
+            完成任务返还 ¥399，¥100 进入公共奖金池；赞助 Token 权益另计
           </span>
         </dd>
         <dt>收款方式</dt>

@@ -72,3 +72,15 @@ lib/
 ## Repo
 - https://github.com/jueduizone/soloship
 - `git push origin main` 正常工作（已配置）
+
+## Keyrail
+- Project manifest: `.agent-context.yaml`
+- Default context: `production`
+- Managed references:
+  - `vercel` → injects `VERCEL_TOKEN`
+  - `supabase-url` → injects `KEYRAIL_SUPABASE_URL`
+  - `supabase-anon-key` → injects `KEYRAIL_SUPABASE_ANON_KEY`
+  - `supabase-service-role-key` → injects `KEYRAIL_SUPABASE_SERVICE_ROLE_KEY`
+- Use `keyrail status` to verify project identity and configured secrets.
+- Run commands that need project keys through `keyrail run -- <command>` so keys are scoped to this repo.
+- Keep runtime environment variables in Vercel as usual; Keyrail is for local/agent operations and must not write raw secrets into Git.
