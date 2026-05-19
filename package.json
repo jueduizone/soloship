@@ -9,6 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "deploy:prod": "node scripts/deploy-vercel-prod.mjs",
     "lint": "next lint"
   },
   "dependencies": {
