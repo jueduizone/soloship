@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process'
 const token = process.env.VERCEL_TOKEN
 
 if (!token) {
-  console.error('Missing VERCEL_TOKEN. Run this through Keyrail: keyrail run --yes -- npm run deploy:prod')
+  console.error('Missing VERCEL_TOKEN. Run this with a Vercel token in the environment.')
   process.exit(1)
 }
 

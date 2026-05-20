@@ -11,6 +11,4 @@ pnpm-debug.log*
 .env*
 *.tsbuildinfo
 .env*.local
-.ctx/
-.keyrail/
 SETUP.md
