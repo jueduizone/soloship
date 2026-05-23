@@ -47,10 +47,7 @@ export function PaymentBox({
         </dd>
         <dt>收款方式</dt>
         <dd>
-          微信号：<span style={{ fontWeight: 600 }}>soloship_pay</span>
-          <div style={{ color: 'var(--ss-text-dim)', fontSize: 13, marginTop: 4 }}>
-            添加微信后转账备注邮箱即可
-          </div>
+          三天之内会有志愿者联系您付款和沟通后续流程，请耐心等待
         </dd>
       </dl>
 
