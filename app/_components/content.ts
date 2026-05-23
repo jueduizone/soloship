@@ -230,11 +230,6 @@ export const mentors = {
           bio: '深耕 AI、AR 与空间计算十余年，孵化上百个 AI 软硬件项目从 0 到 1 落地，拥有数十项国际专利。',
           avatarUrl: '/assets/guests/zhao-weiqi.jpg',
         },
-        {
-          name: 'Kagehiro',
-          role: 'Lockedin AI Founder',
-          bio: 'AI 面试神器创业者，开营日分享 AI 产品出海与个人创业实战。',
-        },
       ],
     },
   ],
@@ -382,16 +377,8 @@ export const partners = {
           logoUrl: '/assets/partners/waytoagi.png',
         },
         {
-          name: 'WTeam',
-          logoUrl: '/assets/partners/wteam.png',
-        },
-        {
           name: '周周黑客松',
           logoUrl: '/assets/partners/hackathonweekly.png',
-        },
-        {
-          name: 'AGI Villa',
-          logoUrl: '/assets/partners/agivilla.svg',
         },
       ],
     },
