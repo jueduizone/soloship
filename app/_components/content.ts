@@ -241,20 +241,20 @@ export const partners = {
   sub: '感谢每一位合作伙伴在招募、内容、场地与传播上的支持，让这次共学营真正落地。',
   groups: [
     {
-      label: '主办方',
+      label: '特邀支持',
       items: [
         {
-          name: 'PROPELLER',
-          logoUrl: '/assets/partners/propeller.svg',
+          name: '长三角绿洲智谷·赵巷',
+          logoUrl: '/assets/partners/changsanjiao.png',
         },
         {
-          name: 'AI搞什么',
-          logoUrl: '/assets/partners/ai-gaoshenme.svg',
+          name: '小红书科技',
+          logoUrl: '/assets/partners/xiaohongshu.png',
         },
       ],
     },
     {
-      label: '深度合作社区',
+      label: '深度合作伙伴',
       items: [
         {
           name: 'Startup Grind 创业磨坊',
@@ -273,67 +273,8 @@ export const partners = {
           logoUrl: '/assets/partners/vibefriends.png',
         },
         {
-          name: '造物矩阵',
-          logoUrl: '/assets/partners/zaowujuzhen.png',
-        },
-      ],
-    },
-    {
-      label: '特邀支持',
-      items: [
-        {
-          name: '小红书科技',
-          logoUrl: '/assets/partners/xiaohongshu.png',
-        },
-        {
-          name: '长三角绿洲智谷·赵巷',
-          logoUrl: '/assets/partners/changsanjiao.png',
-        },
-      ],
-    },
-    {
-      label: '模型与生态支持',
-      items: [
-        {
-          name: 'AWS',
-          logoUrl: '/assets/partners/aws.png',
-        },
-        {
           name: 'Gingiris',
           logoUrl: '/assets/partners/gingiris.png',
-        },
-      ],
-    },
-    {
-      label: '高校与机构支持',
-      items: [
-        {
-          name: 'ECNU',
-          logoUrl: '/assets/partners/ecnu.png',
-        },
-        {
-          name: '复旦',
-          logoUrl: '/assets/partners/fudan.png',
-        },
-        {
-          name: '中国科学技术大学',
-          logoUrl: '/assets/partners/ustc.png',
-        },
-        {
-          name: 'SIEA',
-          logoUrl: '/assets/partners/siea.png',
-        },
-        {
-          name: '交慧',
-          logoUrl: '/assets/partners/jiaohui.png',
-        },
-        {
-          name: '创业协会',
-          logoUrl: '/assets/partners/chuangyexiehui.png',
-        },
-        {
-          name: '博远',
-          logoUrl: '/assets/partners/boyuan.png',
         },
       ],
     },
@@ -341,28 +282,16 @@ export const partners = {
       label: '合作社区',
       items: [
         {
-          name: 'AIGCOpen',
-          logoUrl: '/assets/partners/aigcopen.png',
-        },
-        {
-          name: '少数派',
-          logoUrl: '/assets/partners/sspai.png',
-        },
-        {
-          name: '开源社',
-          logoUrl: '/assets/partners/kaiyuanshe.png',
-        },
-        {
-          name: 'Tech PodFest',
-          logoUrl: '/assets/partners/techpodfest.png',
-        },
-        {
           name: '硅星人',
           logoUrl: '/assets/partners/guixingren.png',
         },
         {
           name: '京城一灯',
           logoUrl: '/assets/partners/jingchengyideng.png',
+        },
+        {
+          name: '周周黑客松',
+          logoUrl: '/assets/partners/hackathonweekly.png',
         },
         {
           name: 'AI 不神秘',
@@ -377,8 +306,41 @@ export const partners = {
           logoUrl: '/assets/partners/waytoagi.png',
         },
         {
-          name: '周周黑客松',
-          logoUrl: '/assets/partners/hackathonweekly.png',
+          name: '造物矩阵',
+          logoUrl: '/assets/partners/zaowujuzhen.png',
+        },
+      ],
+    },
+    {
+      label: '高校社区',
+      items: [
+        {
+          name: 'ECNU',
+          logoUrl: '/assets/partners/ecnu.png',
+        },
+        {
+          name: '创业协会',
+          logoUrl: '/assets/partners/chuangyexiehui.png',
+        },
+        {
+          name: '交慧',
+          logoUrl: '/assets/partners/jiaohui.png',
+        },
+        {
+          name: '博远',
+          logoUrl: '/assets/partners/boyuan.png',
+        },
+        {
+          name: '复旦',
+          logoUrl: '/assets/partners/fudan.png',
+        },
+        {
+          name: 'SIEA',
+          logoUrl: '/assets/partners/siea.png',
+        },
+        {
+          name: '中国科学技术大学',
+          logoUrl: '/assets/partners/ustc.png',
         },
       ],
     },
