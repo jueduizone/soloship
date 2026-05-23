@@ -176,7 +176,7 @@ export const mentors = {
           name: 'Luke Kim',
           role: '独立个人创业导师，UC Berkeley 讲师',
           bio: '$25M raised，500+ coached，聚焦 OPC 理念、定价与个人商业闭环。',
-          avatarUrl: '/assets/guests/luke-kim.jpg',
+          avatarUrl: '/assets/guests/luke-kim.png',
         },
         {
           name: 'Cell 细胞',
