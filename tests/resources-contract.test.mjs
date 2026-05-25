@@ -27,9 +27,11 @@ assert.match(resourcesApi, /NextResponse\.json\(\{ ok: true, resources/, '/api/r
 const adminResourcesPage = read('app/admin/resources/page.tsx')
 assert.match(adminResourcesPage, /createResourceAction/, 'admin resources page must allow creating playlist items')
 assert.match(adminResourcesPage, /updateResourceAction/, 'admin resources page must allow editing playlist items')
+assert.match(adminResourcesPage, /ss-resource-management-table/, 'admin resources page must use a compact management table')
+assert.match(adminResourcesPage, /details className="ss-resource-management-row"/, 'admin resources page must keep row edits collapsed by default')
 assert.match(adminResourcesPage, /name="summary"/, 'admin resources page must expose editable video descriptions')
 assert.match(adminResourcesPage, /Cloudflare Stream UID/, 'admin resources page must explain video UID input')
-assert.match(adminResourcesPage, /href=\{`\/resources\/\$\{r\.id\}`\}/, 'admin resources page must link video items to playback preview')
+assert.match(adminResourcesPage, /href=\{`\/resources\/\$\{resource\.id\}`\}/, 'admin resources page must link video items to playback preview')
 
 const adminResourceApi = read('app/api/admin/resources/[id]/route.ts')
 assert.match(adminResourceApi, /export\s+async\s+function\s+PATCH/, 'admin resource detail API must expose PATCH')

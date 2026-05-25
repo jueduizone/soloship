@@ -17,6 +17,15 @@ const RESOURCE_TYPES = [
   { value: 'link', label: '资料链接' },
 ] as const
 
+const RESOURCE_VISIBILITY_LABEL: Record<string, string> = {
+  admitted_only: '已入营可见',
+  public: '公开可见',
+}
+
+function getResourceTypeLabel(type: string | null) {
+  return RESOURCE_TYPES.find(item => item.value === type)?.label ?? type ?? '资料'
+}
+
 function ResourceFields({ resource }: { resource?: ResourceRow }) {
   return (
     <>
@@ -105,6 +114,26 @@ function ResourceFields({ resource }: { resource?: ResourceRow }) {
   )
 }
 
+function ResourceEditPanel({ resource }: { resource: ResourceRow }) {
+  return (
+    <div className="ss-resource-row-editor">
+      <div className="ss-resource-editor-toolbar">
+        {resource.type === 'video' ? (
+          <a className="ss-table-action" href={`/resources/${resource.id}`} target="_blank" rel="noreferrer">预览</a>
+        ) : resource.url ? (
+          <a className="ss-table-action" href={resource.url} target="_blank" rel="noreferrer">打开</a>
+        ) : null}
+      </div>
+      <form action={updateResourceAction} className="ss-resource-form ss-resource-edit-form">
+        <ResourceFields resource={resource} />
+        <div className="ss-resource-actions">
+          <AdminSubmitButton idleLabel="保存" pendingLabel="保存中" />
+        </div>
+      </form>
+    </div>
+  )
+}
+
 export default async function AdminResourcesPage() {
   const admin = createAdminClient()
   const event = await getDefaultEvent(admin)
@@ -126,43 +155,52 @@ export default async function AdminResourcesPage() {
         {event.name} · 共 {resources.length} 条资料。课程视频会出现在前台 /resources 播放列表，已付费学员点击后进入播放页。
       </div>
 
-      <section className="ss-panel ss-resource-admin-panel">
-        <h3>新增课程 / 资料</h3>
+      <details className="ss-resource-create-panel">
+        <summary>
+          <span>新增课程 / 资料</span>
+          <span>录入新的视频 UID 或资料链接</span>
+        </summary>
         <form action={createResourceAction} className="ss-resource-form">
           <ResourceFields />
           <div className="ss-resource-actions">
             <AdminSubmitButton idleLabel="新增" pendingLabel="新增中" />
           </div>
         </form>
-      </section>
+      </details>
 
       {resources.length === 0 ? (
         <div className="ss-empty">暂无资料。可以在上方新增课程视频或资料链接，前台 /resources 会自动按可见性展示。</div>
       ) : (
-        <div className="ss-resource-list">
-          {resources.map(r => (
-            <section className="ss-panel ss-resource-admin-panel" key={r.id}>
-              <div className="ss-resource-admin-head">
-                <div>
-                  <div className="ss-resource-admin-title">{r.title}</div>
-                  <div className="ss-admin-sub" style={{ marginBottom: 0 }}>
-                    {RESOURCE_STAGE_LABEL[r.stage]} · {r.type === 'video' ? '课程视频' : r.type ?? '资料'} · {r.visibility}
+        <div className="ss-resource-management-table">
+          <div className="ss-resource-management-head">
+            <span>内容</span>
+            <span>阶段</span>
+            <span>类型</span>
+            <span>可见性</span>
+            <span>排序</span>
+            <span>操作</span>
+          </div>
+          <div className="ss-resource-management-body">
+            {resources.map(r => (
+              <details className="ss-resource-management-row" key={r.id}>
+                <summary className="ss-resource-row-main">
+                  <div className="ss-resource-row-copy">
+                    <div className="ss-resource-admin-title">{r.title}</div>
+                    {r.summary && <div className="ss-resource-row-summary">{r.summary}</div>}
+                    {r.url && <div className="ss-resource-row-url">{r.url}</div>}
                   </div>
-                </div>
-                {r.type === 'video' ? (
-                  <a className="ss-table-action" href={`/resources/${r.id}`} target="_blank" rel="noreferrer">预览</a>
-                ) : r.url ? (
-                  <a className="ss-table-action" href={r.url} target="_blank" rel="noreferrer">打开</a>
-                ) : null}
-              </div>
-              <form action={updateResourceAction} className="ss-resource-form">
-                <ResourceFields resource={r} />
-                <div className="ss-resource-actions">
-                  <AdminSubmitButton idleLabel="保存" pendingLabel="保存中" />
-                </div>
-              </form>
-            </section>
-          ))}
+                  <div className="ss-resource-row-stage">{RESOURCE_STAGE_LABEL[r.stage]}</div>
+                  <div><span className="ss-chip">{getResourceTypeLabel(r.type)}</span></div>
+                  <div><span className="ss-chip" data-kind={r.visibility}>{RESOURCE_VISIBILITY_LABEL[r.visibility]}</span></div>
+                  <div className="ss-resource-row-order">{r.order_index}</div>
+                  <div className="ss-resource-row-actions">
+                    <span className="ss-table-action">编辑</span>
+                  </div>
+                </summary>
+                <ResourceEditPanel resource={r} />
+              </details>
+            ))}
+          </div>
         </div>
       )}
 
