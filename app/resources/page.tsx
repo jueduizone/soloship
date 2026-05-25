@@ -107,7 +107,11 @@ export default async function ResourcesPage() {
                     </div>
                   </div>
                   {resource.summary && <p className="ss-resource-summary">{resource.summary}</p>}
-                  {resource.url && (
+                  {resource.type === 'video' ? (
+                    <Link className="ss-resource-link" href={`/resources/${resource.id}`}>
+                      观看课程 →
+                    </Link>
+                  ) : resource.url && (
                     <a className="ss-resource-link" href={resource.url} target="_blank" rel="noreferrer">
                       打开资料 ↗
                     </a>

@@ -31,7 +31,7 @@ export async function GET() {
       id: resource.id,
       title: resource.title,
       summary: resource.summary,
-      url: resource.url,
+      url: resource.type === 'video' ? null : resource.url,
       type: resource.type,
       stage: resource.stage,
       visibility: resource.visibility,

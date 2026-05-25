@@ -60,6 +60,7 @@ export default async function AdminResourcesPage() {
 
       <div className="ss-admin-sub" style={{ marginTop: 18 }}>
         支持阶段：{RESOURCE_STAGE_ORDER.map(stage => RESOURCE_STAGE_LABEL[stage]).join(' / ')}；可见性：public / admitted_only。
+        视频资料请将 type 设为 video，url 填腾讯云 VOD fileId。
       </div>
     </div>
   )
