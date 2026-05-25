@@ -46,6 +46,28 @@ assert.match(
   'VOD player must render account watermark for leakage tracing'
 )
 
+const detailPage = read('app/resources/[id]/page.tsx')
+assert.match(
+  detailPage,
+  /listResourcesForViewer/,
+  'VOD detail page must load the accessible course playlist'
+)
+assert.match(
+  detailPage,
+  /groupVideosByStage/,
+  'VOD detail page must group playlist videos by course stage'
+)
+assert.match(
+  detailPage,
+  /aria-current=\{item\.id === resource\.id \? 'page' : undefined\}/,
+  'VOD detail page must highlight the current playlist item'
+)
+assert.match(
+  detailPage,
+  /href=\{`\/resources\/\$\{item\.id\}`\}/,
+  'VOD detail page must let viewers switch between playlist videos'
+)
+
 const cloudflareVod = read('lib/vod/cloudflare.ts')
 assert.match(
   cloudflareVod,

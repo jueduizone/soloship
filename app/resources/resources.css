@@ -2,6 +2,10 @@
   max-width: 920px;
 }
 
+.ss-resources-shell .ss-vod-container {
+  max-width: 1360px;
+}
+
 .ss-resource-access {
   display: flex;
   flex-wrap: wrap;
@@ -100,7 +104,7 @@
 }
 
 .ss-vod-player-shell {
-  margin-top: 24px;
+  margin-top: 18px;
 }
 
 .ss-vod-player-frame {
@@ -156,4 +160,213 @@
   color: var(--ss-text-dim);
   font-size: 13px;
   line-height: 1.6;
+}
+
+.ss-vod-topbar {
+  margin-bottom: 28px;
+}
+
+.ss-vod-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: start;
+}
+
+.ss-vod-main {
+  min-width: 0;
+}
+
+.ss-vod-header {
+  margin-bottom: 18px;
+}
+
+.ss-vod-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ss-vod-kicker span {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 251, 135, 0.24);
+  border-radius: 999px;
+  color: var(--ss-accent-hi);
+  background: var(--ss-accent-soft);
+  font-family: var(--ss-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ss-vod-title {
+  margin: 0;
+  color: var(--ss-text-strong);
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1.05;
+  font-weight: 750;
+  letter-spacing: 0;
+}
+
+.ss-vod-summary {
+  max-width: 760px;
+  margin: 16px 0 0;
+  color: var(--ss-text);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.ss-vod-sidebar {
+  position: sticky;
+  top: 92px;
+  max-height: calc(100vh - 116px);
+  overflow: auto;
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.ss-vod-sidebar-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--ss-border-dark);
+  background: rgba(2, 8, 5, 0.94);
+  backdrop-filter: blur(12px);
+}
+
+.ss-vod-sidebar-head a {
+  color: var(--ss-accent-hi);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.ss-vod-sidebar-title {
+  color: var(--ss-text-strong);
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.ss-vod-sidebar-sub {
+  margin-top: 4px;
+  color: var(--ss-text-faint);
+  font-size: 12px;
+}
+
+.ss-vod-playlist {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+}
+
+.ss-vod-playlist-stage h2 {
+  margin: 8px 6px 8px;
+  color: var(--ss-text-faint);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ss-vod-playlist-items {
+  display: grid;
+  gap: 6px;
+}
+
+.ss-vod-playlist-item {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--ss-text);
+  text-decoration: none;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.ss-vod-playlist-item:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.ss-vod-playlist-item[aria-current="page"] {
+  border-color: rgba(0, 251, 135, 0.38);
+  background: var(--ss-accent-soft);
+}
+
+.ss-vod-playlist-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ss-text-faint);
+  font-family: var(--ss-mono);
+  font-size: 11px;
+}
+
+.ss-vod-playlist-item[aria-current="page"] .ss-vod-playlist-index {
+  color: #03110a;
+  background: var(--ss-accent);
+}
+
+.ss-vod-playlist-copy {
+  min-width: 0;
+}
+
+.ss-vod-playlist-title {
+  display: block;
+  color: var(--ss-text-strong);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.ss-vod-playlist-meta {
+  display: block;
+  margin-top: 4px;
+  color: var(--ss-text-faint);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+@media (max-width: 1120px) {
+  .ss-vod-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ss-vod-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .ss-vod-title {
+    font-size: 34px;
+  }
+
+  .ss-vod-summary {
+    font-size: 15px;
+  }
+
+  .ss-vod-layout {
+    gap: 20px;
+  }
+
+  .ss-vod-sidebar-head {
+    flex-direction: column;
+  }
 }
