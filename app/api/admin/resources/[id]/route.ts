@@ -15,7 +15,11 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   const body = await request.json().catch(() => null) as Record<string, unknown> | null
   if (!body) return NextResponse.json({ error: '无效请求体' }, { status: 400 })
   const patch: Record<string, unknown> = {}
-  if (typeof body.title === 'string') patch.title = body.title.trim()
+  if (typeof body.title === 'string') {
+    const title = body.title.trim()
+    if (!title) return NextResponse.json({ error: 'title 不能为空' }, { status: 400 })
+    patch.title = title
+  }
   if ('summary' in body) patch.summary = typeof body.summary === 'string' && body.summary.trim() ? body.summary.trim() : null
   if ('url' in body) patch.url = typeof body.url === 'string' && body.url.trim() ? body.url.trim() : null
   if ('type' in body) patch.type = typeof body.type === 'string' && body.type.trim() ? body.type.trim() : 'link'

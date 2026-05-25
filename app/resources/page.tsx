@@ -21,6 +21,10 @@ const VISIBILITY_LABELS: Record<ResourceVisibility, string> = {
   public: 'Public',
   admitted_only: 'Admitted Only',
 }
+const RESOURCE_TYPE_LABELS: Record<string, string> = {
+  video: '课程视频',
+  link: '资料链接',
+}
 
 function groupByStage(resources: ResourceRow[]): Record<ResourceStage, ResourceRow[]> {
   return STAGE_ORDER.reduce((acc, stage) => {
@@ -58,9 +62,9 @@ export default async function ResourcesPage() {
 
       <header className="ss-apply-header">
         <span className="ss-eyebrow">{event.name} · Resources</span>
-        <h1 className="ss-apply-title">资料库</h1>
+        <h1 className="ss-apply-title">课程播放列表</h1>
         <p className="ss-apply-sub">
-          这里按阶段整理共学营资料。Public 资料任何人可看；Admitted Only 资料仅已入营学员和组织者可见。
+          这里按阶段整理课程视频和共学资料。Public 资料任何人可看；Admitted Only 资料仅已入营学员和组织者可见。
         </p>
       </header>
 
@@ -100,7 +104,7 @@ export default async function ResourcesPage() {
                   <div className="ss-resource-card-header">
                     <h3 className="ss-resource-title">{resource.title}</h3>
                     <div className="ss-resource-meta">
-                      {resource.type && <span className="ss-resource-pill">{resource.type}</span>}
+                      {resource.type && <span className="ss-resource-pill">{RESOURCE_TYPE_LABELS[resource.type] ?? resource.type}</span>}
                       <span className="ss-resource-pill" data-visibility={resource.visibility}>
                         {VISIBILITY_LABELS[resource.visibility]}
                       </span>

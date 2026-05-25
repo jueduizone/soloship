@@ -494,9 +494,52 @@
 }
 .ss-resource-form {
   display: grid;
-  grid-template-columns: minmax(180px, 1.4fr) minmax(180px, 1.2fr) minmax(200px, 1.5fr) 100px 130px 150px 90px auto;
-  gap: 10px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
   align-items: start;
+}
+.ss-resource-form .ss-field {
+  margin-bottom: 0;
+}
+.ss-resource-form .ss-textarea {
+  min-height: 44px;
+  height: 44px;
+}
+.ss-resource-title-field,
+.ss-resource-summary-field,
+.ss-resource-url-field {
+  grid-column: span 4;
+}
+.ss-resource-type-field,
+.ss-resource-stage-field,
+.ss-resource-visibility-field {
+  grid-column: span 3;
+}
+.ss-resource-order-field {
+  grid-column: span 1;
+}
+.ss-resource-actions {
+  grid-column: span 2;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  padding-top: 22px;
+}
+.ss-resource-admin-panel {
+  margin-bottom: 16px;
+}
+.ss-resource-admin-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.ss-resource-admin-title {
+  color: var(--ss-text-strong);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 .ss-resource-list {
   display: flex;
@@ -512,7 +555,18 @@
 @media (max-width: 1100px) {
   .ss-admin-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .ss-admin-quick-grid { grid-template-columns: 1fr; }
-  .ss-resource-form { grid-template-columns: 1fr 1fr; }
+  .ss-resource-title-field,
+  .ss-resource-summary-field,
+  .ss-resource-url-field,
+  .ss-resource-type-field,
+  .ss-resource-stage-field,
+  .ss-resource-visibility-field {
+    grid-column: span 6;
+  }
+  .ss-resource-order-field,
+  .ss-resource-actions {
+    grid-column: span 3;
+  }
 }
 @media (max-width: 720px) {
   .ss-admin-topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -522,4 +576,14 @@
   .ss-admin-metric-card { min-height: 92px; }
   .ss-admin-metric-card strong { font-size: 28px; }
   .ss-resource-form { grid-template-columns: 1fr; }
+  .ss-resource-title-field,
+  .ss-resource-summary-field,
+  .ss-resource-url-field,
+  .ss-resource-type-field,
+  .ss-resource-stage-field,
+  .ss-resource-visibility-field,
+  .ss-resource-order-field,
+  .ss-resource-actions {
+    grid-column: 1;
+  }
 }
