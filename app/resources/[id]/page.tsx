@@ -97,7 +97,7 @@ export default async function ResourceDetailPage({ params }: { params: { id: str
     <div className="ss-apply-container ss-vod-container">
       <div className="ss-topbar ss-vod-topbar">
         <Link href="/resources">← 资料库</Link>
-        <span>{user.email}</span>
+        <span className="ss-vod-viewer">{user.email}</span>
       </div>
 
       <div className="ss-vod-layout">
