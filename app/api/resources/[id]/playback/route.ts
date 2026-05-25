@@ -4,7 +4,10 @@ import { createClient } from '@/lib/supabase/server'
 import { isOrganizerUser } from '@/lib/auth/require-organizer'
 import { getResourceById } from '@/lib/db/resources'
 import { getRegistrationForApplicant } from '@/lib/db/registrations'
-import { createTencentVodPlayback, parseTencentVodFileId } from '@/lib/vod/tencent'
+import {
+  createCloudflareStreamPlayback,
+  parseCloudflareStreamVideoUid,
+} from '@/lib/vod/cloudflare'
 
 export const dynamic = 'force-dynamic'
 
@@ -44,12 +47,12 @@ export async function POST(
       return NextResponse.json({ error: '该资料不是视频' }, { status: 400 })
     }
 
-    const fileId = parseTencentVodFileId(resource.url)
-    if (!fileId) {
-      return NextResponse.json({ error: '视频尚未配置腾讯云 VOD fileId' }, { status: 400 })
+    const videoUid = parseCloudflareStreamVideoUid(resource.url)
+    if (!videoUid) {
+      return NextResponse.json({ error: '视频尚未配置 Cloudflare Stream video UID' }, { status: 400 })
     }
 
-    const playback = createTencentVodPlayback(fileId)
+    const playback = await createCloudflareStreamPlayback(videoUid)
     return NextResponse.json({
       ok: true,
       playback,

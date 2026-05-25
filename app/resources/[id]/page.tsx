@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { isOrganizerUser } from '@/lib/auth/require-organizer'
 import { getRegistrationForApplicant } from '@/lib/db/registrations'
 import { getResourceById } from '@/lib/db/resources'
-import { TencentVodPlayer } from './TencentVodPlayer'
+import { CloudflareStreamPlayer } from './CloudflareStreamPlayer'
 
 export const dynamic = 'force-dynamic'
 
@@ -85,7 +85,7 @@ export default async function ResourceDetailPage({ params }: { params: { id: str
         {resource.summary && <p className="ss-apply-sub">{resource.summary}</p>}
       </header>
 
-      <TencentVodPlayer resourceId={resource.id} />
+      <CloudflareStreamPlayer resourceId={resource.id} />
     </div>
   )
 }

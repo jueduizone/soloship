@@ -23,18 +23,18 @@ assert.match(
 )
 assert.match(
   playbackRoute,
-  /createTencentVodPlayback/,
-  'VOD playback token route must create Tencent VOD signed playback params server-side'
+  /createCloudflareStreamPlayback/,
+  'VOD playback token route must create Cloudflare Stream signed playback params server-side'
 )
 
 const resourcesApi = read('app/api/resources/route.ts')
 assert.match(
   resourcesApi,
   /url: resource\.type === 'video' \? null : resource\.url/,
-  '/api/resources must not expose video source URLs or fileIds'
+  '/api/resources must not expose video source URLs or video UIDs'
 )
 
-const player = read('app/resources/[id]/TencentVodPlayer.tsx')
+const player = read('app/resources/[id]/CloudflareStreamPlayer.tsx')
 assert.match(
   player,
   /\/api\/resources\/\$\{resourceId\}\/playback/,
@@ -46,16 +46,16 @@ assert.match(
   'VOD player must render account watermark for leakage tracing'
 )
 
-const tencentVod = read('lib/vod/tencent.ts')
+const cloudflareVod = read('lib/vod/cloudflare.ts')
 assert.match(
-  tencentVod,
-  /contentInfo/,
-  'Tencent VOD player signatures must include contentInfo'
+  cloudflareVod,
+  /downloadable: false/,
+  'Cloudflare Stream signed tokens must disable download permission'
 )
 assert.match(
-  tencentVod,
-  /TENCENT_VOD_CONTENT_INFO/,
-  'Tencent VOD contentInfo should be configurable for Original, Transcode, RawAdaptive, or ProtectedAdaptive playback'
+  cloudflareVod,
+  /CLOUDFLARE_STREAM_API_TOKEN/,
+  'Cloudflare Stream signing must use a server-side API token'
 )
 
 console.log('vod contract ok')

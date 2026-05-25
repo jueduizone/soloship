@@ -206,7 +206,7 @@ create table if not exists public.resources (
   event_id          uuid not null references public.events(id) on delete cascade,
   title             text not null,
   summary           text,
-  url               text,           -- for video resources, store Tencent VOD fileId or a URL containing fileId
+  url               text,           -- for video resources, store Cloudflare Stream video UID or a URL containing the UID
   type              text,           -- 'doc' | 'video' | 'link' | 'pdf'
   stage             resource_stage not null default 'pre_camp',
   visibility        resource_visibility not null default 'admitted_only',
