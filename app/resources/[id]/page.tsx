@@ -54,9 +54,8 @@ export default async function ResourceDetailPage({ params }: { params: { id: str
   if (!canAccess) {
     return (
       <div className="ss-apply-container">
-        <div className="ss-topbar">
+        <div className="ss-resource-topbar">
           <Link href="/resources">← 资料库</Link>
-          <span>{user.email}</span>
         </div>
         <div className="ss-apply-card" style={{ marginTop: 24 }}>
           <div className="ss-eyebrow">Access</div>
@@ -75,9 +74,8 @@ export default async function ResourceDetailPage({ params }: { params: { id: str
   if (resource.type !== 'video') {
     return (
       <div className="ss-apply-container">
-        <div className="ss-topbar">
+        <div className="ss-resource-topbar">
           <Link href="/resources">← 资料库</Link>
-          <span>{user.email}</span>
         </div>
         <header className="ss-apply-header">
           <span className="ss-eyebrow">Resource</span>
@@ -95,9 +93,8 @@ export default async function ResourceDetailPage({ params }: { params: { id: str
 
   return (
     <div className="ss-apply-container ss-vod-container">
-      <div className="ss-topbar ss-vod-topbar">
+      <div className="ss-resource-topbar ss-vod-topbar">
         <Link href="/resources">← 资料库</Link>
-        <span className="ss-vod-viewer">{user.email}</span>
       </div>
 
       <div className="ss-vod-layout">

@@ -54,6 +54,16 @@ assert.match(
 )
 assert.match(
   detailPage,
+  /ss-resource-topbar ss-vod-topbar/,
+  'VOD detail page must use the resources topbar spacing'
+)
+assert.doesNotMatch(
+  detailPage,
+  /<span>\{user\.email\}<\/span>|ss-vod-viewer/,
+  'VOD detail page must not show user email in the content topbar'
+)
+assert.match(
+  detailPage,
   /groupVideosByStage/,
   'VOD detail page must group playlist videos by course stage'
 )

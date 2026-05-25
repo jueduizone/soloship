@@ -55,9 +55,9 @@ export default async function ResourcesPage() {
 
   return (
     <div className="ss-apply-container">
-      <div className="ss-topbar">
+      <div className="ss-resource-topbar">
         <Link href="/">← SoloShip</Link>
-        {user ? <span>{user.email}</span> : <Link href="/auth/login?next=/resources">登录</Link>}
+        {!user && <Link href="/auth/login?next=/resources">登录查看权限</Link>}
       </div>
 
       <header className="ss-apply-header">

@@ -1,10 +1,37 @@
 .ss-resources-shell .ss-apply-container {
   max-width: 920px;
+  padding-top: 28px;
 }
 
 .ss-resources-shell .ss-vod-container {
   max-width: 1360px;
+  padding-top: 28px;
   padding-bottom: 32px;
+}
+
+.ss-resource-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 34px;
+  margin-bottom: 36px;
+  font-size: 13px;
+}
+
+.ss-resource-topbar a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--ss-text-dim);
+}
+
+.ss-resource-topbar a:hover {
+  color: var(--ss-text-strong);
+  border-color: var(--ss-border-dark);
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .ss-resource-access {
@@ -170,39 +197,7 @@
 }
 
 .ss-vod-topbar {
-  min-height: 32px;
   margin-bottom: 20px;
-  padding: 0;
-}
-
-.ss-vod-topbar a {
-  display: inline-flex;
-  align-items: center;
-  height: 32px;
-  padding: 0 10px;
-  border: 1px solid transparent;
-  border-radius: 999px;
-}
-
-.ss-vod-topbar a:hover {
-  border-color: var(--ss-border-dark);
-  background: rgba(255, 255, 255, 0.025);
-}
-
-.ss-vod-viewer {
-  display: inline-flex;
-  align-items: center;
-  min-width: 0;
-  max-width: 280px;
-  height: 32px;
-  overflow: hidden;
-  padding: 0 10px;
-  border: 1px solid var(--ss-border-dark-soft);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.018);
-  color: var(--ss-text-dim);
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .ss-vod-layout {
@@ -407,12 +402,7 @@
   }
 
   .ss-vod-topbar {
-    align-items: flex-start;
     gap: 8px;
-  }
-
-  .ss-vod-viewer {
-    max-width: 52vw;
   }
 
   .ss-vod-sidebar-head {

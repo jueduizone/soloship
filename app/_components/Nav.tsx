@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import { LogoutButton } from './LogoutButton'
+import { NavLink } from './NavLink'
 import { NavCta } from './NavCta'
 import { event, nav } from './content'
 import { createClient } from '@/lib/supabase/server'
@@ -66,84 +67,32 @@ export async function Nav() {
 
         <div className="flex items-center gap-1 sm:gap-6">
           {nav.links.map((l) => (
-            <Link
-              key={l.href}
-              href={resolveHomeAnchor(l.href)}
-              className="hidden md:inline-flex items-center"
-              style={{
-                color: 'var(--ss-text-dim)',
-                fontSize: 13.5,
-                fontWeight: 450,
-                letterSpacing: '-0.005em',
-                padding: '6px 4px',
-                transition: 'color 160ms ease',
-              }}
-            >
+            <NavLink key={l.href} href={resolveHomeAnchor(l.href)}>
               {l.label}
-            </Link>
+            </NavLink>
           ))}
 
           {user && (
             <>
-              <Link
-                href="/apply/status"
-                className="hidden md:inline-flex items-center"
-                style={{
-                  color: 'var(--ss-text-dim)',
-                  fontSize: 13.5,
-                  fontWeight: 450,
-                  letterSpacing: '-0.005em',
-                  padding: '6px 4px',
-                }}
-              >
+              <NavLink href="/apply/status">
                 申请状态
-              </Link>
-              <Link
-                href="/resources"
-                className="hidden md:inline-flex items-center"
-                style={{
-                  color: 'var(--ss-text-dim)',
-                  fontSize: 13.5,
-                  fontWeight: 450,
-                  letterSpacing: '-0.005em',
-                  padding: '6px 4px',
-                }}
-              >
+              </NavLink>
+              <NavLink href="/resources">
                 资料库
-              </Link>
+              </NavLink>
             </>
           )}
 
           {showFellows && (
-            <Link
-              href="/fellows"
-              className="hidden md:inline-flex items-center"
-              style={{
-                color: 'var(--ss-text-dim)',
-                fontSize: 13.5,
-                fontWeight: 450,
-                letterSpacing: '-0.005em',
-                padding: '6px 4px',
-              }}
-            >
+            <NavLink href="/fellows">
               同学录
-            </Link>
+            </NavLink>
           )}
 
           {showAdmin && (
-            <Link
-              href="/admin/registrations"
-              className="hidden md:inline-flex items-center"
-              style={{
-                color: 'var(--ss-accent-hi)',
-                fontSize: 13.5,
-                fontWeight: 500,
-                letterSpacing: '-0.005em',
-                padding: '6px 4px',
-              }}
-            >
+            <NavLink href="/admin">
               后台
-            </Link>
+            </NavLink>
           )}
 
           <NavCta
