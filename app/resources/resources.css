@@ -163,7 +163,7 @@
 }
 
 .ss-vod-topbar {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .ss-vod-layout {
@@ -178,14 +178,14 @@
 }
 
 .ss-vod-header {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .ss-vod-kicker {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .ss-vod-kicker span {
@@ -206,17 +206,18 @@
 .ss-vod-title {
   margin: 0;
   color: var(--ss-text-strong);
-  font-size: clamp(34px, 4vw, 56px);
-  line-height: 1.05;
-  font-weight: 750;
+  max-width: 860px;
+  font-size: clamp(28px, 2.2vw, 36px);
+  line-height: 1.18;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
 .ss-vod-summary {
   max-width: 760px;
-  margin: 16px 0 0;
+  margin: 10px 0 0;
   color: var(--ss-text);
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.65;
 }
 
@@ -355,11 +356,11 @@
 
 @media (max-width: 720px) {
   .ss-vod-title {
-    font-size: 34px;
+    font-size: 26px;
   }
 
   .ss-vod-summary {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .ss-vod-layout {
