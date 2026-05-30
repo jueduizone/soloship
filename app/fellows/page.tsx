@@ -1,10 +1,13 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { isOrganizerUser } from '@/lib/auth/require-organizer'
 import { getDefaultEvent } from '@/lib/db/events'
 import { listPublicFellows, type FellowListItem } from '@/lib/db/fellows'
 import { getRegistrationForApplicant } from '@/lib/db/registrations'
+import { getDictionary } from '@/lib/i18n'
+import { getCurrentLocale } from '@/lib/i18n/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,6 +26,7 @@ function canViewFellow(
 }
 
 export default async function FellowsPage() {
+  const copy = getDictionary(getCurrentLocale(cookies()))
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const admin = createAdminClient()
@@ -41,35 +45,35 @@ export default async function FellowsPage() {
   )
 
   const emptyText = !user
-    ? '还没有公开的同学档案。登录且入营后可查看同期可见档案。'
+    ? copy.fellows.emptyAnonymous
     : !isCohort && !isOrganizer
-      ? '还没有可公开查看的同学档案。正式入营后可查看同期同学录。'
-      : '本期还没有可查看的同学档案。'
+      ? copy.fellows.emptyPublicOnly
+      : copy.fellows.emptyCohort
 
   return (
     <div className="ss-fellows-container">
       <div className="ss-topbar" style={{ marginBottom: 32 }}>
         <Link href="/">← SoloShip</Link>
-        {isCohort || isOrganizer ? <Link href="/profile">编辑我的资料</Link> : null}
+        {isCohort || isOrganizer ? <Link href="/profile">{copy.fellows.editProfile}</Link> : null}
       </div>
 
       <header className="ss-fellows-header">
-        <span className="ss-eyebrow">同学录 · {event.name}</span>
-        <h1 className="ss-fellows-title">{event.name} 同学录</h1>
+        <span className="ss-eyebrow">{copy.fellows.eyebrow} · {event.name}</span>
+        <h1 className="ss-fellows-title">{event.name} {copy.fellows.titleSuffix}</h1>
         <p className="ss-fellows-sub">
-          已正式入营的 builder。公开资料所有人可见，同期可见资料仅限已入营同学查看。
+          {copy.fellows.subtitle}
         </p>
       </header>
 
       {!user && (
         <div className="ss-callout" style={{ marginBottom: 24 }}>
-          未登录状态只展示公开档案。<Link href="/auth/login?next=/fellows">登录查看你的可访问范围</Link>
+          {copy.fellows.anonymousCallout}<Link href="/auth/login?next=/fellows">{copy.fellows.loginScope}</Link>
         </div>
       )}
 
       {user && !isCohort && !isOrganizer && (
         <div className="ss-callout" style={{ marginBottom: 24 }}>
-          你当前还未入营，只能查看公开档案。<Link href="/apply/status">查看申请状态</Link>
+          {copy.fellows.publicOnlyCallout}<Link href="/apply/status">{copy.fellows.viewStatus}</Link>
         </div>
       )}
 
@@ -88,7 +92,7 @@ export default async function FellowsPage() {
                 )}
                 <div>
                   <div className="ss-fellow-name">{f.display_name}</div>
-                  {f.visibility !== 'public' && <div className="ss-fellow-visibility">同期可见</div>}
+                  {f.visibility !== 'public' && <div className="ss-fellow-visibility">{copy.fellows.cohortOnly}</div>}
                 </div>
               </div>
               {f.one_liner && <div className="ss-fellow-one">{f.one_liner}</div>}

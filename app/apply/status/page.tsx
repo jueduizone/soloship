@@ -1,39 +1,21 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { getRegistrationForApplicant } from '@/lib/db/registrations'
 import { getLatestPaymentForRegistration } from '@/lib/db/payments'
-import type { RegistrationStatus } from '@/lib/db/types'
-import { t } from '@/lib/i18n'
+import { getDictionary } from '@/lib/i18n'
+import { getCurrentLocale } from '@/lib/i18n/site'
 import { PaymentBox } from './PaymentBox'
 
 export const dynamic = 'force-dynamic'
 
-const STATUS_LABEL: Record<RegistrationStatus, string> = {
-  submitted: '待审核',
-  reviewing: '审核中',
-  admitted: '已录取',
-  waitlisted: '候补',
-  rejected: '未录取',
-  payment_pending: '待付款确认',
-  paid: '已入营',
-  withdrawn: '已退出',
-}
-
-const STATUS_EXPLAIN: Record<RegistrationStatus, string> = {
-  submitted: '我们已经收到你的申请。3 个工作日内会完成审核，通过邮件通知你结果。',
-  reviewing: '你的申请正在审核中。如无意外，将在 3 个工作日内给出结果。',
-  admitted: '恭喜你被录取！我们会通过邮件发送付款方式。完成付款后本页会更新为「已入营」。',
-  waitlisted: '你目前在候补名单中。如前序录取名额释放，我们会第一时间通知你。',
-  rejected: '很遗憾，本期没有足够的匹配度。我们会保留你的资料，在后续招募时再联系。',
-  payment_pending: '我们已经发送付款信息，请按邮件指引完成付款。到账后本页会自动变为「已入营」。',
-  paid: '你已正式入营。资料库和同学录已开放，可以完善你的同学录资料。',
-  withdrawn: '你已退出本期。',
-}
-
 export default async function StatusPage() {
+  const locale = getCurrentLocale(cookies())
+  const copy = getDictionary(locale)
+  const statusCopy = copy.apply.status
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login?next=/apply/status')
@@ -53,14 +35,14 @@ export default async function StatusPage() {
       <div className="ss-apply-container">
         <div className="ss-topbar">
           <Link href="/">← SoloShip</Link>
-          <span>查询邮箱：{user.email}</span>
+          <span>{statusCopy.queryEmail}{user.email}</span>
         </div>
         <header className="ss-apply-header">
-          <h1 className="ss-apply-title">{t.apply.status.title}</h1>
-          <p className="ss-apply-sub">{t.apply.status.empty}</p>
+          <h1 className="ss-apply-title">{statusCopy.title}</h1>
+          <p className="ss-apply-sub">{statusCopy.empty}</p>
         </header>
         <Link href="/apply" className="ss-btn ss-btn-primary">
-          {t.apply.status.goApply}
+          {statusCopy.goApply}
         </Link>
       </div>
     )
@@ -75,31 +57,31 @@ export default async function StatusPage() {
     <div className="ss-apply-container">
       <div className="ss-topbar">
         <Link href="/">← SoloShip</Link>
-        <span>查询邮箱：{user.email}</span>
+        <span>{statusCopy.queryEmail}{user.email}</span>
       </div>
 
       <header className="ss-apply-header">
         <span className="ss-eyebrow">{event.name} · {event.subtitle}</span>
-        <h1 className="ss-apply-title">{t.apply.status.title}</h1>
+        <h1 className="ss-apply-title">{statusCopy.title}</h1>
         <p className="ss-apply-sub">
-          本页按当前登录邮箱查询申请。提交后可随时从首页「申请状态」入口回来查看审核、付款和入营进度。
+          {statusCopy.intro}
         </p>
       </header>
 
       <div className="ss-apply-card">
         <span className="ss-status-pill" data-kind={reg.status}>
-          {STATUS_LABEL[reg.status]}
+          {statusCopy.labels[reg.status]}
         </span>
 
-        <div className="ss-callout">{STATUS_EXPLAIN[reg.status]}</div>
+        <div className="ss-callout">{statusCopy.explain[reg.status]}</div>
 
         <dl className="ss-kv">
-          <dt>姓名</dt><dd>{reg.name}</dd>
-          <dt>邮箱</dt><dd>{reg.email}</dd>
-          {reg.city && (<><dt>城市</dt><dd>{reg.city}</dd></>)}
-          {reg.build_direction && (<><dt>方向</dt><dd>{reg.build_direction}</dd></>)}
-          <dt>提交时间</dt>
-          <dd>{new Date(reg.submitted_at).toLocaleString('zh-CN')}</dd>
+          <dt>{statusCopy.fields.name}</dt><dd>{reg.name}</dd>
+          <dt>{statusCopy.fields.email}</dt><dd>{reg.email}</dd>
+          {reg.city && (<><dt>{statusCopy.fields.city}</dt><dd>{reg.city}</dd></>)}
+          {reg.build_direction && (<><dt>{statusCopy.fields.direction}</dt><dd>{reg.build_direction}</dd></>)}
+          <dt>{statusCopy.fields.submittedAt}</dt>
+          <dd>{new Date(reg.submitted_at).toLocaleString(locale === 'en' ? 'en-US' : 'zh-CN')}</dd>
         </dl>
 
         {showPaymentBox && (
@@ -107,21 +89,22 @@ export default async function StatusPage() {
             registrationId={reg.id}
             amountCents={event.price_cents}
             currency={event.currency}
+            copy={copy}
           />
         )}
 
         {reg.status === 'payment_pending' && (
           <div style={{ marginTop: 24 }}>
-            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>付款</div>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>{statusCopy.payment.title}</div>
             <div className="ss-callout" style={{ marginTop: 0 }}>
-              我们已记录你的付款，请等待后台确认。确认后状态会变为「已入营」。
+              {statusCopy.payment.pendingBody}
             </div>
             {payment && (
               <dl className="ss-kv">
-                <dt>金额</dt>
+                <dt>{statusCopy.fields.amount}</dt>
                 <dd>¥{(payment.amount_cents / 100).toFixed(2)} {payment.currency}</dd>
-                <dt>状态</dt>
-                <dd>等待后台确认</dd>
+                <dt>{statusCopy.fields.state}</dt>
+                <dd>{statusCopy.payment.pendingState}</dd>
               </dl>
             )}
           </div>
@@ -129,24 +112,24 @@ export default async function StatusPage() {
 
         {reg.status === 'paid' && (
           <div style={{ marginTop: 24 }}>
-            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>入营</div>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>{statusCopy.payment.paidTitle}</div>
             <div className="ss-callout" style={{ marginTop: 0 }}>
-              你已正式入营，可以编辑个人资料并查看同学录。
+              {statusCopy.payment.paidBody}
             </div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 14 }}>
-              <Link href="/profile" className="ss-btn ss-btn-primary">编辑个人资料</Link>
-              <Link href="/fellows" className="ss-btn ss-btn-ghost">进入同学录</Link>
+              <Link href="/profile" className="ss-btn ss-btn-primary">{statusCopy.payment.editProfile}</Link>
+              <Link href="/fellows" className="ss-btn ss-btn-ghost">{statusCopy.payment.fellows}</Link>
             </div>
             {payment && (
               <dl className="ss-kv">
-                <dt>金额</dt>
+                <dt>{statusCopy.fields.amount}</dt>
                 <dd>¥{(payment.amount_cents / 100).toFixed(2)} {payment.currency}</dd>
-                <dt>状态</dt>
-                <dd>已确认到账</dd>
+                <dt>{statusCopy.fields.state}</dt>
+                <dd>{statusCopy.payment.confirmedState}</dd>
                 {payment.confirmed_at && (
                   <>
-                    <dt>确认时间</dt>
-                    <dd>{new Date(payment.confirmed_at).toLocaleString('zh-CN')}</dd>
+                    <dt>{statusCopy.fields.confirmedAt}</dt>
+                    <dd>{new Date(payment.confirmed_at).toLocaleString(locale === 'en' ? 'en-US' : 'zh-CN')}</dd>
                   </>
                 )}
               </dl>
@@ -156,19 +139,19 @@ export default async function StatusPage() {
 
         {['admitted', 'payment_pending', 'paid'].includes(reg.status) && (
           <div style={{ marginTop: 24 }}>
-            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>入营资料</div>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>{statusCopy.payment.resourcesTitle}</div>
             <div className="ss-callout" style={{ marginTop: 0 }}>
-              资料库已开放。Public 资料和入营专属资料会按阶段持续更新。
+              {statusCopy.payment.resourcesBody}
             </div>
             <div style={{ marginTop: 16 }}>
-              <Link href="/resources" className="ss-btn ss-btn-primary">进入资料库</Link>
+              <Link href="/resources" className="ss-btn ss-btn-primary">{statusCopy.payment.resources}</Link>
             </div>
           </div>
         )}
 
         {['submitted', 'reviewing'].includes(reg.status) && (
           <div style={{ marginTop: 24 }}>
-            <Link href="/apply?edit=1" className="ss-btn ss-btn-ghost">修改申请</Link>
+            <Link href="/apply?edit=1" className="ss-btn ss-btn-ghost">{statusCopy.payment.edit}</Link>
           </div>
         )}
       </div>

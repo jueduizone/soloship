@@ -1,5 +1,8 @@
 import { PublicPageSkeleton } from '../../_components/LoadingSkeleton'
+import { getDictionary } from '@/lib/i18n'
+import { getCurrentLocale } from '@/lib/i18n/site'
+import { cookies } from 'next/headers'
 
 export default function Loading() {
-  return <PublicPageSkeleton title="同学详情加载中" variant="detail" />
+  return <PublicPageSkeleton title={getDictionary(getCurrentLocale(cookies())).common.fellowDetailLoading} variant="detail" />
 }

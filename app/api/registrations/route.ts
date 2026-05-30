@@ -4,32 +4,35 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { upsertRegistration } from '@/lib/db/registrations'
 import type { LinkEntry } from '@/lib/db/types'
+import { getDictionary } from '@/lib/i18n'
+import { normalizeLocale, SITE_LOCALE_COOKIE } from '@/lib/i18n/site'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
+  const copy = getDictionary(normalizeLocale(request.cookies.get(SITE_LOCALE_COOKIE)?.value))
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.json({ error: '请先登录' }, { status: 401 })
+    return NextResponse.json({ error: copy.common.api.loginRequired }, { status: 401 })
   }
 
   let body: Record<string, unknown>
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ error: '无效的请求体' }, { status: 400 })
+    return NextResponse.json({ error: copy.common.api.invalidBody }, { status: 400 })
   }
 
   const name = String(body.name ?? '').trim()
   if (!name) {
-    return NextResponse.json({ error: '缺少必填字段' }, { status: 400 })
+    return NextResponse.json({ error: copy.common.api.missingRequired }, { status: 400 })
   }
 
   // Always use the authenticated user's email — don't trust the client.
   const email = user.email
   if (!email) {
-    return NextResponse.json({ error: '当前账号没有邮箱' }, { status: 400 })
+    return NextResponse.json({ error: copy.common.api.missingEmail }, { status: 400 })
   }
 
   const rawLinks = Array.isArray(body.links) ? body.links : []
@@ -48,7 +51,7 @@ export async function POST(request: NextRequest) {
   try {
     const event = await getDefaultEvent(admin)
     if (event.status !== 'recruiting') {
-      return NextResponse.json({ error: '当前活动暂未开放申请' }, { status: 400 })
+      return NextResponse.json({ error: copy.common.api.notRecruiting }, { status: 400 })
     }
 
     const row = await upsertRegistration(admin, {
@@ -66,7 +69,7 @@ export async function POST(request: NextRequest) {
     })
     return NextResponse.json({ ok: true, registration: row })
   } catch (err) {
-    const message = err instanceof Error ? err.message : '未知错误'
+    const message = err instanceof Error ? err.message : copy.common.api.unknown
     return NextResponse.json({ error: message }, { status: 400 })
   }
 }

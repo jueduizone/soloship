@@ -54,6 +54,31 @@ const verifyPage = read('app/auth/verify/page.tsx')
 assert.match(verifyPage, /getCurrentLocale\(cookies\(\)\)/, 'verify page must read locale from cookies')
 assert.match(verifyPage, /getDictionary\(getCurrentLocale\(cookies\(\)\)\)/, 'verify page must load localized verify copy')
 
+const applyPage = read('app/apply/page.tsx')
+assert.match(applyPage, /getDictionary\(getCurrentLocale\(cookies\(\)\)\)/, 'apply page must load localized copy from cookies')
+assert.match(applyPage, /<ApplyForm[\s\S]*copy=\{copy\}/, 'apply form must receive localized copy')
+
+const applyForm = read('app/apply/ApplyForm.tsx')
+assert.doesNotMatch(applyForm, /import \{[^}]*\bt\b[^}]*\} from ['"]@\/lib\/i18n['"]/, 'apply form must not import fixed zh copy')
+assert.match(applyForm, /copy\.apply\.form\.submitting/, 'apply form pending copy must be localized')
+
+const statusPage = read('app/apply/status/page.tsx')
+assert.match(statusPage, /getCurrentLocale\(cookies\(\)\)/, 'status page must read locale from cookies')
+assert.match(statusPage, /statusCopy\.labels\[reg\.status\]/, 'status labels must be localized')
+assert.match(statusPage, /toLocaleString\(locale === 'en' \? 'en-US' : 'zh-CN'\)/, 'status dates must use localized formatting')
+
+const profilePage = read('app/profile/page.tsx')
+assert.match(profilePage, /getDictionary\(getCurrentLocale\(cookies\(\)\)\)/, 'profile page must load localized copy from cookies')
+assert.match(profilePage, /<ProfileForm[\s\S]*copy=\{copy\}/, 'profile form must receive localized copy')
+
+const fellowsPage = read('app/fellows/page.tsx')
+assert.match(fellowsPage, /getDictionary\(getCurrentLocale\(cookies\(\)\)\)/, 'fellows page must load localized copy from cookies')
+assert.match(fellowsPage, /copy\.fellows\.cohortOnly/, 'fellows visibility label must be localized')
+
+const registrationsApi = read('app/api/registrations/route.ts')
+assert.match(registrationsApi, /SITE_LOCALE_COOKIE/, 'registrations API must localize errors from the locale cookie')
+assert.match(registrationsApi, /copy\.common\.api\.loginRequired/, 'registrations API login error must be localized')
+
 const resources = read('app/resources/page.tsx')
 assert.match(resources, /RESOURCE_COPY/, 'resources page must define localized resources copy')
 assert.match(resources, /Course Playlist/, 'resources page must include English copy')

@@ -1,5 +1,8 @@
 import { PublicPageSkeleton } from './_components/LoadingSkeleton'
+import { getDictionary } from '@/lib/i18n'
+import { getCurrentLocale } from '@/lib/i18n/site'
+import { cookies } from 'next/headers'
 
 export default function Loading() {
-  return <PublicPageSkeleton title="SoloShip 首页加载中" variant="home" />
+  return <PublicPageSkeleton title={getDictionary(getCurrentLocale(cookies())).common.homeLoading} variant="home" />
 }

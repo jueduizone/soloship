@@ -1,27 +1,19 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { getRegistrationForApplicant } from '@/lib/db/registrations'
 import { getFellowByRegistration } from '@/lib/db/fellows'
-import type { RegistrationStatus } from '@/lib/db/types'
+import { getDictionary } from '@/lib/i18n'
+import { getCurrentLocale } from '@/lib/i18n/site'
 import { ProfileForm } from './ProfileForm'
 
 export const dynamic = 'force-dynamic'
 
-const STATUS_LABEL: Record<RegistrationStatus, string> = {
-  submitted: '待审核',
-  reviewing: '审核中',
-  admitted: '已录取',
-  waitlisted: '候补',
-  rejected: '未录取',
-  payment_pending: '待付款确认',
-  paid: '已入营',
-  withdrawn: '已退出',
-}
-
 export default async function ProfilePage() {
+  const copy = getDictionary(getCurrentLocale(cookies()))
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth/login?next=/profile')
@@ -46,49 +38,50 @@ export default async function ProfilePage() {
       </div>
 
       <header className="ss-apply-header">
-        <span className="ss-eyebrow">{event.name} · 个人资料</span>
-        <h1 className="ss-apply-title">个人资料</h1>
+        <span className="ss-eyebrow">{event.name} · {copy.profile.eyebrow}</span>
+        <h1 className="ss-apply-title">{copy.profile.title}</h1>
         <p className="ss-apply-sub">
-          管理你的同学录档案和可见性。正式入营后，同学录会按你的可见性设置展示。
+          {copy.profile.subtitle}
         </p>
       </header>
 
       <div className="ss-apply-card">
         <dl className="ss-kv" style={{ marginTop: 0 }}>
-          <dt>邮箱</dt><dd>{user.email}</dd>
-          {reg && (<><dt>报名状态</dt><dd>{STATUS_LABEL[reg.status]}</dd></>)}
-          {reg?.name && (<><dt>姓名</dt><dd>{reg.name}</dd></>)}
-          {reg?.city && (<><dt>城市</dt><dd>{reg.city}</dd></>)}
+          <dt>{copy.profile.fields.email}</dt><dd>{user.email}</dd>
+          {reg && (<><dt>{copy.profile.fields.status}</dt><dd>{copy.apply.status.labels[reg.status]}</dd></>)}
+          {reg?.name && (<><dt>{copy.profile.fields.name}</dt><dd>{reg.name}</dd></>)}
+          {reg?.city && (<><dt>{copy.profile.fields.city}</dt><dd>{reg.city}</dd></>)}
         </dl>
 
         {!reg && (
           <div className="ss-callout">
-            你还没有提交报名。<Link href="/apply">去报名</Link>
+            {copy.profile.noRegistration}<Link href="/apply">{copy.profile.goApply}</Link>
           </div>
         )}
 
         {reg && !canEdit && (
           <div className="ss-callout">
-            录取后可以在此编辑同学录档案。当前状态：{STATUS_LABEL[reg.status]}。
+            {copy.profile.lockedPrefix}{copy.apply.status.labels[reg.status]}{copy.profile.lockedSuffix}
           </div>
         )}
 
         {fellow && (
           <div className="ss-callout" style={{ marginTop: 16 }}>
-            已有同学录档案。<Link href={`/fellows/${fellow.id}`}>查看我的页面</Link>
+            {copy.profile.existing}<Link href={`/fellows/${fellow.id}`}>{copy.profile.viewMine}</Link>
           </div>
         )}
 
         {reg?.status === 'paid' && (
           <div className="ss-callout">
-            资料库已开放。<Link href="/resources">进入资料库</Link>
+            {copy.profile.resourcesOpen}<Link href="/resources">{copy.profile.enterResources}</Link>
           </div>
         )}
 
         {canEdit && (
           <div style={{ marginTop: 28 }}>
-            <div className="ss-eyebrow" style={{ marginBottom: 12 }}>同学录档案</div>
+            <div className="ss-eyebrow" style={{ marginBottom: 12 }}>{copy.profile.formTitle}</div>
             <ProfileForm
+              copy={copy}
               initial={{
                 id: fellow?.id,
                 display_name: fellow?.display_name ?? reg!.name,

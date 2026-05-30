@@ -1,9 +1,11 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { getDefaultEvent } from '@/lib/db/events'
 import { getRegistrationByUser } from '@/lib/db/registrations'
-import { t } from '@/lib/i18n'
+import { getDictionary } from '@/lib/i18n'
+import { getCurrentLocale } from '@/lib/i18n/site'
 import { ApplyForm } from './ApplyForm'
 
 export const dynamic = 'force-dynamic'
@@ -13,6 +15,7 @@ export default async function ApplyPage({
 }: {
   searchParams?: { edit?: string }
 }) {
+  const copy = getDictionary(getCurrentLocale(cookies()))
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -38,35 +41,35 @@ export default async function ApplyPage({
       <div className="ss-topbar">
         <Link href="/">← SoloShip</Link>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <Link href="/apply/status">查看申请状态</Link>
+          <Link href="/apply/status">{copy.apply.topbarStatus}</Link>
           <span>{user.email}</span>
         </div>
       </div>
 
       <header className="ss-apply-header">
         <span className="ss-eyebrow">{event.name} · {event.subtitle}</span>
-        <h1 className="ss-apply-title">{t.apply.title}</h1>
-        <p className="ss-apply-sub">{t.apply.subtitle}</p>
+        <h1 className="ss-apply-title">{copy.apply.title}</h1>
+        <p className="ss-apply-sub">{copy.apply.subtitle}</p>
       </header>
 
       <div className="ss-apply-card">
         <div className="ss-apply-steps">
-          <span className="is-done">1 提交申请</span>
-          <span>2 审核 / 录取</span>
-          <span>3 付款 / 入营</span>
+          <span className="is-done">{copy.apply.steps.submit}</span>
+          <span>{copy.apply.steps.review}</span>
+          <span>{copy.apply.steps.payment}</span>
         </div>
 
         <div className="ss-callout" style={{ marginBottom: 24 }}>
-          提交后会进入申请状态页。之后用当前登录邮箱进入「查看申请状态」即可查询审核结果、付款确认和入营进度。
+          {copy.apply.callout}
         </div>
 
         {existing && (
           <div className="ss-callout" style={{ marginBottom: 24 }}>
-            你正在编辑已提交的申请。改完保存后会回到
+            {copy.apply.editCalloutPrefix}
             <Link href="/apply/status" style={{ marginLeft: 4, textDecoration: 'underline' }}>
-              申请状态
+              {copy.apply.editCalloutLink}
             </Link>
-            页查看进度。
+            {copy.apply.editCalloutSuffix}
           </div>
         )}
 
@@ -93,6 +96,7 @@ export default async function ApplyPage({
           }}
           email={user.email ?? ''}
           isUpdate={Boolean(existing)}
+          copy={copy}
         />
       </div>
     </div>

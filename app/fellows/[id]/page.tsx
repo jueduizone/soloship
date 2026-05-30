@@ -1,10 +1,13 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { isOrganizerUser } from '@/lib/auth/require-organizer'
 import { getFellowById, type FellowListItem } from '@/lib/db/fellows'
 import { getRegistrationForApplicant } from '@/lib/db/registrations'
+import { getDictionary } from '@/lib/i18n'
+import { getCurrentLocale } from '@/lib/i18n/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,6 +30,7 @@ export default async function FellowDetailPage({
 }: {
   params: { id: string }
 }) {
+  const copy = getDictionary(getCurrentLocale(cookies()))
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const admin = createAdminClient()
@@ -50,8 +54,8 @@ export default async function FellowDetailPage({
   return (
     <div className="ss-fellows-container" style={{ maxWidth: 720 }}>
       <div className="ss-topbar" style={{ marginBottom: 32 }}>
-        <Link href="/fellows">← 同学录</Link>
-        {user?.id === fellow.registration?.user_id && <Link href="/profile">编辑我的资料</Link>}
+        <Link href="/fellows">{copy.fellows.back}</Link>
+        {user?.id === fellow.registration?.user_id && <Link href="/profile">{copy.fellows.editProfile}</Link>}
       </div>
 
       <div className="ss-fellow-detail">
@@ -74,7 +78,7 @@ export default async function FellowDetailPage({
             >
               {fellow.display_name}
             </h1>
-            {fellow.visibility !== 'public' && <div className="ss-fellow-visibility">同期可见</div>}
+            {fellow.visibility !== 'public' && <div className="ss-fellow-visibility">{copy.fellows.cohortOnly}</div>}
           </div>
         </div>
 
@@ -93,7 +97,7 @@ export default async function FellowDetailPage({
 
         {fellow.project_name && (
           <div style={{ marginTop: 24 }}>
-            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>项目</div>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>{copy.fellows.project}</div>
             <div style={{
               color: 'var(--ss-accent-hi)',
               fontSize: 18,
@@ -110,7 +114,7 @@ export default async function FellowDetailPage({
 
         {fellow.links && fellow.links.length > 0 && (
           <div style={{ marginTop: 24 }}>
-            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>链接</div>
+            <div className="ss-eyebrow" style={{ marginBottom: 8 }}>{copy.fellows.links}</div>
             <ul style={{ margin: 0, paddingLeft: 18 }}>
               {fellow.links.map((l, i) => (
                 <li key={i}>

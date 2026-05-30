@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { t } from '@/lib/i18n'
+import type { Dictionary } from '@/lib/i18n'
 
 type FormState = {
   name: string
@@ -19,11 +19,13 @@ export function ApplyForm({
   email,
   initial,
   isUpdate,
+  copy,
 }: {
   eventId: string
   email: string
   initial: FormState
   isUpdate: boolean
+  copy: Dictionary
 }) {
   const router = useRouter()
   const [form, setForm] = useState<FormState>(initial)
@@ -61,7 +63,7 @@ export function ApplyForm({
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        setError(data?.error ?? t.common.error)
+        setError(data?.error ?? copy.common.error)
         return
       }
       router.push('/apply/status')
@@ -74,13 +76,13 @@ export function ApplyForm({
       {error && <div className="ss-form-error">{error}</div>}
 
       <div className="ss-field">
-        <label htmlFor="email">{t.apply.form.email}</label>
+        <label htmlFor="email">{copy.apply.form.email}</label>
         <input id="email" className="ss-input" type="email" value={email} disabled />
-        <div className="ss-field-hint">登录邮箱即报名邮箱，无法修改。</div>
+        <div className="ss-field-hint">{copy.apply.form.emailHint}</div>
       </div>
 
       <div className="ss-field">
-        <label htmlFor="name">{t.apply.form.name}</label>
+        <label htmlFor="name">{copy.apply.form.name}</label>
         <input
           id="name"
           className="ss-input"
@@ -91,7 +93,7 @@ export function ApplyForm({
       </div>
 
       <div className="ss-field">
-        <label htmlFor="city">{t.apply.form.city}</label>
+        <label htmlFor="city">{copy.apply.form.city}</label>
         <input
           id="city"
           className="ss-input"
@@ -102,53 +104,53 @@ export function ApplyForm({
       </div>
 
       <div className="ss-field">
-        <label htmlFor="contact">{t.apply.form.contact}</label>
+        <label htmlFor="contact">{copy.apply.form.contact}</label>
         <input
           id="contact"
           className="ss-input"
           required
           value={form.contact}
           onChange={e => set('contact', e.target.value)}
-          placeholder="微信号 / 手机号"
+          placeholder={copy.apply.form.contactPlaceholder}
         />
       </div>
 
       <div className="ss-field">
-        <label htmlFor="bio">{t.apply.form.bio}</label>
+        <label htmlFor="bio">{copy.apply.form.bio}</label>
         <input
           id="bio"
           className="ss-input"
           required
           value={form.bio}
           onChange={e => set('bio', e.target.value)}
-          placeholder="一句话介绍自己，比如：做了 3 年 iOS 开发，现在想独立 ship"
+          placeholder={copy.apply.form.bioPlaceholder}
         />
       </div>
 
       <div className="ss-field">
-        <label htmlFor="direction">{t.apply.form.direction}</label>
+        <label htmlFor="direction">{copy.apply.form.direction}</label>
         <input
           id="direction"
           className="ss-input"
           value={form.build_direction}
           onChange={e => set('build_direction', e.target.value)}
-          placeholder="工具 / 内容 / 社交 / B2B / Agent…"
+          placeholder={copy.apply.form.directionPlaceholder}
         />
       </div>
 
       <div className="ss-field">
-        <label htmlFor="idea">{t.apply.form.idea}</label>
+        <label htmlFor="idea">{copy.apply.form.idea}</label>
         <textarea
           id="idea"
           className="ss-textarea"
           value={form.project_idea}
           onChange={e => set('project_idea', e.target.value)}
-          placeholder="用一两段话讲清楚你想做什么、目标用户是谁、你觉得为什么值得做"
+          placeholder={copy.apply.form.ideaPlaceholder}
         />
       </div>
 
       <div className="ss-field">
-        <label htmlFor="links">{t.apply.form.links}</label>
+        <label htmlFor="links">{copy.apply.form.links}</label>
         <textarea
           id="links"
           className="ss-textarea"
@@ -156,13 +158,13 @@ export function ApplyForm({
           onChange={e => set('links', e.target.value)}
           placeholder={'https://github.com/yourname\nhttps://x.com/yourname'}
         />
-        <div className="ss-field-hint">一行一个链接，选填。</div>
+        <div className="ss-field-hint">{copy.apply.form.linksHint}</div>
       </div>
 
       <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending} aria-busy={pending}>
         {pending ? (
-          <span className="ss-loading-label"><span className="ss-auth-spinner" />正在提交…</span>
-        ) : isUpdate ? '更新申请' : t.apply.form.submit}
+          <span className="ss-loading-label"><span className="ss-auth-spinner" />{copy.apply.form.submitting}</span>
+        ) : isUpdate ? copy.apply.form.update : copy.apply.form.submit}
       </button>
     </form>
   )

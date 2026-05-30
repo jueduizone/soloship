@@ -5,6 +5,8 @@ import { getDefaultEvent } from '@/lib/db/events'
 import { getRegistrationByUser } from '@/lib/db/registrations'
 import { upsertFellowProfile } from '@/lib/db/fellows'
 import type { LinkEntry, ProfileVisibility } from '@/lib/db/types'
+import { getDictionary } from '@/lib/i18n'
+import { normalizeLocale, SITE_LOCALE_COOKIE } from '@/lib/i18n/site'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,29 +23,30 @@ function normalizeHttpUrl(value: string): string | null {
 }
 
 export async function PATCH(request: NextRequest) {
+  const copy = getDictionary(normalizeLocale(request.cookies.get(SITE_LOCALE_COOKIE)?.value))
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.json({ error: '请先登录' }, { status: 401 })
+    return NextResponse.json({ error: copy.common.api.loginRequired }, { status: 401 })
   }
 
   let body: Record<string, unknown>
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ error: '无效的请求体' }, { status: 400 })
+    return NextResponse.json({ error: copy.common.api.invalidBody }, { status: 400 })
   }
 
   const admin = createAdminClient()
   const event = await getDefaultEvent(admin)
   const reg = await getRegistrationByUser(admin, user.id, event.id)
   if (!reg) {
-    return NextResponse.json({ error: '未找到报名记录' }, { status: 404 })
+    return NextResponse.json({ error: copy.common.api.registrationMissing }, { status: 404 })
   }
   const eligible = ['admitted', 'payment_pending', 'paid'].includes(reg.status)
   if (!eligible) {
     return NextResponse.json(
-      { error: '录取后才能编辑个人资料' },
+      { error: copy.common.api.profileLocked },
       { status: 400 }
     )
   }
@@ -56,7 +59,7 @@ export async function PATCH(request: NextRequest) {
     const rawUrl = typeof obj.url === 'string' ? obj.url : ''
     const url = normalizeHttpUrl(rawUrl)
     if (url === null) {
-      return NextResponse.json({ error: `链接格式不正确：${rawUrl}` }, { status: 400 })
+      return NextResponse.json({ error: `${copy.profile.form.invalidLinkPrefix}${rawUrl}${copy.profile.form.invalidLinkSuffix}` }, { status: 400 })
     }
     if (!url) continue
     const label = typeof obj.label === 'string' && obj.label.trim() ? obj.label.trim() : url
@@ -66,7 +69,7 @@ export async function PATCH(request: NextRequest) {
   const avatarRaw = typeof body.avatar_url === 'string' ? body.avatar_url : ''
   const avatarUrl = normalizeHttpUrl(avatarRaw)
   if (avatarUrl === null) {
-    return NextResponse.json({ error: '头像 URL 格式不正确' }, { status: 400 })
+    return NextResponse.json({ error: copy.common.api.avatarInvalid }, { status: 400 })
   }
 
   const tags = Array.isArray(body.tags)
@@ -106,7 +109,7 @@ export async function PATCH(request: NextRequest) {
     )
     return NextResponse.json({ ok: true, profile: row })
   } catch (err) {
-    const message = err instanceof Error ? err.message : '未知错误'
+    const message = err instanceof Error ? err.message : copy.common.api.unknown
     return NextResponse.json({ error: message }, { status: 400 })
   }
 }

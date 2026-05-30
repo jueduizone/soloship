@@ -2,15 +2,18 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import type { Dictionary } from '@/lib/i18n'
 
 export function PaymentBox({
   registrationId,
   amountCents,
   currency,
+  copy,
 }: {
   registrationId: string
   amountCents: number
   currency: string
+  copy: Dictionary
 }) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
@@ -26,7 +29,7 @@ export function PaymentBox({
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        setError(data?.error ?? '提交失败')
+        setError(data?.error ?? copy.apply.paymentBox.error)
         return
       }
       router.refresh()
@@ -35,19 +38,19 @@ export function PaymentBox({
 
   return (
     <div style={{ marginTop: 24 }}>
-      <div className="ss-eyebrow" style={{ marginBottom: 8 }}>付款</div>
+      <div className="ss-eyebrow" style={{ marginBottom: 8 }}>{copy.apply.paymentBox.title}</div>
 
       <dl className="ss-kv">
-        <dt>费用</dt>
+        <dt>{copy.apply.paymentBox.fee}</dt>
         <dd>
           ¥{(amountCents / 100).toFixed(0)} {currency}
           <span style={{ color: 'var(--ss-text-dim)', marginLeft: 8, fontSize: 13 }}>
-            完成任务返还 ¥399，¥100 进入公共奖金池；赞助 Token 权益另计
+            {copy.apply.paymentBox.feeNote}
           </span>
         </dd>
-        <dt>收款方式</dt>
+        <dt>{copy.apply.paymentBox.method}</dt>
         <dd>
-          三天之内会有志愿者联系您付款和沟通后续流程，请耐心等待
+          {copy.apply.paymentBox.methodBody}
         </dd>
       </dl>
 
@@ -62,8 +65,8 @@ export function PaymentBox({
         aria-busy={pending}
       >
         {pending ? (
-          <span className="ss-loading-label"><span className="ss-auth-spinner" />正在提交…</span>
-        ) : '我已付款，等待确认'}
+          <span className="ss-loading-label"><span className="ss-auth-spinner" />{copy.apply.paymentBox.submitting}</span>
+        ) : copy.apply.paymentBox.submit}
       </button>
     </div>
   )

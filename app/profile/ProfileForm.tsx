@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { ProfileVisibility } from '@/lib/db/types'
+import type { Dictionary } from '@/lib/i18n'
 
 type FormState = {
   id?: string
@@ -30,7 +31,7 @@ function normalizeUrl(value: string) {
   }
 }
 
-export function ProfileForm({ initial }: { initial: FormState }) {
+export function ProfileForm({ initial, copy }: { initial: FormState; copy: Dictionary }) {
   const router = useRouter()
   const [form, setForm] = useState<FormState>(initial)
   const [error, setError] = useState<string | null>(null)
@@ -52,7 +53,7 @@ export function ProfileForm({ initial }: { initial: FormState }) {
         if (!value) continue
         const normalized = normalizeUrl(value)
         if (!normalized) {
-          setError(`链接格式不正确：${value}。请使用 http(s) URL。`)
+          setError(`${copy.profile.form.invalidLinkPrefix}${value}${copy.profile.form.invalidLinkSuffix}`)
           return
         }
         parsedLinks.push({ label: normalized.replace(/^https?:\/\//, '').replace(/\/$/, ''), url: normalized })
@@ -60,7 +61,7 @@ export function ProfileForm({ initial }: { initial: FormState }) {
 
       const avatarUrl = normalizeUrl(form.avatar_url)
       if (avatarUrl === null) {
-        setError('头像 URL 格式不正确。请使用 http(s) URL，或留空。')
+        setError(copy.profile.form.invalidAvatar)
         return
       }
 
@@ -87,7 +88,7 @@ export function ProfileForm({ initial }: { initial: FormState }) {
 
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        setError(data?.error ?? '保存失败')
+        setError(data?.error ?? copy.profile.form.saveError)
         return
       }
       const id = typeof data?.profile?.id === 'string' ? data.profile.id : null
@@ -101,12 +102,12 @@ export function ProfileForm({ initial }: { initial: FormState }) {
       {error && <div className="ss-form-error">{error}</div>}
       {savedId && (
         <div className="ss-form-success">
-          已保存。<Link href={`/fellows/${savedId}`}>查看我的同学录页面</Link>
+          {copy.profile.form.saved}<Link href={`/fellows/${savedId}`}>{copy.profile.form.viewProfile}</Link>
         </div>
       )}
 
       <div className="ss-field">
-        <label htmlFor="display_name">展示名</label>
+        <label htmlFor="display_name">{copy.profile.form.displayName}</label>
         <input
           id="display_name"
           className="ss-input"
@@ -117,7 +118,7 @@ export function ProfileForm({ initial }: { initial: FormState }) {
       </div>
 
       <div className="ss-field">
-        <label htmlFor="avatar_url">头像 URL</label>
+        <label htmlFor="avatar_url">{copy.profile.form.avatarUrl}</label>
         <input
           id="avatar_url"
           className="ss-input"
@@ -126,22 +127,22 @@ export function ProfileForm({ initial }: { initial: FormState }) {
           onChange={e => set('avatar_url', e.target.value)}
           placeholder="https://example.com/avatar.jpg"
         />
-        <p className="ss-field-hint">暂不上传图片。留空时会用展示名首字母作为头像。</p>
+        <p className="ss-field-hint">{copy.profile.form.avatarHint}</p>
       </div>
 
       <div className="ss-field">
-        <label htmlFor="one_liner">一句话介绍</label>
+        <label htmlFor="one_liner">{copy.profile.form.oneLiner}</label>
         <input
           id="one_liner"
           className="ss-input"
           value={form.one_liner}
           onChange={e => set('one_liner', e.target.value)}
-          placeholder="你是谁 / 在做什么"
+          placeholder={copy.profile.form.oneLinerPlaceholder}
         />
       </div>
 
       <div className="ss-field">
-        <label htmlFor="city">城市</label>
+        <label htmlFor="city">{copy.profile.form.city}</label>
         <input
           id="city"
           className="ss-input"
@@ -151,18 +152,18 @@ export function ProfileForm({ initial }: { initial: FormState }) {
       </div>
 
       <div className="ss-field">
-        <label htmlFor="tags">标签</label>
+        <label htmlFor="tags">{copy.profile.form.tags}</label>
         <input
           id="tags"
           className="ss-input"
           value={form.tags}
           onChange={e => set('tags', e.target.value)}
-          placeholder="用逗号分隔，例：AI, 出海, iOS"
+          placeholder={copy.profile.form.tagsPlaceholder}
         />
       </div>
 
       <div className="ss-field">
-        <label htmlFor="project_name">项目名</label>
+        <label htmlFor="project_name">{copy.profile.form.projectName}</label>
         <input
           id="project_name"
           className="ss-input"
@@ -172,18 +173,18 @@ export function ProfileForm({ initial }: { initial: FormState }) {
       </div>
 
       <div className="ss-field">
-        <label htmlFor="project_intro">项目介绍</label>
+        <label htmlFor="project_intro">{copy.profile.form.projectIntro}</label>
         <textarea
           id="project_intro"
           className="ss-textarea"
           value={form.project_intro}
           onChange={e => set('project_intro', e.target.value)}
-          placeholder="你想做什么、目标用户、当前进度"
+          placeholder={copy.profile.form.projectIntroPlaceholder}
         />
       </div>
 
       <div className="ss-field">
-        <label htmlFor="links">链接（一行一个）</label>
+        <label htmlFor="links">{copy.profile.form.links}</label>
         <textarea
           id="links"
           className="ss-textarea"
@@ -191,27 +192,27 @@ export function ProfileForm({ initial }: { initial: FormState }) {
           onChange={e => set('links', e.target.value)}
           placeholder={'https://github.com/yourname\nhttps://x.com/yourname'}
         />
-        <p className="ss-field-hint">每行必须是 http(s) URL。保存后详情页会自动展示可点击链接。</p>
+        <p className="ss-field-hint">{copy.profile.form.linksHint}</p>
       </div>
 
       <div className="ss-field">
-        <label htmlFor="visibility">可见性</label>
+        <label htmlFor="visibility">{copy.profile.form.visibility}</label>
         <select
           id="visibility"
           className="ss-select"
           value={form.visibility}
           onChange={e => set('visibility', e.target.value as ProfileVisibility)}
         >
-          <option value="public">公开 — 任何人可见</option>
-          <option value="cohort_only">仅同期学员</option>
-          <option value="private">私密 — 仅自己可见</option>
+          <option value="public">{copy.profile.form.public}</option>
+          <option value="cohort_only">{copy.profile.form.cohortOnly}</option>
+          <option value="private">{copy.profile.form.private}</option>
         </select>
       </div>
 
       <button type="submit" className="ss-btn ss-btn-primary ss-btn-block" disabled={pending} aria-busy={pending}>
         {pending ? (
-          <span className="ss-loading-label"><span className="ss-auth-spinner" />正在保存…</span>
-        ) : '保存'}
+          <span className="ss-loading-label"><span className="ss-auth-spinner" />{copy.profile.form.saving}</span>
+        ) : copy.profile.form.save}
       </button>
     </form>
   )

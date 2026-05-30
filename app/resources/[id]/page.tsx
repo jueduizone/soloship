@@ -33,6 +33,7 @@ const VOD_COPY: Record<SiteLocale, {
     admitted_only: string
     public: string
   }
+  stages: Record<ResourceRow['stage'], string>
 }> = {
   zh: {
     backResources: '← 资料库',
@@ -56,6 +57,13 @@ const VOD_COPY: Record<SiteLocale, {
     visibility: {
       admitted_only: '已入营可见',
       public: '公开可见',
+    },
+    stages: {
+      pre_camp: '开营前',
+      week_1: 'Week 1',
+      week_2: 'Week 2',
+      demo_day: 'Demo Day',
+      post_camp: '结营后',
     },
   },
   en: {
@@ -81,13 +89,20 @@ const VOD_COPY: Record<SiteLocale, {
       admitted_only: 'Admitted only',
       public: 'Public',
     },
+    stages: {
+      pre_camp: 'Before kickoff',
+      week_1: 'Week 1',
+      week_2: 'Week 2',
+      demo_day: 'Demo Day',
+      post_camp: 'After cohort',
+    },
   },
 }
 
-function groupVideosByStage(resources: ResourceRow[]) {
+function groupVideosByStage(resources: ResourceRow[], copy: typeof VOD_COPY[SiteLocale]) {
   return RESOURCE_STAGE_ORDER.map(stage => ({
     stage,
-    label: RESOURCE_STAGE_LABEL[stage],
+    label: copy.stages[stage] ?? RESOURCE_STAGE_LABEL[stage],
     items: resources.filter(resource => resource.stage === stage && resource.type === 'video'),
   })).filter(group => group.items.length > 0)
 }
@@ -116,7 +131,7 @@ export default async function ResourceDetailPage({ params }: { params: { id: str
   const resources = await listResourcesForViewer(admin, resource.event_id, {
     canSeeAdmittedOnly: canAccess,
   })
-  const groupedVideos = groupVideosByStage(resources)
+  const groupedVideos = groupVideosByStage(resources, copy)
   const currentIndex = resources
     .filter(item => item.type === 'video')
     .findIndex(item => item.id === resource.id)

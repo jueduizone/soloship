@@ -4,6 +4,8 @@ import type { SiteLocale } from './site'
 
 type DeepWiden<T> = T extends string
   ? string
+  : T extends (...args: never[]) => unknown
+    ? T
   : T extends object
     ? { [K in keyof T]: DeepWiden<T[K]> }
     : T
