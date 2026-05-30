@@ -72,8 +72,8 @@ export async function Nav() {
         </Link>
 
         <div className="ss-site-nav-actions">
-          {nav.links.map((l) => (
-            <NavLink key={l.href} href={resolveHomeAnchor(l.href)} className={user ? 'ss-site-nav-link ss-site-nav-home-link' : 'ss-site-nav-link'}>
+          {!user && nav.links.map((l) => (
+            <NavLink key={l.href} href={resolveHomeAnchor(l.href)} className="ss-site-nav-link">
               {l.label}
             </NavLink>
           ))}
