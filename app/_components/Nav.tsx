@@ -47,8 +47,8 @@ export async function Nav() {
         borderBottom: '1px solid var(--ss-border-dark-soft)',
       }}
     >
-      <div className="ss-container flex items-center justify-between" style={{ height: 52 }}>
-        <Link href="/#top" className="flex items-center gap-3" aria-label={`${event.name} ${event.volume}`}>
+      <div className="ss-container ss-site-nav-inner">
+        <Link href="/#top" className="ss-site-nav-brand" aria-label={`${event.name} ${event.volume}`}>
           <img
             src="/assets/brand/soloship-logo.svg"
             alt={event.name}
@@ -71,32 +71,32 @@ export async function Nav() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-1 sm:gap-6">
+        <div className="ss-site-nav-actions">
           {nav.links.map((l) => (
-            <NavLink key={l.href} href={resolveHomeAnchor(l.href)}>
+            <NavLink key={l.href} href={resolveHomeAnchor(l.href)} className={user ? 'ss-site-nav-link ss-site-nav-home-link' : 'ss-site-nav-link'}>
               {l.label}
             </NavLink>
           ))}
 
           {user && (
             <>
-              <NavLink href="/apply/status">
+              <NavLink href="/apply/status" className="ss-site-nav-link">
                 {common.applyStatus}
               </NavLink>
-              <NavLink href="/resources">
+              <NavLink href="/resources" className="ss-site-nav-link">
                 {common.resources}
               </NavLink>
             </>
           )}
 
           {showFellows && (
-            <NavLink href="/fellows">
+            <NavLink href="/fellows" className="ss-site-nav-link">
               {common.fellows}
             </NavLink>
           )}
 
           {showAdmin && (
-            <NavLink href="/admin">
+            <NavLink href="/admin" className="ss-site-nav-link">
               {common.admin}
             </NavLink>
           )}

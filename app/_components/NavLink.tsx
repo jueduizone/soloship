@@ -6,11 +6,13 @@ import type { CSSProperties, ReactNode } from 'react'
 
 const baseStyle: CSSProperties = {
   color: 'var(--ss-text-dim)',
-  fontSize: 13.5,
+  fontSize: 13,
   fontWeight: 450,
   letterSpacing: '-0.005em',
   padding: '6px 4px',
   transition: 'color 160ms ease',
+  whiteSpace: 'nowrap',
+  lineHeight: 1,
 }
 
 const activeStyle: CSSProperties = {
@@ -27,7 +29,7 @@ function isActivePath(pathname: string, href: string) {
 export function NavLink({
   href,
   children,
-  className = 'hidden md:inline-flex items-center',
+  className = 'ss-site-nav-link',
 }: {
   href: string
   children: ReactNode
