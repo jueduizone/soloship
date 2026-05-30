@@ -1,9 +1,12 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 
 import { LogoutButton } from './LogoutButton'
+import { LanguageSwitch } from './LanguageSwitch'
 import { NavLink } from './NavLink'
 import { NavCta } from './NavCta'
-import { event, nav } from './content'
+import { getSiteContent } from './content'
+import { getCurrentLocale } from '@/lib/i18n/site'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { isOrganizerUser } from '@/lib/auth/require-organizer'
@@ -15,6 +18,9 @@ function resolveHomeAnchor(href: string) {
 }
 
 export async function Nav() {
+  const locale = getCurrentLocale(cookies())
+  const content = getSiteContent(locale)
+  const { event, nav, common } = content
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const showAdmin = user ? isOrganizerUser(user) : false
@@ -75,32 +81,35 @@ export async function Nav() {
           {user && (
             <>
               <NavLink href="/apply/status">
-                申请状态
+                {common.applyStatus}
               </NavLink>
               <NavLink href="/resources">
-                资料库
+                {common.resources}
               </NavLink>
             </>
           )}
 
           {showFellows && (
             <NavLink href="/fellows">
-              同学录
+              {common.fellows}
             </NavLink>
           )}
 
           {showAdmin && (
             <NavLink href="/admin">
-              后台
+              {common.admin}
             </NavLink>
           )}
+
+          <LanguageSwitch currentLocale={locale} />
 
           <NavCta
             href={user ? nav.cta.href : `/auth/login?next=${encodeURIComponent(nav.cta.href)}`}
             label={nav.cta.label}
+            loadingLabel={common.loading}
           />
 
-          {user && <LogoutButton />}
+          {user && <LogoutButton label={common.logout} pendingLabel={common.loggingOut} />}
         </div>
       </div>
     </nav>

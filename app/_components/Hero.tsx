@@ -1,9 +1,7 @@
-import { event, hero } from './content'
+import type { SiteContent } from './content'
 
-const isAccentMeta = (label: string) => label === '价格'
-const isFullWidthMeta = (label: string) => label === '价格' || label === '形式'
-
-export function Hero() {
+export function Hero({ content }: { content: SiteContent }) {
+  const { event, hero, common } = content
   return (
     <section
       id="top"
@@ -46,17 +44,17 @@ export function Hero() {
           <aside className="ss-hero-aside">
             <div className="ss-hero-summary">
               <div className="ss-hero-summary-head">
-                <span className="ss-mono ss-hero-summary-label">PROGRAM</span>
+                <span className="ss-mono ss-hero-summary-label">{common.program}</span>
                 <span className="ss-mono ss-hero-summary-tag">
                   {event.volume} · {event.year}
                 </span>
               </div>
               <dl className="ss-hero-meta-list">
-                {hero.meta.map((m) => {
+                {hero.meta.map((m, index) => {
                   const cls = [
                     'ss-hero-meta-card',
-                    isAccentMeta(m.label) ? 'is-accent' : '',
-                    isFullWidthMeta(m.label) ? 'is-full' : '',
+                    index === 3 ? 'is-accent' : '',
+                    index === 1 || index === 3 ? 'is-full' : '',
                   ]
                     .filter(Boolean)
                     .join(' ')

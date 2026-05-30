@@ -401,3 +401,298 @@ export const footer = {
     { label: '立即申请', href: event.applyHref },
   ],
 }
+
+export const zhContent = {
+  event,
+  nav,
+  hero,
+  whyNow,
+  whySoloship,
+  whoFor,
+  timeline,
+  outcome,
+  mentors,
+  partners,
+  faq,
+  finalCta,
+  footer,
+  common: {
+    program: 'PROGRAM',
+    guest: 'GUEST',
+    outcome: 'OUTCOME',
+    suitableFor: '适合谁',
+    notSuitableFor: '不适合谁',
+    loading: '加载中',
+    logout: '退出登录',
+    loggingOut: '退出中',
+    applyStatus: '申请状态',
+    resources: '资料库',
+    fellows: '同学录',
+    admin: '后台',
+  },
+  wechat: {
+    kicker: '微信内置浏览器',
+    title: '请用系统浏览器打开',
+    body: '报名、登录和付款确认在微信里可能无法正常完成。请点击右上角「...」，选择「在浏览器打开」。',
+    continue: '继续浏览',
+  },
+}
+
+export const enContent: typeof zhContent = {
+  event: {
+    ...event,
+    tagline: 'AI OPC Cohort',
+    duration: '3 weeks',
+    format: 'Offline kickoff + online sprint + offline Demo Day',
+    capacity: '80 builders · 40 teams · application-based',
+    capacityShort: '80 builders',
+    priceNote: '¥399 refunded after completion, ¥100 goes into the public prize pool',
+    status: 'Applications for Vol.1 are open',
+    statusShort: 'Applications open',
+  },
+  nav: {
+    links: [
+      { label: 'Why Now', href: '#why' },
+      { label: 'Timeline', href: '#timeline' },
+      { label: 'Guests', href: '#mentors' },
+      { label: 'Partners', href: '#partners' },
+      { label: 'FAQ', href: '#faq' },
+    ],
+    cta: { label: 'Apply Now', href: event.applyHref },
+  },
+  hero: {
+    eyebrow: `${event.volume} · ${event.year} · AI OPC Cohort`,
+    status: 'Applications for Vol.1 are open',
+    headline: 'A 3-week sprint to ship an AI product that can launch and charge globally.',
+    sub: 'One offline kickoff, three weeks of online shipping, and one offline Demo Day. SoloShip gives AI-era OPC builders a deadline, peers, and real feedback.',
+    meta: [
+      { label: 'Duration', value: '3 weeks' },
+      { label: 'Format', value: 'Offline kickoff + online sprint + offline Demo Day' },
+      { label: 'Seats', value: '80 builders · 40 teams · application-based' },
+      { label: 'Price', value: '¥499 · ¥399 refunded after completion, ¥100 goes into the prize pool' },
+    ],
+    primaryCta: { label: 'Apply Now', href: event.applyHref },
+    secondaryCta: { label: 'View Timeline', href: event.timelineHref },
+    fineprint: 'Application-based · Pay ¥499 after admission · Complete the sprint to get ¥399 back · ¥100 supports the prize pool and mentors · Sponsor token rewards are issued separately and already exceed ¥100 in value',
+  },
+  whyNow: {
+    eyebrow: 'Why now',
+    headline: 'For the first time, solo builders can realistically build global products end to end.',
+    body: [
+      'AI infrastructure now lets one person cover the full product loop: code, design, growth, support, and iteration.',
+      'The real bottlenecks are no longer only technical. They are distribution, payments, growth, and finishing what you start.',
+      'SoloShip compresses those constraints into three weeks, with peers and deadlines that make shipping real.',
+    ],
+  },
+  whySoloship: {
+    eyebrow: 'WHY SOLOSHIP',
+    headline: 'A cohort, not a course. A sprint, not a group chat.',
+    cards: [
+      {
+        title: 'Builder-only',
+        body: 'A high-density 3-week cohort where everyone is building on the same timeline. No spectators, no passive content consumption.',
+      },
+      {
+        title: 'Deadline-driven',
+        body: 'This is not about collecting notes. By Demo Day, your product should be online or demoable.',
+      },
+      {
+        title: 'Global-first',
+        body: 'Projects default to global markets: English product surfaces, overseas payments, and global distribution.',
+      },
+      {
+        title: 'Signal, not noise',
+        body: 'Small scale and application-based admission keep the peer density high. You meet people who can actually ship with you.',
+      },
+    ],
+  },
+  whoFor: {
+    eyebrow: 'Who it is for / not for',
+    headline: 'Application-based, intentionally selective.',
+    suits: [
+      'Builders with an idea who want to ship a global product',
+      'Indie builders who have made things but need a stronger shipping rhythm',
+      'People who want deadlines, peer pressure, and Demo Day to push them forward',
+      'Builders looking for a high-density cohort instead of a broad community',
+    ],
+    notSuits: [
+      'People who only want to watch lessons and save notes',
+      'People who cannot invest meaningful time during the 3-week sprint',
+      'People who are not currently interested in global products',
+      'People expecting step-by-step handholding through every decision',
+    ],
+  },
+  timeline: {
+    eyebrow: 'Timeline',
+    headline: 'Four stages from application to Demo Day.',
+    stages: [
+      {
+        phase: '01',
+        name: 'Recruiting',
+        when: 'Apr 23 – May 23',
+        points: [
+          'Open online applications for about 80 builders / 40 teams',
+          'Submit your idea and build direction',
+          'We look for OPC thinking, global potential, and commercial clarity',
+        ],
+      },
+      {
+        phase: '02',
+        name: 'Admission',
+        when: 'May 18 – May 23',
+        points: [
+          'Review applications and send admission decisions',
+          'Admitted builders pay ¥499: ¥399 is a completion deposit and will be refunded after finishing the sprint',
+          'The remaining ¥100 goes into the public prize pool for Demo Day rewards and mentor support',
+          'LLM sponsors provide additional token rewards, already worth more than ¥100',
+          'Goal: assemble the cohort and lock in directions',
+        ],
+      },
+      {
+        phase: '03',
+        name: 'Kickoff + Online Sprint',
+        when: 'From May 23 · 3 weeks',
+        points: [
+          'Offline kickoff in Shanghai with talks, roundtables, grouping, and office hours',
+          'Three weeks of online sessions: direction, MVP, launch, pricing, growth, and AI hardware going global',
+          'Goal: push an idea into a visible demo and test the business loop',
+        ],
+      },
+      {
+        phase: '04',
+        name: 'Demo Day',
+        when: 'Weekend of week 3 · Shanghai',
+        points: [
+          'Offline roadshow at Yangtze River Delta Oasis Zhigu · Zhaoxiang, Shanghai',
+          'Each team gets 5 minutes for demo and 3 minutes for judges Q&A',
+          'Awards and afterparty, with standout projects amplified publicly',
+        ],
+      },
+    ],
+  },
+  outcome: {
+    eyebrow: 'What you walk away with',
+    headline: 'After three weeks, you leave with outcomes, not notes.',
+    items: [
+      {
+        title: 'A real project people can see',
+        body: 'Code, demo, and a public entry point. Not a slide deck or a roadmap.',
+      },
+      {
+        title: 'A Demo Day stage',
+        body: 'Present inside the cohort, with standout projects amplified publicly.',
+      },
+      {
+        title: 'Peers you may keep building with',
+        body: 'Small scale, high signal, and filtered motivation make future collaboration more likely.',
+      },
+      {
+        title: 'A public builder profile',
+        body: 'Join the SoloShip fellows directory, where your project and links become part of the cohort archive.',
+      },
+    ],
+  },
+  mentors: {
+    eyebrow: 'Mentors & Guests',
+    headline: 'Not a celebrity mentor lineup. Practical builders shipping in the field.',
+    sub: 'Covering OPC, demand validation, AI toolchains, MVP launch, product taste, pricing loops, Product Hunt, and AI hardware going global.',
+    groups: mentors.groups.map(group => ({
+      ...group,
+      label: group.label,
+      people: group.people.map(person => ({
+        ...person,
+        role: person.role,
+        bio: person.bio,
+      })),
+    })),
+  },
+  partners: {
+    eyebrow: 'Partners',
+    headline: 'Together with our partners, we bring SoloShip Vol.1 to life.',
+    sub: 'Thanks to every partner supporting recruiting, content, venue, and distribution.',
+    groups: partners.groups.map(group => ({
+      ...group,
+      label: group.label,
+      items: group.items,
+    })),
+  },
+  faq: {
+    eyebrow: 'FAQ',
+    headline: 'What you may want to know before applying.',
+    items: [
+      {
+        q: 'Does applying guarantee admission?',
+        a: 'No. SoloShip is an application-based cohort. We review build motivation, idea clarity, and available time before admitting builders.',
+      },
+      {
+        q: 'When do I pay ¥499?',
+        a: 'Only after admission. ¥499 works like a completion deposit: ¥399 is refunded when you finish the sprint, and ¥100 goes into the public prize pool for Demo Day rewards and mentor support. Sponsor tokens and developer resources are issued separately and already exceed ¥100 in value.',
+      },
+      {
+        q: 'Do I need an existing project?',
+        a: 'Not strictly, but you need a clear direction and idea. SoloShip is not here to invent your topic from scratch; it helps you ship what you already want to build.',
+      },
+      {
+        q: 'Is it online or offline?',
+        a: 'Vol.1 is online-first with asynchronous shipping, plus offline kickoff and Demo Day moments. Weekly sessions provide rhythm while builders drive execution.',
+      },
+      {
+        q: 'What counts as completing the project?',
+        a: 'The minimum requirement is a demoable project on Demo Day, with code and a working demo. A public launch is a bonus.',
+      },
+      {
+        q: 'Will the materials remain available after the cohort?',
+        a: 'Yes. Admitted builders keep access to the SoloShip directory and resource library, and standout projects may be featured publicly in future recruiting.',
+      },
+      {
+        q: 'Can I apply now?',
+        a: 'Yes. Applications for Vol.1 are open. After submission, your review status will be updated on the application status page.',
+      },
+    ],
+  },
+  finalCta: {
+    eyebrow: 'Next step',
+    headline: 'Will the next project that actually ships be yours?',
+    sub: `Vol.1 is capped at 80 builders and application-based. Submit your application now; payment only happens after admission.`,
+    primaryCta: { label: 'Apply Now', href: event.applyHref },
+    secondaryCta: { label: 'View Timeline', href: event.timelineHref },
+    fineprint: 'Application-based · Pay ¥499 after admission · Complete the sprint to get ¥399 back · ¥100 goes into the prize pool · Token rewards counted separately',
+  },
+  footer: {
+    tagline: 'A cohort for builders who are actually ready to ship.',
+    links: [
+      { label: 'Timeline', href: '#timeline' },
+      { label: 'Guests', href: '#mentors' },
+      { label: 'Partners', href: '#partners' },
+      { label: 'FAQ', href: '#faq' },
+      { label: 'Apply Now', href: event.applyHref },
+    ],
+  },
+  common: {
+    program: 'PROGRAM',
+    guest: 'GUEST',
+    outcome: 'OUTCOME',
+    suitableFor: 'For',
+    notSuitableFor: 'Not for',
+    loading: 'Loading',
+    logout: 'Log out',
+    loggingOut: 'Logging out',
+    applyStatus: 'Status',
+    resources: 'Resources',
+    fellows: 'Fellows',
+    admin: 'Admin',
+  },
+  wechat: {
+    kicker: 'WeChat in-app browser',
+    title: 'Open in your system browser',
+    body: 'Application, login, and payment confirmation may not work reliably inside WeChat. Tap the menu in the top-right corner and choose "Open in browser".',
+    continue: 'Continue browsing',
+  },
+}
+
+export type SiteContent = typeof zhContent
+export type SiteLocale = 'zh' | 'en'
+
+export function getSiteContent(locale: SiteLocale): SiteContent {
+  return locale === 'en' ? enContent : zhContent
+}

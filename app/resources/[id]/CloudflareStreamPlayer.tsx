@@ -13,7 +13,15 @@ type PlaybackResponse = {
   }
 }
 
-export function CloudflareStreamPlayer({ resourceId }: { resourceId: string }) {
+export function CloudflareStreamPlayer({
+  resourceId,
+  loadingLabel = '正在准备安全播放环境…',
+  securityNote = '本课程仅限已付费入营用户观看。页面带有账号水印，请勿录屏、转发或下载。',
+}: {
+  resourceId: string
+  loadingLabel?: string
+  securityNote?: string
+}) {
   const [playback, setPlayback] = useState<PlaybackResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -60,7 +68,7 @@ export function CloudflareStreamPlayer({ resourceId }: { resourceId: string }) {
           </div>
         )}
         {!playback && !error && (
-          <div className="ss-vod-loading">正在准备安全播放环境…</div>
+          <div className="ss-vod-loading">{loadingLabel}</div>
         )}
         {error && (
           <div className="ss-vod-error">{error}</div>
@@ -68,7 +76,7 @@ export function CloudflareStreamPlayer({ resourceId }: { resourceId: string }) {
       </div>
 
       <p className="ss-vod-note">
-        本课程仅限已付费入营用户观看。页面带有账号水印，请勿录屏、转发或下载。
+        {securityNote}
       </p>
     </div>
   )

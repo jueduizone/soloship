@@ -1,6 +1,7 @@
-import { finalCta } from './content'
+import type { SiteContent } from './content'
 
-export function FinalCTA() {
+export function FinalCTA({ content }: { content: SiteContent }) {
+  const { finalCta } = content
   return (
     <section
       id="waitlist"

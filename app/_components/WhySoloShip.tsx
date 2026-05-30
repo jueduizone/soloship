@@ -1,6 +1,7 @@
-import { whySoloship } from './content'
+import type { SiteContent } from './content'
 
-export function WhySoloShip() {
+export function WhySoloShip({ content }: { content: SiteContent }) {
+  const { whySoloship } = content
   return (
     <section
       className="ss-section"

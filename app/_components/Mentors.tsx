@@ -1,4 +1,4 @@
-import { mentors } from './content'
+import type { SiteContent } from './content'
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/)
@@ -12,7 +12,8 @@ function getInitials(name: string): string {
   return single[0]
 }
 
-export function Mentors() {
+export function Mentors({ content }: { content: SiteContent }) {
+  const { mentors, common } = content
   return (
     <section
       id="mentors"
@@ -100,7 +101,7 @@ export function Mentors() {
                         className="ss-mono"
                         style={{ color: 'var(--ss-text-faint)' }}
                       >
-                        GUEST
+                        {common.guest}
                       </div>
                     </div>
                     <h3

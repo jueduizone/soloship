@@ -1,6 +1,7 @@
-import { timeline } from './content'
+import type { SiteContent } from './content'
 
-export function Timeline() {
+export function Timeline({ content }: { content: SiteContent }) {
+  const { timeline } = content
   return (
     <section
       id="timeline"

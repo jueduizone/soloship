@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { partners } from './content'
+import type { SiteContent } from './content'
 
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/)
@@ -80,7 +80,8 @@ function PartnerBadge({ name, logoUrl }: { name: string; logoUrl?: string }) {
   )
 }
 
-export function Partners() {
+export function Partners({ content }: { content: SiteContent }) {
+  const { partners } = content
   return (
     <section
       id="partners"

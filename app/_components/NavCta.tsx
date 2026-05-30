@@ -6,13 +6,14 @@ import { useRouter } from 'next/navigation'
 type NavCtaProps = {
   href: string
   label: string
+  loadingLabel?: string
 }
 
 function isModifiedClick(event: MouseEvent<HTMLAnchorElement>) {
   return event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0
 }
 
-export function NavCta({ href, label }: NavCtaProps) {
+export function NavCta({ href, label, loadingLabel = '加载中' }: NavCtaProps) {
   const router = useRouter()
   const [hydrated, setHydrated] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -73,7 +74,7 @@ export function NavCta({ href, label }: NavCtaProps) {
           boxShadow: '0 0 0 3px rgba(0,251,135,0.16), 0 0 18px rgba(0,251,135,0.52)',
         }}
       />
-      {isPending ? '加载中' : label}
+      {isPending ? loadingLabel : label}
     </a>
   )
 }

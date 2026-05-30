@@ -1,4 +1,4 @@
-import { whoFor } from './content'
+import type { SiteContent } from './content'
 
 function Column({
   label,
@@ -55,7 +55,8 @@ function Column({
   )
 }
 
-export function WhoItsFor() {
+export function WhoItsFor({ content }: { content: SiteContent }) {
+  const { whoFor, common } = content
   return (
     <section className="ss-section is-light ss-hairline-top on-light">
       <div className="ss-container">
@@ -64,8 +65,8 @@ export function WhoItsFor() {
           <h2 className="ss-h2 is-light">{whoFor.headline}</h2>
         </div>
         <div className="grid gap-12 md:gap-20" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
-          <Column label="适合谁" accent="var(--ss-ink)" items={whoFor.suits} sign="+" />
-          <Column label="不适合谁" accent="var(--ss-ink-3)" items={whoFor.notSuits} sign="−" />
+          <Column label={common.suitableFor} accent="var(--ss-ink)" items={whoFor.suits} sign="+" />
+          <Column label={common.notSuitableFor} accent="var(--ss-ink-3)" items={whoFor.notSuits} sign="−" />
         </div>
       </div>
     </section>

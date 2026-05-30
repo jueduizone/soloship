@@ -1,6 +1,7 @@
-import { whyNow } from './content'
+import type { SiteContent } from './content'
 
-export function WhyNow() {
+export function WhyNow({ content }: { content: SiteContent }) {
+  const { whyNow } = content
   return (
     <section id="why" className="ss-section is-light ss-hairline-top on-light">
       <div className="ss-container">

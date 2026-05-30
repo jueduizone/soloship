@@ -1,6 +1,7 @@
-import { outcome } from './content'
+import type { SiteContent } from './content'
 
-export function Outcome() {
+export function Outcome({ content }: { content: SiteContent }) {
+  const { outcome, common } = content
   return (
     <section
       className="ss-section"
@@ -31,7 +32,7 @@ export function Outcome() {
                 className="ss-mono"
                 style={{ color: 'var(--ss-accent-hi)', marginBottom: 16 }}
               >
-                OUTCOME / {String(i + 1).padStart(2, '0')}
+                {common.outcome} / {String(i + 1).padStart(2, '0')}
               </div>
               <h3
                 style={{

@@ -1,10 +1,15 @@
-import { event, footer } from './content'
+import { cookies } from 'next/headers'
+import { getSiteContent } from './content'
+import { getCurrentLocale } from '@/lib/i18n/site'
 
 function resolveHomeAnchor(href: string) {
   return href.startsWith('#') ? `/${href}` : href
 }
 
 export function Footer() {
+  const content = getSiteContent(getCurrentLocale(cookies()))
+  const { event, footer } = content
+
   return (
     <footer
       style={{

@@ -1,6 +1,7 @@
-import { faq } from './content'
+import type { SiteContent } from './content'
 
-export function FAQ() {
+export function FAQ({ content }: { content: SiteContent }) {
+  const { faq } = content
   return (
     <section id="faq" className="ss-section is-light ss-hairline-top on-light">
       <div className="ss-container">

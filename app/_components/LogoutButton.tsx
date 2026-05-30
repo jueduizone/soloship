@@ -3,7 +3,13 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 
-export function LogoutButton() {
+export function LogoutButton({
+  label = '退出登录',
+  pendingLabel = '退出中',
+}: {
+  label?: string
+  pendingLabel?: string
+}) {
   const router = useRouter()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -45,7 +51,7 @@ export function LogoutButton() {
         disabled={busy}
         aria-busy={busy}
       >
-        {busy ? '退出中' : '退出登录'}
+        {busy ? pendingLabel : label}
       </button>
     </form>
   )
