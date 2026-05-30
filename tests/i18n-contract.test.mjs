@@ -13,6 +13,19 @@ const siteI18n = read('lib/i18n/site.ts')
 assert.match(siteI18n, /SITE_LOCALE_COOKIE = 'soloship_locale'/, 'site i18n must use a stable locale cookie')
 assert.match(siteI18n, /normalizeLocale/, 'site i18n must normalize unknown locale values')
 
+const dictionaryIndex = read('lib/i18n/index.ts')
+assert.match(dictionaryIndex, /getDictionary\(locale: SiteLocale\)/, 'shared i18n must expose getDictionary(locale)')
+assert.match(dictionaryIndex, /dictionaries = \{\s*zh,\s*en,/s, 'shared i18n must register both zh and en dictionaries')
+
+const authEn = read('lib/i18n/en.ts')
+assert.match(authEn, /Login to SoloShip/, 'English auth dictionary must include login copy')
+assert.match(authEn, /Continue with Google/, 'English auth dictionary must include OAuth copy')
+assert.match(authEn, /Verification email sent/, 'English auth dictionary must include verify copy')
+
+const authErrors = read('lib/i18n/auth-errors.ts')
+assert.match(authErrors, /mapAuthError\(err: unknown, dictionary: Dictionary = t\)/, 'auth error mapper must accept a localized dictionary')
+assert.match(authErrors, /dictionary\.auth\.errors/, 'auth error mapper must read errors from the provided dictionary')
+
 const switcher = read('app/_components/LanguageSwitch.tsx')
 assert.match(switcher, /document\.cookie/, 'language switch must persist locale to a cookie')
 assert.match(switcher, /router\.refresh\(\)/, 'language switch must refresh server-rendered pages')
@@ -26,6 +39,20 @@ assert.match(nav, /getSiteContent\(locale\)/, 'nav must use localized content')
 const home = read('app/page.tsx')
 assert.match(home, /getSiteContent\(getCurrentLocale\(cookies\(\)\)\)/, 'home page must load localized content from cookies')
 assert.match(home, /<Hero content=\{content\}/, 'home sections must receive localized content')
+
+const loginPage = read('app/auth/login/page.tsx')
+assert.match(loginPage, /getCurrentLocale\(cookies\(\)\)/, 'login page must read locale from cookies')
+assert.match(loginPage, /getDictionary\(locale\)/, 'login page must load the localized auth dictionary')
+assert.match(loginPage, /<LoginClient dictionary=\{dictionary\} locale=\{locale\}/, 'login page must pass locale and dictionary to the client form')
+
+const loginClient = read('app/auth/login/LoginClient.tsx')
+assert.match(loginClient, /mapAuthError\(error, copy\)/, 'login client must localize auth errors')
+assert.match(loginClient, /locale === 'en' \? 'en' : 'zh_CN'/, 'Google login button must use the selected locale')
+assert.match(loginClient, /copy\.auth\.login\.googleLoading/, 'login client must localize Google loading copy')
+
+const verifyPage = read('app/auth/verify/page.tsx')
+assert.match(verifyPage, /getCurrentLocale\(cookies\(\)\)/, 'verify page must read locale from cookies')
+assert.match(verifyPage, /getDictionary\(getCurrentLocale\(cookies\(\)\)\)/, 'verify page must load localized verify copy')
 
 const resources = read('app/resources/page.tsx')
 assert.match(resources, /RESOURCE_COPY/, 'resources page must define localized resources copy')

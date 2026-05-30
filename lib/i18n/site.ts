@@ -1,5 +1,7 @@
 import type { SiteLocale } from '@/app/_components/content'
 
+export type { SiteLocale } from '@/app/_components/content'
+
 export const SITE_LOCALE_COOKIE = 'soloship_locale'
 export const SITE_LOCALES: SiteLocale[] = ['zh', 'en']
 

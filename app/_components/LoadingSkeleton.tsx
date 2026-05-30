@@ -65,7 +65,7 @@ export function PublicPageSkeleton({ title = '页面加载中', variant = 'form'
           <SkeletonLine className="is-button" />
         </div>
       )}
-      <span className="ss-sr-only">加载中…</span>
+      <span className="ss-sr-only">{title}</span>
     </div>
   )
 }
@@ -97,7 +97,7 @@ export function AdminPageSkeleton({ title = '管理后台加载中', variant = '
           </div>
         </>
       )}
-      <span className="ss-sr-only">加载中…</span>
+      <span className="ss-sr-only">{title}</span>
     </div>
   )
 }

@@ -14,6 +14,12 @@ export const zh = {
       submitSignUp: '创建账号',
       verifyHint: '我们已发送验证邮件到你的邮箱，点击邮件中的链接即可完成注册。',
       signUpFailedGeneric: '注册失败，请稍后再试，或联系管理员。',
+      googleMissingCredential: 'Google 登录没有返回有效凭证，请重试。',
+      googleLoading: 'Google 登录加载中',
+      signingIn: '正在登录…',
+      signingUp: '正在注册…',
+      githubRedirecting: '正在跳转 GitHub…',
+      divider: 'or',
       backToHome: '返回首页',
       applyNotice: {
         title: '申请 SoloShip Vol.1 前请先登录',
@@ -82,6 +88,8 @@ export const zh = {
   },
   common: {
     loading: '加载中…',
+    authLoading: '登录页加载中',
+    verifyLoading: '验证登录加载中',
     error: '出错了，请稍后再试。',
   },
 } as const

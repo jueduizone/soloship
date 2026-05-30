@@ -1,10 +1,24 @@
-// i18n 预留结构位。MVP 只有 zh-CN，不做实际切换。
-// 后续若要扩展，改成 { zh, en }.nested 即可。
-
 import { zh } from './zh'
+import { en } from './en'
+import type { SiteLocale } from './site'
+
+type DeepWiden<T> = T extends string
+  ? string
+  : T extends object
+    ? { [K in keyof T]: DeepWiden<T[K]> }
+    : T
 
 export const locale = 'zh-CN' as const
-export type Locale = typeof locale
+export type Locale = SiteLocale
 
-export const t = zh
-export type Dictionary = typeof zh
+export type Dictionary = DeepWiden<typeof zh>
+export const t: Dictionary = zh
+
+export const dictionaries = {
+  zh,
+  en,
+} as const satisfies Record<SiteLocale, Dictionary>
+
+export function getDictionary(locale: SiteLocale): Dictionary {
+  return dictionaries[locale] ?? zh
+}

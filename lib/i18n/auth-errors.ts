@@ -1,11 +1,7 @@
-// 将 Supabase / 浏览器返回的英文鉴权错误映射为中文提示。
-// 未识别的错误落到 errors.unknown，避免英文直接露出到中文界面。
-import { t } from './index'
+import { t, type Dictionary } from './index'
 
 export interface MappedAuthError {
-  /** 中文错误提示 */
   message: string
-  /** 是否建议用户改用 OAuth（限流等场景） */
   suggestOAuth: boolean
 }
 
@@ -32,12 +28,12 @@ function extractCode(err: unknown): string {
   return ''
 }
 
-export function mapAuthError(err: unknown): MappedAuthError {
+export function mapAuthError(err: unknown, dictionary: Dictionary = t): MappedAuthError {
   const raw = extractMessage(err)
   const msg = raw.toLowerCase()
   const code = extractCode(err)
   const status = extractStatus(err)
-  const E = t.auth.errors
+  const E = dictionary.auth.errors
 
   if (
     code === 'invalid_credentials' ||
