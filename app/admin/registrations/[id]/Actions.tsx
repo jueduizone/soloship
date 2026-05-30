@@ -6,17 +6,7 @@ import type {
   PaymentConfirmationRow,
   RegistrationStatus,
 } from '@/lib/db/types'
-
-const STATUS_LABEL: Record<RegistrationStatus, string> = {
-  submitted: '待审核',
-  reviewing: '审核中',
-  admitted: '已录取',
-  waitlisted: '候补',
-  rejected: '未录取',
-  payment_pending: '待付款',
-  paid: '已入营',
-  withdrawn: '已退出',
-}
+import { ADMIN_REGISTRATION_STATUS_LABEL } from '@/lib/admin/registration-status'
 
 export function AdmissionActions({
   registrationId,
@@ -56,7 +46,7 @@ export function AdmissionActions({
       const nextStatus = (data?.status ?? data?.registration?.status) as RegistrationStatus | undefined
       setNote('')
       setPendingDecision(null)
-      setSuccess(nextStatus ? `已更新为「${STATUS_LABEL[nextStatus]}」。` : '审核操作已保存。')
+      setSuccess(nextStatus ? `已更新为「${ADMIN_REGISTRATION_STATUS_LABEL[nextStatus]}」。` : '审核操作已保存。')
       router.refresh()
     })
   }

@@ -3,30 +3,12 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requireAdmin } from '@/lib/auth/require-admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { listRegistrations } from '@/lib/db/registrations'
-import type { RegistrationStatus } from '@/lib/db/types'
+import {
+  ADMIN_REGISTRATION_STATUS_FILTERS,
+  ADMIN_REGISTRATION_STATUS_LABEL,
+} from '@/lib/admin/registration-status'
 
 export const dynamic = 'force-dynamic'
-
-const STATUS_LABEL: Record<RegistrationStatus, string> = {
-  submitted: '待审核',
-  reviewing: '审核中',
-  admitted: '已录取',
-  waitlisted: '候补',
-  rejected: '未录取',
-  payment_pending: '待付款',
-  paid: '已入营',
-  withdrawn: '已退出',
-}
-
-const STATUS_FILTERS: Array<{ key: string; label: string; values?: RegistrationStatus[] }> = [
-  { key: 'all', label: '全部' },
-  { key: 'pending', label: '待审核', values: ['submitted', 'reviewing'] },
-  { key: 'admitted', label: '已录取', values: ['admitted'] },
-  { key: 'payment_pending', label: '待付款', values: ['payment_pending'] },
-  { key: 'paid', label: '已付款', values: ['paid'] },
-  { key: 'waitlisted', label: '候补', values: ['waitlisted'] },
-  { key: 'rejected', label: '已拒绝', values: ['rejected'] },
-]
 
 const PAGE_SIZE = 50
 
@@ -40,7 +22,7 @@ export default async function RegistrationsListPage({
   const event = await getDefaultEvent(admin)
 
   const filterKey = searchParams.filter ?? 'all'
-  const filter = STATUS_FILTERS.find(f => f.key === filterKey) ?? STATUS_FILTERS[0]
+  const filter = ADMIN_REGISTRATION_STATUS_FILTERS.find(f => f.key === filterKey) ?? ADMIN_REGISTRATION_STATUS_FILTERS[0]
   const page = Math.max(1, Number(searchParams.page ?? '1') || 1)
   const offset = (page - 1) * PAGE_SIZE
   const q = searchParams.q?.trim() ?? ''
@@ -52,6 +34,17 @@ export default async function RegistrationsListPage({
     limit: PAGE_SIZE,
     offset,
   })
+
+  const statusCounts = new Map<string, number>()
+  await Promise.all(ADMIN_REGISTRATION_STATUS_FILTERS.map(async f => {
+    const { total: count } = await listRegistrations(admin, {
+      eventId: event.id,
+      status: f.values,
+      search: q || undefined,
+      limit: 1,
+    })
+    statusCounts.set(f.key, count)
+  }))
 
   const lastPage = Math.max(1, Math.ceil(total / PAGE_SIZE))
   const hrefWith = (patch: Record<string, string | number | undefined>) => {
@@ -83,13 +76,13 @@ export default async function RegistrationsListPage({
         </form>
 
         <div className="ss-chip-row">
-          {STATUS_FILTERS.map(f => (
+          {ADMIN_REGISTRATION_STATUS_FILTERS.map(f => (
             <Link
               key={f.key}
               href={hrefWith({ filter: f.key, page: undefined })}
               className={`ss-chip ${f.key === filterKey ? 'is-active' : ''}`}
             >
-              {f.label}
+              {f.label}<span className="ss-chip-count">{statusCounts.get(f.key) ?? 0}</span>
             </Link>
           ))}
         </div>
@@ -123,7 +116,7 @@ export default async function RegistrationsListPage({
                 <td style={{ color: 'var(--ss-text-dim)', fontSize: 13 }}>{r.contact ?? '—'}</td>
                 <td>
                   <span className="ss-status-pill" data-kind={r.status}>
-                    {STATUS_LABEL[r.status]}
+                    {ADMIN_REGISTRATION_STATUS_LABEL[r.status]}
                   </span>
                 </td>
                 <td style={{ color: 'var(--ss-text-faint)', fontSize: 12 }}>

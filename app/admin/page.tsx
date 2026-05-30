@@ -6,13 +6,14 @@ import type { RegistrationStatus } from '@/lib/db/types'
 
 export const dynamic = 'force-dynamic'
 
-const METRICS: Array<{ label: string; statuses: RegistrationStatus[] }> = [
-  { label: '总报名', statuses: ['submitted', 'reviewing', 'admitted', 'waitlisted', 'rejected', 'payment_pending', 'paid', 'withdrawn'] },
-  { label: '待审核', statuses: ['submitted', 'reviewing'] },
-  { label: '已录取', statuses: ['admitted'] },
-  { label: '待付款', statuses: ['payment_pending'] },
-  { label: '已入营', statuses: ['paid'] },
-  { label: '候补/拒绝', statuses: ['waitlisted', 'rejected'] },
+const METRICS: Array<{ label: string; filter: string; statuses: RegistrationStatus[] }> = [
+  { label: '总报名', filter: 'all', statuses: ['submitted', 'reviewing', 'admitted', 'waitlisted', 'rejected', 'payment_pending', 'paid', 'withdrawn'] },
+  { label: '待审核', filter: 'pending', statuses: ['submitted', 'reviewing'] },
+  { label: '已录取', filter: 'admitted', statuses: ['admitted'] },
+  { label: '待付款确认', filter: 'payment_pending', statuses: ['payment_pending'] },
+  { label: '已入营', filter: 'paid', statuses: ['paid'] },
+  { label: '候补', filter: 'waitlisted', statuses: ['waitlisted'] },
+  { label: '未录取', filter: 'rejected', statuses: ['rejected'] },
 ]
 
 async function countByStatuses(eventId: string, statuses: RegistrationStatus[]) {
@@ -46,7 +47,7 @@ export default async function AdminDashboardPage() {
         {METRICS.map((metric, index) => (
           <Link
             key={metric.label}
-            href={metric.label === '总报名' ? '/admin/registrations' : `/admin/registrations?filter=${metric.label === '待审核' ? 'pending' : metric.label === '已录取' ? 'admitted' : metric.label === '待付款' ? 'payment_pending' : metric.label === '已入营' ? 'paid' : metric.label === '候补/拒绝' ? 'waitlisted' : 'all'}`}
+            href={metric.filter === 'all' ? '/admin/registrations' : `/admin/registrations?filter=${metric.filter}`}
             className="ss-admin-metric-card"
           >
             <span>{metric.label}</span>

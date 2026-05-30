@@ -6,21 +6,10 @@ import { getRegistrationById } from '@/lib/db/registrations'
 import { listAdmissionDecisions } from '@/lib/db/admission'
 import { getLatestPaymentForRegistration } from '@/lib/db/payments'
 import { getDefaultEvent } from '@/lib/db/events'
-import type { RegistrationStatus } from '@/lib/db/types'
+import { ADMIN_REGISTRATION_STATUS_LABEL } from '@/lib/admin/registration-status'
 import { AdmissionActions, PaymentActions } from './Actions'
 
 export const dynamic = 'force-dynamic'
-
-const STATUS_LABEL: Record<RegistrationStatus, string> = {
-  submitted: '待审核',
-  reviewing: '审核中',
-  admitted: '已录取',
-  waitlisted: '候补',
-  rejected: '未录取',
-  payment_pending: '待付款',
-  paid: '已入营',
-  withdrawn: '已退出',
-}
 
 const DECISION_LABEL: Record<string, string> = {
   admit: '录取',
@@ -59,7 +48,7 @@ export default async function RegistrationDetailPage({
         </div>
         <div style={{ marginLeft: 'auto' }}>
           <span className="ss-status-pill" data-kind={reg.status}>
-            {STATUS_LABEL[reg.status]}
+            {ADMIN_REGISTRATION_STATUS_LABEL[reg.status]}
           </span>
         </div>
       </div>
