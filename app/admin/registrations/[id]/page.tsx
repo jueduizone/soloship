@@ -7,7 +7,7 @@ import { listAdmissionDecisions } from '@/lib/db/admission'
 import { getLatestPaymentForRegistration } from '@/lib/db/payments'
 import { getDefaultEvent } from '@/lib/db/events'
 import { ADMIN_REGISTRATION_STATUS_LABEL } from '@/lib/admin/registration-status'
-import { AdmissionActions, PaymentActions } from './Actions'
+import { AdmissionActions, PaymentActions, StatusOverrideActions } from './Actions'
 
 export const dynamic = 'force-dynamic'
 
@@ -139,6 +139,11 @@ export default async function RegistrationDetailPage({
               payment={payment}
               defaultAmountCents={event.price_cents}
             />
+          </div>
+
+          <div className="ss-panel">
+            <h3>状态修正</h3>
+            <StatusOverrideActions registrationId={reg.id} status={reg.status} />
           </div>
         </div>
       </div>

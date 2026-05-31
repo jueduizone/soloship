@@ -25,3 +25,18 @@ export const ADMIN_REGISTRATION_STATUS_FILTERS: Array<{
   { key: 'rejected', label: '未录取', values: ['rejected'] },
   { key: 'withdrawn', label: '已退出', values: ['withdrawn'] },
 ]
+
+export const ADMIN_STATUS_OVERRIDE_OPTIONS: RegistrationStatus[] = [
+  'submitted',
+  'reviewing',
+  'admitted',
+  'waitlisted',
+  'rejected',
+  'payment_pending',
+  'paid',
+  'withdrawn',
+]
+
+export function isAdminStatusOverride(value: unknown): value is RegistrationStatus {
+  return typeof value === 'string' && ADMIN_STATUS_OVERRIDE_OPTIONS.includes(value as RegistrationStatus)
+}

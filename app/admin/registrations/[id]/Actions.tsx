@@ -6,7 +6,10 @@ import type {
   PaymentConfirmationRow,
   RegistrationStatus,
 } from '@/lib/db/types'
-import { ADMIN_REGISTRATION_STATUS_LABEL } from '@/lib/admin/registration-status'
+import {
+  ADMIN_REGISTRATION_STATUS_LABEL,
+  ADMIN_STATUS_OVERRIDE_OPTIONS,
+} from '@/lib/admin/registration-status'
 
 export function AdmissionActions({
   registrationId,
@@ -323,5 +326,89 @@ export function PaymentActions({
         </>
       )}
     </>
+  )
+}
+
+export function StatusOverrideActions({
+  registrationId,
+  status,
+}: {
+  registrationId: string
+  status: RegistrationStatus
+}) {
+  const router = useRouter()
+  const [nextStatus, setNextStatus] = useState<RegistrationStatus>(status)
+  const [note, setNote] = useState('')
+  const [pending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+
+  const submit = () => {
+    setError(null)
+    setSuccess(null)
+    startTransition(async () => {
+      const res = await fetch(`/api/admin/registrations/${registrationId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: nextStatus, note: note || null }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setError(data?.error ?? '状态修正失败')
+        return
+      }
+
+      setNote('')
+      setSuccess(`状态已修正为「${ADMIN_REGISTRATION_STATUS_LABEL[nextStatus]}」。`)
+      router.refresh()
+    })
+  }
+
+  return (
+    <div className="ss-status-override">
+      <div className="ss-callout" style={{ marginTop: 0 }}>
+        用于运营纠错：可把已拒绝改为已入营，或把已入营改回待付款确认 / 未录取。此操作只修改报名状态，不会自动创建或确认付款记录。
+      </div>
+
+      {error && <div className="ss-form-error">{error}</div>}
+      {success && <div className="ss-form-success">{success}</div>}
+
+      <div className="ss-field">
+        <label htmlFor="override-status">目标状态</label>
+        <select
+          id="override-status"
+          className="ss-select"
+          value={nextStatus}
+          onChange={e => setNextStatus(e.target.value as RegistrationStatus)}
+        >
+          {ADMIN_STATUS_OVERRIDE_OPTIONS.map(option => (
+            <option key={option} value={option}>
+              {ADMIN_REGISTRATION_STATUS_LABEL[option]}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="ss-field">
+        <label htmlFor="override-note">修正备注（可选）</label>
+        <textarea
+          id="override-note"
+          className="ss-textarea"
+          value={note}
+          onChange={e => setNote(e.target.value)}
+          placeholder="例如：线下确认补录 / 误操作恢复 / 付款状态纠正"
+        />
+      </div>
+
+      <button
+        type="button"
+        className="ss-btn-action is-danger"
+        onClick={submit}
+        disabled={pending || nextStatus === status}
+        aria-busy={pending}
+      >
+        {pending ? <span className="ss-loading-label"><span className="ss-auth-spinner" />正在修正…</span> : '确认修正状态'}
+      </button>
+    </div>
   )
 }
