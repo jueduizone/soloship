@@ -25,8 +25,9 @@ export async function Nav() {
   const { data: { user } } = await supabase.auth.getUser()
   const showAdmin = user ? isOrganizerUser(user) : false
   let showFellows = showAdmin
+  let showBenefits = showAdmin
 
-  if (user?.email && !showFellows) {
+  if (user?.email && (!showFellows || !showBenefits)) {
     const admin = createAdminClient()
     const currentEvent = await getDefaultEvent(admin)
     const registration = await getRegistrationForApplicant(admin, {
@@ -34,7 +35,8 @@ export async function Nav() {
       email: user.email,
       eventId: currentEvent.id,
     })
-    showFellows = registration?.status === 'paid'
+    showBenefits = registration?.status === 'paid'
+    showFellows = showBenefits
   }
 
   return (
@@ -86,6 +88,11 @@ export async function Nav() {
               <NavLink href="/resources" className="ss-site-nav-link">
                 {common.resources}
               </NavLink>
+              {showBenefits && (
+                <NavLink href="/benefits" className="ss-site-nav-link">
+                  {common.benefits}
+                </NavLink>
+              )}
             </>
           )}
 

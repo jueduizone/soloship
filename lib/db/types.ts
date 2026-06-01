@@ -24,6 +24,12 @@ export type ResourceStage = 'pre_camp' | 'week_1' | 'week_2' | 'demo_day' | 'pos
 
 export type ResourceVisibility = 'public' | 'admitted_only'
 
+export type BenefitType = 'token_code' | 'merch' | 'link' | 'manual'
+
+export type BenefitStatus = 'active' | 'paused' | 'archived'
+
+export type BenefitClaimStatus = 'claimed' | 'pending_fulfillment' | 'fulfilled' | 'cancelled'
+
 export type LinkEntry = { label: string; url: string }
 
 export interface EventRow {
@@ -118,6 +124,50 @@ export interface ResourceRow {
   stage: ResourceStage
   visibility: ResourceVisibility
   order_index: number
+  created_at: string
+  updated_at: string
+}
+
+export interface BenefitRow {
+  id: string
+  event_id: string
+  title: string
+  provider: string | null
+  type: BenefitType
+  status: BenefitStatus
+  description: string | null
+  claim_instructions: string | null
+  redeem_url: string | null
+  total_stock: number | null
+  per_user_limit: number
+  starts_at: string | null
+  ends_at: string | null
+  order_index: number
+  created_at: string
+  updated_at: string
+}
+
+export interface BenefitCodeRow {
+  id: string
+  benefit_id: string
+  code: string
+  assigned_to_user_id: string | null
+  assigned_claim_id: string | null
+  assigned_at: string | null
+  created_at: string
+}
+
+export interface BenefitClaimRow {
+  id: string
+  benefit_id: string
+  user_id: string
+  registration_id: string
+  user_email: string
+  user_name: string | null
+  status: BenefitClaimStatus
+  claim_payload: Record<string, unknown>
+  fulfilled_at: string | null
+  tracking_info: string | null
   created_at: string
   updated_at: string
 }

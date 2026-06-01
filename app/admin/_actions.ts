@@ -2,12 +2,30 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { requireAdmin } from '@/lib/auth/require-admin'
 import { requireOrganizer } from '@/lib/auth/require-organizer'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
+import {
+  BENEFIT_CLAIM_STATUSES,
+  BENEFIT_STATUSES,
+  BENEFIT_TYPES,
+  createBenefit,
+  importBenefitCodes,
+  updateBenefit,
+  updateBenefitClaimStatus,
+} from '@/lib/db/benefits'
 import { createResource, deleteResource, updateResource } from '@/lib/db/resources'
 import { updateFellowProfile } from '@/lib/db/fellows'
-import type { EventStatus, ProfileVisibility, ResourceStage, ResourceVisibility } from '@/lib/db/types'
+import type {
+  BenefitClaimStatus,
+  BenefitStatus,
+  BenefitType,
+  EventStatus,
+  ProfileVisibility,
+  ResourceStage,
+  ResourceVisibility,
+} from '@/lib/db/types'
 
 const EVENT_STATUSES: EventStatus[] = ['draft', 'recruiting', 'reviewing', 'running', 'finished']
 const RESOURCE_STAGES: ResourceStage[] = ['pre_camp', 'week_1', 'week_2', 'demo_day', 'post_camp']
@@ -46,6 +64,25 @@ function parseEventStatus(value: FormDataEntryValue | null): EventStatus {
 
 function parseProfileVisibility(value: FormDataEntryValue | null): ProfileVisibility {
   return PROFILE_VISIBILITIES.includes(value as ProfileVisibility) ? value as ProfileVisibility : 'cohort_only'
+}
+
+function parseBenefitType(value: FormDataEntryValue | null): BenefitType {
+  return BENEFIT_TYPES.includes(value as BenefitType) ? value as BenefitType : 'link'
+}
+
+function parseBenefitStatus(value: FormDataEntryValue | null): BenefitStatus {
+  return BENEFIT_STATUSES.includes(value as BenefitStatus) ? value as BenefitStatus : 'active'
+}
+
+function parseBenefitClaimStatus(value: FormDataEntryValue | null): BenefitClaimStatus {
+  return BENEFIT_CLAIM_STATUSES.includes(value as BenefitClaimStatus) ? value as BenefitClaimStatus : 'pending_fulfillment'
+}
+
+function parseOptionalInteger(value: FormDataEntryValue | null): number | null {
+  const raw = typeof value === 'string' ? value.trim() : ''
+  if (!raw) return null
+  const parsed = Number(raw)
+  return Number.isFinite(parsed) ? Math.max(0, Math.trunc(parsed)) : null
 }
 
 export async function createResourceAction(formData: FormData) {
@@ -92,6 +129,75 @@ export async function deleteResourceAction(formData: FormData) {
   await deleteResource(admin, id)
   revalidatePath('/admin/resources')
   revalidatePath('/resources')
+}
+
+export async function createBenefitAction(formData: FormData) {
+  await requireAdmin()
+  const admin = createAdminClient()
+  const event = await getDefaultEvent(admin)
+  const benefit = await createBenefit(admin, {
+    event_id: event.id,
+    title: mustString(formData, 'title'),
+    provider: getString(formData, 'provider'),
+    type: parseBenefitType(formData.get('type')),
+    status: parseBenefitStatus(formData.get('status')),
+    description: getString(formData, 'description'),
+    claim_instructions: getString(formData, 'claim_instructions'),
+    redeem_url: getString(formData, 'redeem_url'),
+    total_stock: parseOptionalInteger(formData.get('total_stock')),
+    per_user_limit: parseOptionalInteger(formData.get('per_user_limit')) ?? 1,
+    starts_at: getString(formData, 'starts_at'),
+    ends_at: getString(formData, 'ends_at'),
+    order_index: parseOrderIndex(formData.get('order_index')),
+  })
+  const codeText = getString(formData, 'codes')
+  if (codeText) {
+    await importBenefitCodes(admin, benefit.id, codeText.split(/\r?\n|,/))
+  }
+  revalidatePath('/admin/benefits')
+  revalidatePath('/benefits')
+  redirect('/admin/benefits')
+}
+
+export async function updateBenefitAction(formData: FormData) {
+  await requireAdmin()
+  const id = mustString(formData, 'id')
+  const admin = createAdminClient()
+  await updateBenefit(admin, id, {
+    title: mustString(formData, 'title'),
+    provider: getString(formData, 'provider'),
+    type: parseBenefitType(formData.get('type')),
+    status: parseBenefitStatus(formData.get('status')),
+    description: getString(formData, 'description'),
+    claim_instructions: getString(formData, 'claim_instructions'),
+    redeem_url: getString(formData, 'redeem_url'),
+    total_stock: parseOptionalInteger(formData.get('total_stock')),
+    per_user_limit: parseOptionalInteger(formData.get('per_user_limit')) ?? 1,
+    starts_at: getString(formData, 'starts_at'),
+    ends_at: getString(formData, 'ends_at'),
+    order_index: parseOrderIndex(formData.get('order_index')),
+  })
+  const codeText = getString(formData, 'codes')
+  if (codeText) {
+    await importBenefitCodes(admin, id, codeText.split(/\r?\n|,/))
+  }
+  revalidatePath('/admin/benefits')
+  revalidatePath('/benefits')
+  redirect('/admin/benefits')
+}
+
+export async function updateBenefitClaimAction(formData: FormData) {
+  await requireAdmin()
+  const id = mustString(formData, 'id')
+  const admin = createAdminClient()
+  await updateBenefitClaimStatus(
+    admin,
+    id,
+    parseBenefitClaimStatus(formData.get('status')),
+    getString(formData, 'tracking_info')
+  )
+  revalidatePath('/admin/benefits')
+  revalidatePath('/benefits')
 }
 
 export async function updateFellowAction(formData: FormData) {

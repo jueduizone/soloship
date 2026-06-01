@@ -1,0 +1,173 @@
+.ss-benefits-shell .ss-apply-container {
+  max-width: 980px;
+  padding-top: 28px;
+}
+
+.ss-benefits-container .ss-apply-header {
+  margin-bottom: 22px;
+}
+
+.ss-benefit-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.ss-benefit-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.ss-benefit-card-head {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.ss-benefit-title {
+  margin: 12px 0 0;
+  color: var(--ss-text-strong);
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.ss-benefit-lock-title {
+  margin: 0;
+  color: var(--ss-text-strong);
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.ss-benefit-stock {
+  min-width: 92px;
+  padding: 10px 12px;
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 10px;
+  background: var(--ss-bg-alt);
+  text-align: right;
+}
+
+.ss-benefit-stock span,
+.ss-benefit-code-block span,
+.ss-benefit-claimed > span {
+  display: block;
+  color: var(--ss-text-faint);
+  font-family: var(--ss-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ss-benefit-stock strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ss-text-strong);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.ss-benefit-instructions {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--ss-border-dark-soft);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.018);
+  color: var(--ss-text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ss-benefit-instructions strong {
+  color: var(--ss-text-strong);
+  font-size: 12px;
+}
+
+.ss-benefit-claim-form {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.ss-benefit-claim-fields {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ss-benefit-claim-fields .ss-textarea {
+  grid-column: 1 / -1;
+  min-height: 76px;
+}
+
+.ss-benefit-code,
+.ss-benefit-code-block code {
+  display: inline-flex;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 251, 135, 0.24);
+  border-radius: 8px;
+  color: var(--ss-accent-hi);
+  background: var(--ss-accent-soft);
+  font-family: var(--ss-mono);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.ss-benefit-claimed {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.ss-benefit-claimed > strong {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 251, 135, 0.28);
+  border-radius: 999px;
+  color: var(--ss-accent-hi);
+  background: var(--ss-accent-soft);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ss-benefit-code-block {
+  display: grid;
+  max-width: 100%;
+  gap: 6px;
+}
+
+.ss-benefit-claimed p {
+  margin: 0;
+  color: var(--ss-text-dim);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 720px) {
+  .ss-benefit-card-head,
+  .ss-benefit-claim-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .ss-benefit-card-head {
+    display: grid;
+  }
+
+  .ss-benefit-stock {
+    width: 100%;
+    text-align: left;
+  }
+}

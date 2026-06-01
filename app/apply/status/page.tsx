@@ -119,6 +119,7 @@ export default async function StatusPage() {
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 14 }}>
               <Link href="/profile" className="ss-btn ss-btn-primary">{statusCopy.payment.editProfile}</Link>
               <Link href="/fellows" className="ss-btn ss-btn-ghost">{statusCopy.payment.fellows}</Link>
+              <Link href="/benefits" className="ss-btn ss-btn-ghost">{statusCopy.payment.benefits}</Link>
             </div>
             {payment && (
               <dl className="ss-kv">

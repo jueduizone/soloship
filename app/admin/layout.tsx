@@ -27,6 +27,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           <Link href="/admin/registrations">报名</Link>
           <Link href="/admin/fellows">同学录</Link>
           <Link href="/admin/resources">资料库</Link>
+          <Link href="/admin/benefits">福利</Link>
           <Link href="/admin/events">活动配置</Link>
         </nav>
         <div className="ss-user">{user.email}</div>
