@@ -6,6 +6,7 @@ import { getDefaultEvent } from '@/lib/db/events'
 import {
   clearLotteryWinners,
   createLotteryPrize,
+  deleteLotteryPrize,
   getOrCreateLotteryDraw,
   parseLotteryEmails,
   replaceLotteryParticipants,
@@ -74,6 +75,12 @@ export async function updateLotteryPrizeAction(formData: FormData) {
     winnerCount: parsePositiveInteger(formData.get('winner_count'), 1),
     orderIndex: parseOrderIndex(formData.get('order_index')),
   })
+  revalidatePath('/lottery')
+}
+
+export async function deleteLotteryPrizeAction(formData: FormData) {
+  const admin = createAdminClient()
+  await deleteLotteryPrize(admin, mustString(formData, 'id'))
   revalidatePath('/lottery')
 }
 

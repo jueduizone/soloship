@@ -4,6 +4,7 @@ import { getLotteryState, getOrCreateLotteryDraw } from '@/lib/db/lottery'
 import {
   clearLotteryHistoryAction,
   createLotteryPrizeAction,
+  deleteLotteryPrizeAction,
   importLotteryParticipantsAction,
   updateLotteryPrizeAction,
 } from './_actions'
@@ -14,45 +15,64 @@ import type { LotteryPrizeWithWinners } from '@/lib/db/lottery'
 export const dynamic = 'force-dynamic'
 
 function PrizeEditForm({ prize }: { prize: LotteryPrizeWithWinners }) {
+  const remainingSlots = Math.max(0, prize.winner_count - prize.winners.length)
+
   return (
-    <form action={updateLotteryPrizeAction} className="ss-lottery-prize-form">
-      <input type="hidden" name="id" value={prize.id} />
-      <div className="ss-field">
-        <label htmlFor={`lottery-prize-name-${prize.id}`}>奖项名称</label>
-        <input
-          id={`lottery-prize-name-${prize.id}`}
-          className="ss-input"
-          name="name"
-          defaultValue={prize.name}
-          required
-        />
+    <article className="ss-lottery-prize-item">
+      <div className="ss-lottery-prize-status">
+        <strong>{prize.name}</strong>
+        <span>{prize.winners.length}/{prize.winner_count} 已开奖 · 还需 {remainingSlots} 人</span>
       </div>
-      <div className="ss-field">
-        <label htmlFor={`lottery-prize-count-${prize.id}`}>中奖人数</label>
-        <input
-          id={`lottery-prize-count-${prize.id}`}
-          className="ss-input"
-          name="winner_count"
-          type="number"
-          min="1"
-          defaultValue={prize.winner_count}
-          required
-        />
-      </div>
-      <div className="ss-field">
-        <label htmlFor={`lottery-prize-order-${prize.id}`}>排序</label>
-        <input
-          id={`lottery-prize-order-${prize.id}`}
-          className="ss-input"
-          name="order_index"
-          type="number"
-          defaultValue={prize.order_index}
-        />
-      </div>
-      <div className="ss-lottery-form-action">
-        <AdminSubmitButton idleLabel="保存" pendingLabel="保存中" />
-      </div>
-    </form>
+      <form action={updateLotteryPrizeAction} className="ss-lottery-prize-row">
+        <input type="hidden" name="id" value={prize.id} />
+        <div className="ss-field ss-lottery-prize-name-field">
+          <label htmlFor={`lottery-prize-name-${prize.id}`}>奖项名称</label>
+          <input
+            id={`lottery-prize-name-${prize.id}`}
+            className="ss-input"
+            name="name"
+            defaultValue={prize.name}
+            required
+          />
+        </div>
+        <div className="ss-field">
+          <label htmlFor={`lottery-prize-count-${prize.id}`}>中奖人数</label>
+          <input
+            id={`lottery-prize-count-${prize.id}`}
+            className="ss-input"
+            name="winner_count"
+            type="number"
+            min="1"
+            defaultValue={prize.winner_count}
+            required
+          />
+        </div>
+        <div className="ss-field">
+          <label htmlFor={`lottery-prize-order-${prize.id}`}>排序</label>
+          <input
+            id={`lottery-prize-order-${prize.id}`}
+            className="ss-input"
+            name="order_index"
+            type="number"
+            defaultValue={prize.order_index}
+          />
+        </div>
+        <div className="ss-lottery-row-actions">
+          <AdminSubmitButton idleLabel="保存" pendingLabel="保存中" />
+        </div>
+      </form>
+      <form action={deleteLotteryPrizeAction} className="ss-lottery-delete-form">
+        <input type="hidden" name="id" value={prize.id} />
+        <button className="ss-btn-action is-danger ss-lottery-small-button" type="submit">删除</button>
+      </form>
+      {prize.winners.length > 0 && (
+        <div className="ss-lottery-winner-chips">
+          {prize.winners.map(winner => (
+            <span key={winner.id}>{winner.position}. {winner.email}</span>
+          ))}
+        </div>
+      )}
+    </article>
   )
 }
 
@@ -131,7 +151,7 @@ export default async function LotteryPage() {
                 id="lottery-prize-name-new"
                 className="ss-input"
                 name="name"
-                placeholder="例如：一等奖 / Cursor Token / 周边礼包"
+                placeholder="例如：一等奖 / Token"
                 required
               />
             </div>
@@ -178,29 +198,9 @@ export default async function LotteryPage() {
             <div className="ss-empty ss-lottery-inline-empty">暂无奖项。先新增奖项，再开始抽奖。</div>
           ) : (
             <div className="ss-lottery-prize-list">
-              {state.prizes.map(prize => {
-                const remainingSlots = Math.max(0, prize.winner_count - prize.winners.length)
-                return (
-                  <article className="ss-lottery-prize-item" key={prize.id}>
-                    <div className="ss-lottery-prize-head">
-                      <div>
-                        <h2>{prize.name}</h2>
-                        <p>{prize.winners.length}/{prize.winner_count} 已开奖 · 还需 {remainingSlots} 人</p>
-                      </div>
-                    </div>
-
-                    <PrizeEditForm prize={prize} />
-
-                    {prize.winners.length > 0 && (
-                      <div className="ss-lottery-winner-chips">
-                        {prize.winners.map(winner => (
-                          <span key={winner.id}>{winner.position}. {winner.email}</span>
-                        ))}
-                      </div>
-                    )}
-                  </article>
-                )
-              })}
+              {state.prizes.map(prize => (
+                <PrizeEditForm prize={prize} key={prize.id} />
+              ))}
             </div>
           )}
         </section>

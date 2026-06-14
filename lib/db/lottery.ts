@@ -145,6 +145,17 @@ export async function updateLotteryPrize(
   return data as LotteryPrizeRow
 }
 
+export async function deleteLotteryPrize(
+  supabase: SupabaseClient,
+  id: string
+): Promise<void> {
+  const { error } = await supabase
+    .from('lottery_prizes')
+    .delete()
+    .eq('id', id)
+  if (error) throw error
+}
+
 export async function drawLotteryAllPrizes(
   supabase: SupabaseClient,
   drawId: string,
