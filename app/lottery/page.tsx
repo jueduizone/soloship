@@ -187,13 +187,26 @@ export default async function LotteryPage() {
               <span>待抽名额</span>
               <strong>{totalRemainingSlots}</strong>
             </div>
-            <LotteryDrawButton
-              sampleEmails={sampleEmails}
-              prizes={state.prizes.map(prize => ({ id: prize.id, name: prize.name }))}
-              idleLabel={totalRemainingSlots === 0 && state.prizes.length > 0 ? '已开奖' : '开始抽奖'}
-              pendingLabel="开奖中"
-              disabled={totalRemainingSlots === 0 && state.prizes.length > 0}
-            />
+            <div className="ss-lottery-draw-actions">
+              <LotteryDrawButton
+                sampleEmails={sampleEmails}
+                prizes={state.prizes.map(prize => ({ id: prize.id, name: prize.name }))}
+                idleLabel={totalRemainingSlots === 0 && state.prizes.length > 0 ? '已开奖' : '开始抽奖'}
+                pendingLabel="开奖中"
+                disabled={totalRemainingSlots === 0 && state.prizes.length > 0}
+              />
+              {state.winners.length > 0 && (
+                <form action={clearLotteryHistoryAction}>
+                  <button
+                    className="ss-btn-action ss-lottery-reset-button"
+                    type="submit"
+                    title="清空当前中奖名单，保留邮箱池和奖项设置"
+                  >
+                    开启新一轮
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
 
           {state.prizes.length === 0 ? (

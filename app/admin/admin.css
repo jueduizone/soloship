@@ -918,6 +918,22 @@
   justify-content: flex-end;
   min-width: 120px;
 }
+.ss-lottery-draw-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+.ss-lottery-reset-button {
+  border-color: rgba(255,180,90,0.28);
+  color: #ffd6a1;
+  background: rgba(255,180,90,0.055);
+}
+.ss-lottery-reset-button:hover {
+  border-color: rgba(255,180,90,0.46);
+  background: rgba(255,180,90,0.09);
+}
 .ss-lottery-spinner {
   width: 18px;
   height: 18px;
@@ -1258,6 +1274,12 @@
   }
   .ss-lottery-draw-control {
     justify-items: start;
+  }
+  .ss-lottery-draw-actions,
+  .ss-lottery-draw-actions form,
+  .ss-lottery-draw-actions .ss-lottery-draw-control,
+  .ss-lottery-draw-actions .ss-btn-action {
+    width: 100%;
   }
   .ss-lottery-modal {
     padding: 16px;

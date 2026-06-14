@@ -38,6 +38,7 @@ assert.match(lotteryPage, /LotteryDrawButton/, 'lottery page must expose animate
 assert.match(lotteryPage, /历史中奖记录/, 'lottery page must show winner history')
 assert.match(lotteryPage, /奖项设置/, 'lottery page must show prize setup beside email import')
 assert.match(lotteryPage, /ss-lottery-draw-all/, 'lottery page must have one all-prize draw control')
+assert.match(lotteryPage, /开启新一轮/, 'lottery page must expose a clear-current-round action near the draw control')
 assert.match(lotteryPage, /clearLotteryHistoryAction/, 'lottery page must support clearing winner history')
 assert.match(lotteryPage, /ss-lottery-prize-item/, 'existing prizes must render in the right-side prize setup panel')
 assert.doesNotMatch(lotteryPage, /公开隐藏链接|\/lottery。/, 'lottery page must not expose internal link wording in visible copy')
@@ -65,6 +66,7 @@ assert.match(adminCss, /\.ss-lottery-form-action \.ss-btn-action[\s\S]*width: 10
 assert.match(adminCss, /ss-lottery-prize-item/, 'right-side prize list must use inline prize rows')
 assert.match(adminCss, /ss-lottery-prize-row/, 'existing prizes must use compact inline editing rows')
 assert.match(adminCss, /ss-lottery-modal-card/, 'lottery CSS must style the suspense modal')
+assert.match(adminCss, /ss-lottery-reset-button/, 'lottery CSS must style the new-round reset action')
 assert.match(adminCss, /ss-lottery-history-head/, 'history header must support a clear action')
 assert.match(adminCss, /ss-lottery-draw-all/, 'lottery CSS must style the all-prize draw control')
 
