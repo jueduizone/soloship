@@ -3,6 +3,7 @@ import { getDefaultEvent } from '@/lib/db/events'
 import { getLotteryState, getOrCreateLotteryDraw } from '@/lib/db/lottery'
 import {
   clearLotteryHistoryAction,
+  clearLotteryParticipantsAction,
   createLotteryPrizeAction,
   deleteLotteryPrizeAction,
   importLotteryParticipantsAction,
@@ -139,6 +140,17 @@ export default async function LotteryPage() {
             </div>
             <AdminSubmitButton idleLabel="导入邮箱" pendingLabel="导入中" />
           </form>
+          {state.participants.length > 0 && (
+            <form action={clearLotteryParticipantsAction} className="ss-lottery-clear-emails-form">
+              <button
+                className="ss-btn-action ss-lottery-clear-emails-button"
+                type="submit"
+                title="清空当前邮箱池，保留奖项设置和中奖历史"
+              >
+                清空邮箱池
+              </button>
+            </form>
+          )}
         </section>
 
         <section className="ss-lottery-panel ss-lottery-prize-panel">

@@ -57,6 +57,12 @@ export async function importLotteryParticipantsAction(formData: FormData) {
   revalidatePath('/lottery')
 }
 
+export async function clearLotteryParticipantsAction() {
+  const { admin, draw } = await getPublicLotteryDraw()
+  await replaceLotteryParticipants(admin, draw.id, [])
+  revalidatePath('/lottery')
+}
+
 export async function createLotteryPrizeAction(formData: FormData) {
   const { admin, draw } = await getPublicLotteryDraw()
   await createLotteryPrize(admin, {

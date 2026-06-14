@@ -762,6 +762,20 @@
   font-family: var(--ss-mono);
   font-size: 13px;
 }
+.ss-lottery-clear-emails-form {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.ss-lottery-clear-emails-button {
+  border-color: rgba(255,120,120,0.22);
+  color: #ffb1b1;
+  background: rgba(255,90,90,0.035);
+}
+.ss-lottery-clear-emails-button:hover {
+  border-color: rgba(255,120,120,0.42);
+  background: rgba(255,90,90,0.07);
+}
 .ss-lottery-prize-form {
   display: grid;
   grid-template-columns: minmax(180px, 1.4fr) minmax(86px, 0.45fr) minmax(78px, 0.4fr) 128px;
@@ -1279,6 +1293,10 @@
   .ss-lottery-draw-actions form,
   .ss-lottery-draw-actions .ss-lottery-draw-control,
   .ss-lottery-draw-actions .ss-btn-action {
+    width: 100%;
+  }
+  .ss-lottery-clear-emails-form,
+  .ss-lottery-clear-emails-button {
     width: 100%;
   }
   .ss-lottery-modal {
