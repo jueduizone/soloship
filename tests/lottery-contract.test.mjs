@@ -33,6 +33,7 @@ assert.match(lotteryPage, /importLotteryParticipantsAction/, 'lottery page must 
 assert.match(lotteryPage, /createLotteryPrizeAction/, 'lottery page must support setting prize names and counts')
 assert.match(lotteryPage, /LotteryDrawButton/, 'lottery page must expose animated draw buttons')
 assert.match(lotteryPage, /历史中奖记录/, 'lottery page must show winner history')
+assert.doesNotMatch(lotteryPage, /公开隐藏链接|\/lottery。/, 'lottery page must not expose internal link wording in visible copy')
 
 const lotteryActions = read('app/lottery/_actions.ts')
 assert.doesNotMatch(lotteryActions, /requireAdmin|getAdminUser|requireOrganizer/, 'lottery setup actions must not require login')
@@ -43,6 +44,10 @@ assert.match(drawButton, /ss-lottery-loading/, 'draw button must render a loadin
 assert.match(drawButton, /setInterval/, 'draw button must animate rolling emails during drawing')
 assert.match(drawButton, /router\.refresh\(\)/, 'draw button must refresh history after drawing')
 assert.match(drawButton, /\/api\/lottery\/prizes\/\$\{prizeId\}\/draw/, 'draw button must call the public hidden lottery API')
+
+const adminCss = read('app/admin/admin.css')
+assert.match(adminCss, /grid-template-columns: repeat\(auto-fit, minmax\(128px, 1fr\)\)/, 'lottery prize form must use responsive columns')
+assert.match(adminCss, /\.ss-lottery-form-action \.ss-btn-action[\s\S]*width: 100%/, 'lottery prize submit buttons must stay inside narrow panels')
 
 const drawApi = read('app/api/lottery/prizes/[id]/draw/route.ts')
 assert.doesNotMatch(drawApi, /getAdminUser|requireAdmin|requireOrganizer/, 'lottery draw API must be accessible without login')

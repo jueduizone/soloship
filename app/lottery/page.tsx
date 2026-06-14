@@ -74,7 +74,7 @@ export default async function LotteryPage() {
     <div className="ss-admin-container ss-lottery-page">
       <div className="ss-admin-title">抽奖工具</div>
       <div className="ss-admin-sub">
-        公开隐藏链接：/lottery。无需登录，拿到链接即可导入邮箱、设置奖项和开奖；同一邮箱在同一场抽奖中只能中奖一次。
+        导入邮箱后设置奖项名称和中奖人数；同一邮箱在同一场抽奖中只能中奖一次。
       </div>
 
       <div className="ss-lottery-summary">

@@ -756,7 +756,7 @@
 }
 .ss-lottery-prize-form {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) 120px 96px 96px;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   gap: 10px;
   align-items: end;
 }
@@ -766,6 +766,12 @@
 .ss-lottery-form-action {
   display: flex;
   align-items: flex-end;
+  min-width: 0;
+}
+.ss-lottery-form-action .ss-btn-action {
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
 }
 .ss-lottery-section {
   margin-top: 24px;
