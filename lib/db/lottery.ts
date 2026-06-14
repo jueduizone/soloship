@@ -13,9 +13,12 @@ export interface LotteryPrizeWithWinners extends LotteryPrizeRow {
 
 export interface LotteryState {
   draw: LotteryDrawRow
+  draws: LotteryDrawRow[]
   participants: LotteryParticipantRow[]
   prizes: LotteryPrizeWithWinners[]
+  allPrizes: LotteryPrizeRow[]
   winners: LotteryWinnerRow[]
+  allWinners: LotteryWinnerRow[]
 }
 
 export function parseLotteryEmails(input: string): string[] {
@@ -32,7 +35,7 @@ export async function getOrCreateLotteryDraw(
     .from('lottery_draws')
     .select('*')
     .eq('event_id', params.eventId)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()
   if (existingError) throw existingError
@@ -55,36 +58,104 @@ export async function getLotteryState(
   supabase: SupabaseClient,
   drawId: string
 ): Promise<LotteryState> {
+  const { data: draw, error: drawError } = await supabase
+    .from('lottery_draws')
+    .select('*')
+    .eq('id', drawId)
+    .single()
+  if (drawError) throw drawError
+  const drawRow = draw as LotteryDrawRow
+
+  const { data: draws, error: drawsError } = await supabase
+    .from('lottery_draws')
+    .select('*')
+    .eq('event_id', drawRow.event_id)
+    .order('created_at', { ascending: true })
+  if (drawsError) throw drawsError
+  const drawRows = (draws ?? []) as LotteryDrawRow[]
+  const drawIds = drawRows.map(item => item.id)
+
   const [
-    { data: draw, error: drawError },
     { data: participants, error: participantsError },
     { data: prizes, error: prizesError },
-    { data: winners, error: winnersError },
+    { data: allPrizes, error: allPrizesError },
+    { data: allWinners, error: allWinnersError },
   ] = await Promise.all([
-    supabase.from('lottery_draws').select('*').eq('id', drawId).single(),
     supabase.from('lottery_participants').select('*').eq('draw_id', drawId).order('email', { ascending: true }),
     supabase.from('lottery_prizes').select('*').eq('draw_id', drawId).order('order_index', { ascending: true }).order('created_at', { ascending: true }),
-    supabase.from('lottery_winners').select('*').eq('draw_id', drawId).order('drawn_at', { ascending: false }),
+    drawIds.length > 0
+      ? supabase.from('lottery_prizes').select('*').in('draw_id', drawIds)
+      : Promise.resolve({ data: [], error: null }),
+    drawIds.length > 0
+      ? supabase.from('lottery_winners').select('*').in('draw_id', drawIds).order('drawn_at', { ascending: false })
+      : Promise.resolve({ data: [], error: null }),
   ])
-  if (drawError) throw drawError
   if (participantsError) throw participantsError
   if (prizesError) throw prizesError
-  if (winnersError) throw winnersError
+  if (allPrizesError) throw allPrizesError
+  if (allWinnersError) throw allWinnersError
 
-  const winnerRows = (winners ?? []) as LotteryWinnerRow[]
+  const allWinnerRows = (allWinners ?? []) as LotteryWinnerRow[]
+  const currentWinnerRows = allWinnerRows.filter(winner => winner.draw_id === drawId)
   const prizeRows = ((prizes ?? []) as LotteryPrizeRow[]).map(prize => ({
     ...prize,
-    winners: winnerRows
+    winners: currentWinnerRows
       .filter(winner => winner.prize_id === prize.id)
       .sort((a, b) => a.position - b.position),
   }))
 
   return {
-    draw: draw as LotteryDrawRow,
+    draw: drawRow,
+    draws: drawRows,
     participants: (participants ?? []) as LotteryParticipantRow[],
     prizes: prizeRows,
-    winners: winnerRows,
+    allPrizes: (allPrizes ?? []) as LotteryPrizeRow[],
+    winners: currentWinnerRows,
+    allWinners: allWinnerRows,
   }
+}
+
+export async function createNextLotteryRound(
+  supabase: SupabaseClient,
+  drawId: string
+): Promise<LotteryDrawRow> {
+  const state = await getLotteryState(supabase, drawId)
+  const nextRound = state.draws.length + 1
+  const { data: draw, error: drawError } = await supabase
+    .from('lottery_draws')
+    .insert({
+      event_id: state.draw.event_id,
+      title: `${state.draw.title.replace(/\s·\s第\s\d+\s轮$/, '')} · 第 ${nextRound} 轮`,
+      created_by: state.draw.created_by,
+    })
+    .select('*')
+    .single()
+  if (drawError) throw drawError
+  const nextDraw = draw as LotteryDrawRow
+
+  if (state.participants.length > 0) {
+    const { error } = await supabase
+      .from('lottery_participants')
+      .insert(state.participants.map(participant => ({
+        draw_id: nextDraw.id,
+        email: participant.email,
+      })))
+    if (error) throw error
+  }
+
+  if (state.prizes.length > 0) {
+    const { error } = await supabase
+      .from('lottery_prizes')
+      .insert(state.prizes.map(prize => ({
+        draw_id: nextDraw.id,
+        name: prize.name,
+        winner_count: prize.winner_count,
+        order_index: prize.order_index,
+      })))
+    if (error) throw error
+  }
+
+  return nextDraw
 }
 
 export async function replaceLotteryParticipants(
@@ -183,7 +254,7 @@ export async function drawLotteryAllPrizes(
     return state.winners
   }
 
-  const winnerEmails = new Set(state.winners.map(winner => winner.email.toLowerCase()))
+  const winnerEmails = new Set(state.allWinners.map(winner => winner.email.toLowerCase()))
   const pool = state.participants
     .map(participant => participant.email.toLowerCase())
     .filter(email => !winnerEmails.has(email))
