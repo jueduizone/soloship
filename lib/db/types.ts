@@ -171,3 +171,39 @@ export interface BenefitClaimRow {
   created_at: string
   updated_at: string
 }
+
+export interface LotteryDrawRow {
+  id: string
+  event_id: string
+  title: string
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface LotteryParticipantRow {
+  id: string
+  draw_id: string
+  email: string
+  created_at: string
+}
+
+export interface LotteryPrizeRow {
+  id: string
+  draw_id: string
+  name: string
+  winner_count: number
+  order_index: number
+  created_at: string
+  updated_at: string
+}
+
+export interface LotteryWinnerRow {
+  id: string
+  draw_id: string
+  prize_id: string
+  email: string
+  position: number
+  drawn_by: string | null
+  drawn_at: string
+}

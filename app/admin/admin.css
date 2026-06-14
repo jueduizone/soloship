@@ -692,6 +692,151 @@
   min-width: 260px;
   gap: 8px;
 }
+.ss-lottery-page {
+  max-width: 1320px;
+}
+.ss-lottery-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+}
+.ss-lottery-summary > div {
+  display: grid;
+  gap: 10px;
+  min-height: 96px;
+  padding: 16px;
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 12px;
+  background: var(--ss-surface);
+}
+.ss-lottery-summary span {
+  color: var(--ss-text-faint);
+  font-family: var(--ss-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ss-lottery-summary strong {
+  color: var(--ss-text-strong);
+  font-size: 34px;
+  line-height: 1;
+}
+.ss-lottery-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+  gap: 16px;
+}
+.ss-lottery-panel,
+.ss-lottery-prize-card {
+  border: 1px solid var(--ss-border-dark);
+  border-radius: 12px;
+  background: var(--ss-surface);
+  padding: 18px;
+}
+.ss-lottery-panel h2,
+.ss-lottery-prize-card h2 {
+  margin: 0;
+  color: var(--ss-text-strong);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+.ss-lottery-panel p,
+.ss-lottery-prize-card p {
+  margin: 8px 0 16px;
+  color: var(--ss-text-dim);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.ss-lottery-email-input {
+  min-height: 260px;
+  font-family: var(--ss-mono);
+  font-size: 13px;
+}
+.ss-lottery-prize-form {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 120px 96px 96px;
+  gap: 10px;
+  align-items: end;
+}
+.ss-lottery-prize-form .ss-field {
+  margin-bottom: 0;
+}
+.ss-lottery-form-action {
+  display: flex;
+  align-items: flex-end;
+}
+.ss-lottery-section {
+  margin-top: 24px;
+}
+.ss-lottery-prize-list {
+  display: grid;
+  gap: 14px;
+}
+.ss-lottery-prize-head {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.ss-lottery-draw-control {
+  display: grid;
+  min-width: 220px;
+  gap: 10px;
+  justify-items: end;
+}
+.ss-lottery-loading {
+  display: inline-flex;
+  max-width: 360px;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0,251,135,0.24);
+  border-radius: 999px;
+  color: var(--ss-accent-hi);
+  background: var(--ss-accent-soft);
+  font-family: var(--ss-mono);
+  font-size: 12px;
+}
+.ss-lottery-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(0,251,135,0.20);
+  border-top-color: var(--ss-accent);
+  animation: ss-lottery-spin 680ms linear infinite;
+}
+.ss-lottery-rolling {
+  overflow: hidden;
+  max-width: 260px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ss-lottery-winner-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.ss-lottery-winner-chips span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(0,251,135,0.24);
+  border-radius: 999px;
+  color: var(--ss-accent-hi);
+  background: var(--ss-accent-soft);
+  font-size: 12px;
+}
+.ss-lottery-history-table td {
+  white-space: nowrap;
+}
+@keyframes ss-lottery-spin {
+  to { transform: rotate(360deg); }
+}
 .ss-resource-management-head {
   padding: 12px 18px;
   border-bottom: 1px solid var(--ss-border-dark);
@@ -784,6 +929,13 @@
 @media (max-width: 1100px) {
   .ss-admin-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .ss-admin-quick-grid { grid-template-columns: 1fr; }
+  .ss-lottery-layout,
+  .ss-lottery-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ss-lottery-prize-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .ss-resource-title-field,
   .ss-resource-summary-field,
   .ss-resource-url-field,
@@ -815,6 +967,17 @@
   .ss-admin-topbar nav { flex-wrap: wrap; gap: 10px 14px; }
   .ss-admin-container { padding: 24px 16px; }
   .ss-admin-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ss-lottery-layout,
+  .ss-lottery-summary,
+  .ss-lottery-prize-form {
+    grid-template-columns: 1fr;
+  }
+  .ss-lottery-prize-head {
+    display: grid;
+  }
+  .ss-lottery-draw-control {
+    justify-items: start;
+  }
   .ss-admin-metric-card { min-height: 92px; }
   .ss-admin-metric-card strong { font-size: 28px; }
   .ss-resource-form { grid-template-columns: 1fr; }

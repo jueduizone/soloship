@@ -15,6 +15,10 @@
 --   benefits                —— 入营福利
 --   benefit_codes           —— token / 兑换码池
 --   benefit_claims          —— 福利领取记录
+--   lottery_draws           —— 抽奖场次
+--   lottery_participants    —— 抽奖邮箱池
+--   lottery_prizes          —— 抽奖奖项
+--   lottery_winners         —— 中奖记录
 --
 -- 权限模型（MVP）：
 --   - 大部分写入走 service_role（API routes），绕 RLS
@@ -304,6 +308,63 @@ exception when duplicate_object then null; end $$;
 
 
 -- ------------------------------------------------------------------
+-- lottery —— 隐藏后台抽奖工具
+-- ------------------------------------------------------------------
+create table if not exists public.lottery_draws (
+  id              uuid primary key default gen_random_uuid(),
+  event_id        uuid not null references public.events(id) on delete cascade,
+  title           text not null,
+  created_by      uuid references auth.users(id) on delete set null,
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now()
+);
+
+create index if not exists lottery_draws_event_idx
+  on public.lottery_draws (event_id, created_at desc);
+
+create table if not exists public.lottery_participants (
+  id              uuid primary key default gen_random_uuid(),
+  draw_id         uuid not null references public.lottery_draws(id) on delete cascade,
+  email           text not null,
+  created_at      timestamptz not null default now(),
+  unique (draw_id, email)
+);
+
+create index if not exists lottery_participants_draw_idx
+  on public.lottery_participants (draw_id, email);
+
+create table if not exists public.lottery_prizes (
+  id              uuid primary key default gen_random_uuid(),
+  draw_id         uuid not null references public.lottery_draws(id) on delete cascade,
+  name            text not null,
+  winner_count    integer not null check (winner_count > 0),
+  order_index     integer not null default 0,
+  created_at      timestamptz not null default now(),
+  updated_at      timestamptz not null default now()
+);
+
+create index if not exists lottery_prizes_draw_idx
+  on public.lottery_prizes (draw_id, order_index, created_at);
+
+create table if not exists public.lottery_winners (
+  id              uuid primary key default gen_random_uuid(),
+  draw_id         uuid not null references public.lottery_draws(id) on delete cascade,
+  prize_id        uuid not null references public.lottery_prizes(id) on delete cascade,
+  email           text not null,
+  position        integer not null,
+  drawn_by        uuid references auth.users(id) on delete set null,
+  drawn_at        timestamptz not null default now(),
+  unique (draw_id, email),
+  unique (prize_id, position)
+);
+
+create index if not exists lottery_winners_draw_idx
+  on public.lottery_winners (draw_id, drawn_at desc);
+create index if not exists lottery_winners_prize_idx
+  on public.lottery_winners (prize_id, position);
+
+
+-- ------------------------------------------------------------------
 -- updated_at 自动维护
 -- ------------------------------------------------------------------
 create or replace function public.tg_set_updated_at()
@@ -328,7 +389,9 @@ begin
       'fellow_profiles',
       'resources',
       'benefits',
-      'benefit_claims'
+      'benefit_claims',
+      'lottery_draws',
+      'lottery_prizes'
     ])
   loop
     execute format('drop trigger if exists set_updated_at on public.%I', t);
@@ -368,6 +431,10 @@ alter table public.resources              enable row level security;
 alter table public.benefits               enable row level security;
 alter table public.benefit_codes          enable row level security;
 alter table public.benefit_claims         enable row level security;
+alter table public.lottery_draws          enable row level security;
+alter table public.lottery_participants   enable row level security;
+alter table public.lottery_prizes         enable row level security;
+alter table public.lottery_winners        enable row level security;
 
 -- events: 任何人可读非 draft 的活动
 drop policy if exists events_public_read on public.events;
@@ -492,6 +559,23 @@ create policy benefit_claims_own_read on public.benefit_claims
 
 drop policy if exists benefit_claims_admin_write on public.benefit_claims;
 create policy benefit_claims_admin_write on public.benefit_claims
+  for all using (public.is_admin()) with check (public.is_admin());
+
+-- lottery: 隐藏后台工具，仅 admin 读写
+drop policy if exists lottery_draws_admin_all on public.lottery_draws;
+create policy lottery_draws_admin_all on public.lottery_draws
+  for all using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists lottery_participants_admin_all on public.lottery_participants;
+create policy lottery_participants_admin_all on public.lottery_participants
+  for all using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists lottery_prizes_admin_all on public.lottery_prizes;
+create policy lottery_prizes_admin_all on public.lottery_prizes
+  for all using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists lottery_winners_admin_all on public.lottery_winners;
+create policy lottery_winners_admin_all on public.lottery_winners
   for all using (public.is_admin()) with check (public.is_admin());
 
 
