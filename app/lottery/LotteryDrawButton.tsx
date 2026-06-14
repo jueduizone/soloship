@@ -5,16 +5,12 @@ import { useRouter } from 'next/navigation'
 import type { LotteryWinnerRow } from '@/lib/db/types'
 
 interface LotteryDrawButtonProps {
-  prizeId: string
-  disabled: boolean
   sampleEmails: string[]
   idleLabel: string
   pendingLabel: string
 }
 
 export function LotteryDrawButton({
-  prizeId,
-  disabled,
   sampleEmails,
   idleLabel,
   pendingLabel,
@@ -39,7 +35,7 @@ export function LotteryDrawButton({
     setWinners([])
     startTransition(async () => {
       const startedAt = Date.now()
-      const response = await fetch(`/api/lottery/prizes/${prizeId}/draw`, {
+      const response = await fetch('/api/lottery/draw', {
         method: 'POST',
       })
       const data = await response.json().catch(() => ({}))
@@ -61,7 +57,7 @@ export function LotteryDrawButton({
       <button
         className="ss-btn-action is-primary"
         type="button"
-        disabled={disabled || isPending}
+        disabled={isPending}
         aria-busy={isPending}
         onClick={draw}
       >

@@ -145,6 +145,75 @@ export async function updateLotteryPrize(
   return data as LotteryPrizeRow
 }
 
+export async function drawLotteryAllPrizes(
+  supabase: SupabaseClient,
+  drawId: string,
+  drawnBy: string | null
+): Promise<LotteryWinnerRow[]> {
+  const state = await getLotteryState(supabase, drawId)
+  if (state.participants.length === 0) {
+    throw new Error('请先导入邮箱后再抽奖')
+  }
+  if (state.prizes.length === 0) {
+    throw new Error('请先设置奖项后再抽奖')
+  }
+
+  const duplicateNames = findDuplicatePrizeNames(state.prizes)
+  if (duplicateNames.length > 0) {
+    throw new Error(`存在重复奖项：${duplicateNames.join('、')}，请先调整奖项名称`)
+  }
+
+  const remainingByPrize = state.prizes.map(prize => ({
+    prize,
+    remainingSlots: Math.max(0, prize.winner_count - prize.winners.length),
+  }))
+  const totalRemaining = remainingByPrize.reduce((total, item) => total + item.remainingSlots, 0)
+  if (totalRemaining === 0) {
+    return state.winners
+  }
+
+  const winnerEmails = new Set(state.winners.map(winner => winner.email.toLowerCase()))
+  const pool = state.participants
+    .map(participant => participant.email.toLowerCase())
+    .filter(email => !winnerEmails.has(email))
+  if (pool.length < totalRemaining) {
+    throw new Error(`剩余可抽邮箱不足：还需要 ${totalRemaining} 个名额，当前仅剩 ${pool.length} 个邮箱`)
+  }
+
+  const shuffled = pickRandom(pool, pool.length)
+  let cursor = 0
+  const inserts: Array<{
+    draw_id: string
+    prize_id: string
+    email: string
+    position: number
+    drawn_by: string | null
+  }> = []
+
+  for (const item of remainingByPrize) {
+    if (item.remainingSlots === 0) continue
+    const startPosition = item.prize.winners.length + 1
+    const emails = shuffled.slice(cursor, cursor + item.remainingSlots)
+    cursor += item.remainingSlots
+    inserts.push(...emails.map((email, index) => ({
+      draw_id: drawId,
+      prize_id: item.prize.id,
+      email,
+      position: startPosition + index,
+      drawn_by: drawnBy,
+    })))
+  }
+
+  const { data, error } = await supabase
+    .from('lottery_winners')
+    .insert(inserts)
+    .select('*')
+  if (error) throw error
+
+  return [...state.winners, ...((data ?? []) as LotteryWinnerRow[])]
+    .sort((a, b) => new Date(b.drawn_at).getTime() - new Date(a.drawn_at).getTime())
+}
+
 export async function drawLotteryPrize(
   supabase: SupabaseClient,
   prizeId: string,
@@ -211,6 +280,18 @@ export async function clearLotteryWinners(
     .delete()
     .eq('draw_id', drawId)
   if (error) throw error
+}
+
+function findDuplicatePrizeNames(prizes: LotteryPrizeRow[]): string[] {
+  const seen = new Set<string>()
+  const duplicates = new Set<string>()
+  for (const prize of prizes) {
+    const normalized = prize.name.trim().toLowerCase()
+    if (!normalized) continue
+    if (seen.has(normalized)) duplicates.add(prize.name.trim())
+    seen.add(normalized)
+  }
+  return Array.from(duplicates)
 }
 
 function pickRandom(pool: string[], count: number): string[] {

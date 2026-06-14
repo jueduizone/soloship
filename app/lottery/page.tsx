@@ -70,6 +70,10 @@ export default async function LotteryPage() {
     .map(participant => participant.email)
     .filter(email => !winnerEmailSet.has(email.toLowerCase()))
   const sampleEmails = state.participants.slice(0, 80).map(participant => participant.email)
+  const totalRemainingSlots = state.prizes.reduce(
+    (total, prize) => total + Math.max(0, prize.winner_count - prize.winners.length),
+    0
+  )
 
   return (
     <div className="ss-admin-container ss-lottery-page">
@@ -119,7 +123,7 @@ export default async function LotteryPage() {
 
         <section className="ss-lottery-panel ss-lottery-prize-panel">
           <h2>奖项设置</h2>
-          <p>在这里连续添加多个奖项，并直接开奖。开奖时会自动排除已经在其他奖项中中奖的邮箱。</p>
+          <p>先连续添加多个奖项，再一次性开奖。开奖时会按排序分配中奖邮箱，并自动排除已经中奖的邮箱。</p>
           <form action={createLotteryPrizeAction} className="ss-lottery-prize-form">
             <div className="ss-field">
               <label htmlFor="lottery-prize-name-new">奖项名称</label>
@@ -158,13 +162,24 @@ export default async function LotteryPage() {
             </div>
           </form>
 
+          <div className="ss-lottery-draw-all">
+            <div>
+              <span>待抽名额</span>
+              <strong>{totalRemainingSlots}</strong>
+            </div>
+            <LotteryDrawButton
+              sampleEmails={sampleEmails}
+              idleLabel={totalRemainingSlots === 0 && state.prizes.length > 0 ? '已开奖' : '开始抽奖'}
+              pendingLabel="开奖中"
+            />
+          </div>
+
           {state.prizes.length === 0 ? (
             <div className="ss-empty ss-lottery-inline-empty">暂无奖项。先新增奖项，再开始抽奖。</div>
           ) : (
             <div className="ss-lottery-prize-list">
               {state.prizes.map(prize => {
                 const remainingSlots = Math.max(0, prize.winner_count - prize.winners.length)
-                const disabled = remainingSlots === 0 || state.participants.length === 0 || availableEmails.length < remainingSlots
                 return (
                   <article className="ss-lottery-prize-item" key={prize.id}>
                     <div className="ss-lottery-prize-head">
@@ -172,13 +187,6 @@ export default async function LotteryPage() {
                         <h2>{prize.name}</h2>
                         <p>{prize.winners.length}/{prize.winner_count} 已开奖 · 还需 {remainingSlots} 人</p>
                       </div>
-                      <LotteryDrawButton
-                        prizeId={prize.id}
-                        disabled={disabled}
-                        sampleEmails={sampleEmails}
-                        idleLabel={remainingSlots === 0 ? '已开奖' : '开始抽奖'}
-                        pendingLabel="开奖中"
-                      />
                     </div>
 
                     <PrizeEditForm prize={prize} />
@@ -189,9 +197,6 @@ export default async function LotteryPage() {
                           <span key={winner.id}>{winner.position}. {winner.email}</span>
                         ))}
                       </div>
-                    )}
-                    {availableEmails.length < remainingSlots && remainingSlots > 0 && (
-                      <div className="ss-form-error">剩余可抽邮箱不足，无法完成该奖项。</div>
                     )}
                   </article>
                 )

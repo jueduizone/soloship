@@ -778,6 +778,33 @@
   min-width: 0;
   white-space: nowrap;
 }
+.ss-lottery-draw-all {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--ss-border-dark-soft);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.018);
+}
+.ss-lottery-draw-all > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+.ss-lottery-draw-all span {
+  color: var(--ss-text-faint);
+  font-family: var(--ss-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ss-lottery-draw-all strong {
+  color: var(--ss-text-strong);
+  font-size: 28px;
+  line-height: 1;
+}
 .ss-lottery-section {
   margin-top: 24px;
 }
@@ -1011,6 +1038,10 @@
   }
   .ss-lottery-history-head {
     align-items: flex-start;
+    flex-direction: column;
+  }
+  .ss-lottery-draw-all {
+    align-items: stretch;
     flex-direction: column;
   }
   .ss-lottery-draw-control {
