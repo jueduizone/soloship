@@ -65,7 +65,11 @@ function PrizeEditForm({ prize }: { prize: LotteryPrizeWithWinners }) {
       </form>
       <form action={deleteLotteryPrizeAction} className="ss-lottery-delete-form">
         <input type="hidden" name="id" value={prize.id} />
-        <button className="ss-btn-action is-danger ss-lottery-small-button" type="submit">删除</button>
+        <AdminSubmitButton
+          idleLabel="删除"
+          pendingLabel="删除中"
+          className="ss-btn-action is-danger ss-lottery-small-button"
+        />
       </form>
       {prize.winners.length > 0 && (
         <div className="ss-lottery-winner-chips">
@@ -146,13 +150,12 @@ export default async function LotteryPage() {
           </form>
           {state.participants.length > 0 && (
             <form action={clearLotteryParticipantsAction} className="ss-lottery-clear-emails-form">
-              <button
+              <AdminSubmitButton
+                idleLabel="清空邮箱池"
+                pendingLabel="清空中"
                 className="ss-btn-action ss-lottery-clear-emails-button"
-                type="submit"
                 title="清空当前邮箱池，保留奖项设置和中奖历史"
-              >
-                清空邮箱池
-              </button>
+              />
             </form>
           )}
         </section>
@@ -213,13 +216,12 @@ export default async function LotteryPage() {
               />
               {state.winners.length > 0 && (
                 <form action={startNextLotteryRoundAction}>
-                  <button
+                  <AdminSubmitButton
+                    idleLabel="开启新一轮"
+                    pendingLabel="开启中"
                     className="ss-btn-action ss-lottery-reset-button"
-                    type="submit"
                     title="复制当前邮箱池和奖项设置，开启下一轮；历史中奖邮箱仍会被排除"
-                  >
-                    开启新一轮
-                  </button>
+                  />
                 </form>
               )}
             </div>
@@ -242,13 +244,12 @@ export default async function LotteryPage() {
           <div className="ss-admin-section-title">历史中奖记录</div>
           {state.allWinners.length > 0 && (
             <form action={clearLotteryHistoryAction}>
-              <button
+              <AdminSubmitButton
+                idleLabel="清除全部历史（重置排重）"
+                pendingLabel="清除中"
                 className="ss-btn-action is-danger"
-                type="submit"
                 title="删除所有轮次中奖记录；删除后历史中奖邮箱会重新具备中奖资格"
-              >
-                清除全部历史（重置排重）
-              </button>
+              />
             </form>
           )}
         </div>
