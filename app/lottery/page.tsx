@@ -189,8 +189,10 @@ export default async function LotteryPage() {
             </div>
             <LotteryDrawButton
               sampleEmails={sampleEmails}
+              prizes={state.prizes.map(prize => ({ id: prize.id, name: prize.name }))}
               idleLabel={totalRemainingSlots === 0 && state.prizes.length > 0 ? '已开奖' : '开始抽奖'}
               pendingLabel="开奖中"
+              disabled={totalRemainingSlots === 0 && state.prizes.length > 0}
             />
           </div>
 

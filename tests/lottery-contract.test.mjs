@@ -51,17 +51,20 @@ assert.match(lotteryActions, /clearLotteryWinners/, 'history clearing action mus
 assert.match(lotteryActions, /deleteLotteryPrizeAction/, 'lottery setup actions must expose prize deletion')
 
 const drawButton = read('app/lottery/LotteryDrawButton.tsx')
-assert.match(drawButton, /ss-lottery-loading/, 'draw button must render a loading animation state')
+assert.match(drawButton, /ss-lottery-rolling-stage/, 'draw button must render a suspense loading state')
 assert.match(drawButton, /setInterval/, 'draw button must animate rolling emails during drawing')
 assert.match(drawButton, /router\.refresh\(\)/, 'draw button must refresh history after drawing')
 assert.match(drawButton, /\/api\/lottery\/draw/, 'draw button must call the public all-prize lottery API')
+assert.match(drawButton, /ss-lottery-modal/, 'draw button must show a modal drawing experience')
+assert.match(drawButton, /groupedWinners/, 'draw result modal must group winners by prize')
 assert.doesNotMatch(drawButton, /prizeId/, 'draw button must not draw one prize at a time')
 
 const adminCss = read('app/admin/admin.css')
-assert.match(adminCss, /grid-template-columns: repeat\(auto-fit, minmax\(128px, 1fr\)\)/, 'lottery prize form must use responsive columns')
+assert.match(adminCss, /grid-template-columns: minmax\(180px, 1\.4fr\)/, 'lottery prize form must use compact management columns')
 assert.match(adminCss, /\.ss-lottery-form-action \.ss-btn-action[\s\S]*width: 100%/, 'lottery prize submit buttons must stay inside narrow panels')
 assert.match(adminCss, /ss-lottery-prize-item/, 'right-side prize list must use inline prize rows')
 assert.match(adminCss, /ss-lottery-prize-row/, 'existing prizes must use compact inline editing rows')
+assert.match(adminCss, /ss-lottery-modal-card/, 'lottery CSS must style the suspense modal')
 assert.match(adminCss, /ss-lottery-history-head/, 'history header must support a clear action')
 assert.match(adminCss, /ss-lottery-draw-all/, 'lottery CSS must style the all-prize draw control')
 
