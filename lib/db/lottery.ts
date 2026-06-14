@@ -202,6 +202,17 @@ export async function drawLotteryPrize(
     .sort((a, b) => a.position - b.position)
 }
 
+export async function clearLotteryWinners(
+  supabase: SupabaseClient,
+  drawId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from('lottery_winners')
+    .delete()
+    .eq('draw_id', drawId)
+  if (error) throw error
+}
+
 function pickRandom(pool: string[], count: number): string[] {
   const copy = [...pool]
   for (let i = copy.length - 1; i > 0; i -= 1) {

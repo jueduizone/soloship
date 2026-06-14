@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import {
+  clearLotteryWinners,
   createLotteryPrize,
   getOrCreateLotteryDraw,
   parseLotteryEmails,
@@ -73,5 +74,11 @@ export async function updateLotteryPrizeAction(formData: FormData) {
     winnerCount: parsePositiveInteger(formData.get('winner_count'), 1),
     orderIndex: parseOrderIndex(formData.get('order_index')),
   })
+  revalidatePath('/lottery')
+}
+
+export async function clearLotteryHistoryAction() {
+  const { admin, draw } = await getPublicLotteryDraw()
+  await clearLotteryWinners(admin, draw.id)
   revalidatePath('/lottery')
 }

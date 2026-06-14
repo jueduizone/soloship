@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { getLotteryState, getOrCreateLotteryDraw } from '@/lib/db/lottery'
 import {
+  clearLotteryHistoryAction,
   createLotteryPrizeAction,
   importLotteryParticipantsAction,
   updateLotteryPrizeAction,
@@ -116,9 +117,9 @@ export default async function LotteryPage() {
           </form>
         </section>
 
-        <section className="ss-lottery-panel">
-          <h2>新增奖项</h2>
-          <p>可以添加多个奖项。开奖时会自动排除已经在其他奖项中中奖的邮箱。</p>
+        <section className="ss-lottery-panel ss-lottery-prize-panel">
+          <h2>奖项设置</h2>
+          <p>在这里连续添加多个奖项，并直接开奖。开奖时会自动排除已经在其他奖项中中奖的邮箱。</p>
           <form action={createLotteryPrizeAction} className="ss-lottery-prize-form">
             <div className="ss-field">
               <label htmlFor="lottery-prize-name-new">奖项名称</label>
@@ -156,55 +157,59 @@ export default async function LotteryPage() {
               <AdminSubmitButton idleLabel="新增奖项" pendingLabel="新增中" />
             </div>
           </form>
+
+          {state.prizes.length === 0 ? (
+            <div className="ss-empty ss-lottery-inline-empty">暂无奖项。先新增奖项，再开始抽奖。</div>
+          ) : (
+            <div className="ss-lottery-prize-list">
+              {state.prizes.map(prize => {
+                const remainingSlots = Math.max(0, prize.winner_count - prize.winners.length)
+                const disabled = remainingSlots === 0 || state.participants.length === 0 || availableEmails.length < remainingSlots
+                return (
+                  <article className="ss-lottery-prize-item" key={prize.id}>
+                    <div className="ss-lottery-prize-head">
+                      <div>
+                        <h2>{prize.name}</h2>
+                        <p>{prize.winners.length}/{prize.winner_count} 已开奖 · 还需 {remainingSlots} 人</p>
+                      </div>
+                      <LotteryDrawButton
+                        prizeId={prize.id}
+                        disabled={disabled}
+                        sampleEmails={sampleEmails}
+                        idleLabel={remainingSlots === 0 ? '已开奖' : '开始抽奖'}
+                        pendingLabel="开奖中"
+                      />
+                    </div>
+
+                    <PrizeEditForm prize={prize} />
+
+                    {prize.winners.length > 0 && (
+                      <div className="ss-lottery-winner-chips">
+                        {prize.winners.map(winner => (
+                          <span key={winner.id}>{winner.position}. {winner.email}</span>
+                        ))}
+                      </div>
+                    )}
+                    {availableEmails.length < remainingSlots && remainingSlots > 0 && (
+                      <div className="ss-form-error">剩余可抽邮箱不足，无法完成该奖项。</div>
+                    )}
+                  </article>
+                )
+              })}
+            </div>
+          )}
         </section>
       </div>
 
       <section className="ss-lottery-section">
-        <div className="ss-admin-section-title">开奖</div>
-        {state.prizes.length === 0 ? (
-          <div className="ss-empty">暂无奖项。先在上方新增奖项，再开始抽奖。</div>
-        ) : (
-          <div className="ss-lottery-prize-list">
-            {state.prizes.map(prize => {
-              const remainingSlots = Math.max(0, prize.winner_count - prize.winners.length)
-              const disabled = remainingSlots === 0 || state.participants.length === 0 || availableEmails.length < remainingSlots
-              return (
-                <article className="ss-lottery-prize-card" key={prize.id}>
-                  <div className="ss-lottery-prize-head">
-                    <div>
-                      <h2>{prize.name}</h2>
-                      <p>{prize.winners.length}/{prize.winner_count} 已开奖 · 还需 {remainingSlots} 人</p>
-                    </div>
-                    <LotteryDrawButton
-                      prizeId={prize.id}
-                      disabled={disabled}
-                      sampleEmails={sampleEmails}
-                      idleLabel={remainingSlots === 0 ? '已开奖' : '开始抽奖'}
-                      pendingLabel="开奖中"
-                    />
-                  </div>
-
-                  <PrizeEditForm prize={prize} />
-
-                  {prize.winners.length > 0 && (
-                    <div className="ss-lottery-winner-chips">
-                      {prize.winners.map(winner => (
-                        <span key={winner.id}>{winner.position}. {winner.email}</span>
-                      ))}
-                    </div>
-                  )}
-                  {availableEmails.length < remainingSlots && remainingSlots > 0 && (
-                    <div className="ss-form-error">剩余可抽邮箱不足，无法完成该奖项。</div>
-                  )}
-                </article>
-              )
-            })}
-          </div>
-        )}
-      </section>
-
-      <section className="ss-lottery-section">
-        <div className="ss-admin-section-title">历史中奖记录</div>
+        <div className="ss-lottery-history-head">
+          <div className="ss-admin-section-title">历史中奖记录</div>
+          {state.winners.length > 0 && (
+            <form action={clearLotteryHistoryAction}>
+              <button className="ss-btn-action is-danger" type="submit">清除历史</button>
+            </form>
+          )}
+        </div>
         {state.winners.length === 0 ? (
           <div className="ss-empty">暂无中奖记录。</div>
         ) : (

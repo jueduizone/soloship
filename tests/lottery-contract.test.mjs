@@ -23,6 +23,7 @@ assert.match(migration, /unique \(draw_id, email\)/, 'lottery migration must pre
 const lotteryDb = read('lib/db/lottery.ts')
 assert.match(lotteryDb, /parseLotteryEmails/, 'lottery data layer must parse imported emails')
 assert.match(lotteryDb, /drawLotteryPrize/, 'lottery data layer must expose drawLotteryPrize')
+assert.match(lotteryDb, /clearLotteryWinners/, 'lottery data layer must support clearing winner history')
 assert.match(lotteryDb, /winnerEmails/, 'drawing must exclude previous winners in the same draw')
 assert.match(lotteryDb, /randomInt/, 'drawing must use server-side random selection')
 assert.match(lotteryDb, /remainingSlots/, 'drawing must only fill missing slots for a prize')
@@ -33,11 +34,16 @@ assert.match(lotteryPage, /importLotteryParticipantsAction/, 'lottery page must 
 assert.match(lotteryPage, /createLotteryPrizeAction/, 'lottery page must support setting prize names and counts')
 assert.match(lotteryPage, /LotteryDrawButton/, 'lottery page must expose animated draw buttons')
 assert.match(lotteryPage, /历史中奖记录/, 'lottery page must show winner history')
+assert.match(lotteryPage, /奖项设置/, 'lottery page must show prize setup beside email import')
+assert.match(lotteryPage, /clearLotteryHistoryAction/, 'lottery page must support clearing winner history')
+assert.match(lotteryPage, /ss-lottery-prize-item/, 'existing prizes must render in the right-side prize setup panel')
 assert.doesNotMatch(lotteryPage, /公开隐藏链接|\/lottery。/, 'lottery page must not expose internal link wording in visible copy')
 
 const lotteryActions = read('app/lottery/_actions.ts')
 assert.doesNotMatch(lotteryActions, /requireAdmin|getAdminUser|requireOrganizer/, 'lottery setup actions must not require login')
 assert.match(lotteryActions, /createAdminClient/, 'public lottery actions must still write through the server-side admin client')
+assert.match(lotteryActions, /clearLotteryHistoryAction/, 'lottery setup actions must expose history clearing')
+assert.match(lotteryActions, /clearLotteryWinners/, 'history clearing action must delete persisted winner rows')
 
 const drawButton = read('app/lottery/LotteryDrawButton.tsx')
 assert.match(drawButton, /ss-lottery-loading/, 'draw button must render a loading animation state')
@@ -48,6 +54,8 @@ assert.match(drawButton, /\/api\/lottery\/prizes\/\$\{prizeId\}\/draw/, 'draw bu
 const adminCss = read('app/admin/admin.css')
 assert.match(adminCss, /grid-template-columns: repeat\(auto-fit, minmax\(128px, 1fr\)\)/, 'lottery prize form must use responsive columns')
 assert.match(adminCss, /\.ss-lottery-form-action \.ss-btn-action[\s\S]*width: 100%/, 'lottery prize submit buttons must stay inside narrow panels')
+assert.match(adminCss, /ss-lottery-prize-item/, 'right-side prize list must use inline prize rows')
+assert.match(adminCss, /ss-lottery-history-head/, 'history header must support a clear action')
 
 const drawApi = read('app/api/lottery/prizes/[id]/draw/route.ts')
 assert.doesNotMatch(drawApi, /getAdminUser|requireAdmin|requireOrganizer/, 'lottery draw API must be accessible without login')
