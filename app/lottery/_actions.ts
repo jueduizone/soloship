@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import {
-  clearLotteryWinners,
+  clearLotteryWinnersForEvent,
   createLotteryPrize,
   createNextLotteryRound,
   deleteLotteryPrize,
@@ -93,7 +93,7 @@ export async function deleteLotteryPrizeAction(formData: FormData) {
 
 export async function clearLotteryHistoryAction() {
   const { admin, draw } = await getPublicLotteryDraw()
-  await clearLotteryWinners(admin, draw.id)
+  await clearLotteryWinnersForEvent(admin, draw.event_id)
   revalidatePath('/lottery')
 }
 

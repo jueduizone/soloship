@@ -364,6 +364,26 @@ export async function clearLotteryWinners(
   if (error) throw error
 }
 
+export async function clearLotteryWinnersForEvent(
+  supabase: SupabaseClient,
+  eventId: string
+): Promise<void> {
+  const { data: draws, error: drawsError } = await supabase
+    .from('lottery_draws')
+    .select('id')
+    .eq('event_id', eventId)
+  if (drawsError) throw drawsError
+
+  const drawIds = (draws ?? []).map(draw => String(draw.id))
+  if (drawIds.length === 0) return
+
+  const { error } = await supabase
+    .from('lottery_winners')
+    .delete()
+    .in('draw_id', drawIds)
+  if (error) throw error
+}
+
 function findDuplicatePrizeNames(prizes: LotteryPrizeRow[]): string[] {
   const seen = new Set<string>()
   const duplicates = new Set<string>()

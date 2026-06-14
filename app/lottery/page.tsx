@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { getLotteryState, getOrCreateLotteryDraw } from '@/lib/db/lottery'
 import {
+  clearLotteryHistoryAction,
   clearLotteryParticipantsAction,
   createLotteryPrizeAction,
   deleteLotteryPrizeAction,
@@ -239,6 +240,17 @@ export default async function LotteryPage() {
       <section className="ss-lottery-section">
         <div className="ss-lottery-history-head">
           <div className="ss-admin-section-title">历史中奖记录</div>
+          {state.allWinners.length > 0 && (
+            <form action={clearLotteryHistoryAction}>
+              <button
+                className="ss-btn-action is-danger"
+                type="submit"
+                title="删除所有轮次中奖记录；删除后历史中奖邮箱会重新具备中奖资格"
+              >
+                清除全部历史（重置排重）
+              </button>
+            </form>
+          )}
         </div>
         {state.allWinners.length === 0 ? (
           <div className="ss-empty">暂无中奖记录。</div>
