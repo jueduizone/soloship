@@ -1,4 +1,4 @@
--- SoloShip hidden admin lottery tool.
+-- SoloShip hidden-link lottery tool.
 -- Run this in Supabase SQL Editor for existing databases.
 
 create table if not exists public.lottery_draws (

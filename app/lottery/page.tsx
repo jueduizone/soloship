@@ -1,4 +1,3 @@
-import { requireAdmin } from '@/lib/auth/require-admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDefaultEvent } from '@/lib/db/events'
 import { getLotteryState, getOrCreateLotteryDraw } from '@/lib/db/lottery'
@@ -6,7 +5,7 @@ import {
   createLotteryPrizeAction,
   importLotteryParticipantsAction,
   updateLotteryPrizeAction,
-} from '@/app/admin/_actions'
+} from './_actions'
 import { AdminSubmitButton } from '@/app/admin/AdminSubmitButton'
 import { LotteryDrawButton } from './LotteryDrawButton'
 import type { LotteryPrizeWithWinners } from '@/lib/db/lottery'
@@ -56,14 +55,13 @@ function PrizeEditForm({ prize }: { prize: LotteryPrizeWithWinners }) {
   )
 }
 
-export default async function AdminLotteryPage() {
-  const user = await requireAdmin()
+export default async function LotteryPage() {
   const admin = createAdminClient()
   const event = await getDefaultEvent(admin)
   const draw = await getOrCreateLotteryDraw(admin, {
     eventId: event.id,
     title: `${event.name} 抽奖`,
-    userId: user.id,
+    userId: null,
   })
   const state = await getLotteryState(admin, draw.id)
   const winnerEmailSet = new Set(state.winners.map(winner => winner.email.toLowerCase()))
@@ -76,7 +74,7 @@ export default async function AdminLotteryPage() {
     <div className="ss-admin-container ss-lottery-page">
       <div className="ss-admin-title">抽奖工具</div>
       <div className="ss-admin-sub">
-        指定链接：/admin/lottery。导入邮箱后设置奖项名称和人数，每个邮箱在同一场抽奖中只能中奖一次。
+        公开隐藏链接：/lottery。无需登录，拿到链接即可导入邮箱、设置奖项和开奖；同一邮箱在同一场抽奖中只能中奖一次。
       </div>
 
       <div className="ss-lottery-summary">

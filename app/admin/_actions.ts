@@ -15,13 +15,6 @@ import {
   updateBenefit,
   updateBenefitClaimStatus,
 } from '@/lib/db/benefits'
-import {
-  createLotteryPrize,
-  getOrCreateLotteryDraw,
-  parseLotteryEmails,
-  replaceLotteryParticipants,
-  updateLotteryPrize,
-} from '@/lib/db/lottery'
 import { createResource, deleteResource, updateResource } from '@/lib/db/resources'
 import { updateFellowProfile } from '@/lib/db/fellows'
 import type {
@@ -90,12 +83,6 @@ function parseOptionalInteger(value: FormDataEntryValue | null): number | null {
   if (!raw) return null
   const parsed = Number(raw)
   return Number.isFinite(parsed) ? Math.max(0, Math.trunc(parsed)) : null
-}
-
-function parsePositiveInteger(value: FormDataEntryValue | null, fallback: number): number {
-  const parsed = parseOptionalInteger(value)
-  if (parsed == null || parsed <= 0) return fallback
-  return parsed
 }
 
 export async function createResourceAction(formData: FormData) {
@@ -211,50 +198,6 @@ export async function updateBenefitClaimAction(formData: FormData) {
   )
   revalidatePath('/admin/benefits')
   revalidatePath('/benefits')
-}
-
-export async function importLotteryParticipantsAction(formData: FormData) {
-  const user = await requireAdmin()
-  const admin = createAdminClient()
-  const event = await getDefaultEvent(admin)
-  const draw = await getOrCreateLotteryDraw(admin, {
-    eventId: event.id,
-    title: `${event.name} 抽奖`,
-    userId: user.id,
-  })
-  const emails = parseLotteryEmails(mustString(formData, 'emails'))
-  if (emails.length === 0) throw new Error('请至少导入一个邮箱')
-  await replaceLotteryParticipants(admin, draw.id, emails)
-  revalidatePath('/admin/lottery')
-}
-
-export async function createLotteryPrizeAction(formData: FormData) {
-  const user = await requireAdmin()
-  const admin = createAdminClient()
-  const event = await getDefaultEvent(admin)
-  const draw = await getOrCreateLotteryDraw(admin, {
-    eventId: event.id,
-    title: `${event.name} 抽奖`,
-    userId: user.id,
-  })
-  await createLotteryPrize(admin, {
-    drawId: draw.id,
-    name: mustString(formData, 'name'),
-    winnerCount: parsePositiveInteger(formData.get('winner_count'), 1),
-    orderIndex: parseOrderIndex(formData.get('order_index')),
-  })
-  revalidatePath('/admin/lottery')
-}
-
-export async function updateLotteryPrizeAction(formData: FormData) {
-  await requireAdmin()
-  const admin = createAdminClient()
-  await updateLotteryPrize(admin, mustString(formData, 'id'), {
-    name: mustString(formData, 'name'),
-    winnerCount: parsePositiveInteger(formData.get('winner_count'), 1),
-    orderIndex: parseOrderIndex(formData.get('order_index')),
-  })
-  revalidatePath('/admin/lottery')
 }
 
 export async function updateFellowAction(formData: FormData) {

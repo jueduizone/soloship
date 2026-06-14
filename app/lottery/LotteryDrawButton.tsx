@@ -39,7 +39,7 @@ export function LotteryDrawButton({
     setWinners([])
     startTransition(async () => {
       const startedAt = Date.now()
-      const response = await fetch(`/api/admin/lottery/prizes/${prizeId}/draw`, {
+      const response = await fetch(`/api/lottery/prizes/${prizeId}/draw`, {
         method: 'POST',
       })
       const data = await response.json().catch(() => ({}))

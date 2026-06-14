@@ -308,7 +308,7 @@ exception when duplicate_object then null; end $$;
 
 
 -- ------------------------------------------------------------------
--- lottery —— 隐藏后台抽奖工具
+-- lottery —— 隐藏链接抽奖工具；页面/API 可免登录，表直连访问仍由 RLS 限制
 -- ------------------------------------------------------------------
 create table if not exists public.lottery_draws (
   id              uuid primary key default gen_random_uuid(),
@@ -561,7 +561,7 @@ drop policy if exists benefit_claims_admin_write on public.benefit_claims;
 create policy benefit_claims_admin_write on public.benefit_claims
   for all using (public.is_admin()) with check (public.is_admin());
 
--- lottery: 隐藏后台工具，仅 admin 读写
+-- lottery: 表直连仅 admin 读写；公开隐藏页通过 service_role 服务端路径操作
 drop policy if exists lottery_draws_admin_all on public.lottery_draws;
 create policy lottery_draws_admin_all on public.lottery_draws
   for all using (public.is_admin()) with check (public.is_admin());
