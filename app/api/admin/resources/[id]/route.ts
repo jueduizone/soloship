@@ -6,7 +6,7 @@ import type { ResourceStage, ResourceVisibility } from '@/lib/db/types'
 
 export const dynamic = 'force-dynamic'
 
-const STAGES: ResourceStage[] = ['pre_camp', 'week_1', 'week_2', 'demo_day', 'post_camp']
+const STAGES: ResourceStage[] = ['pre_camp', 'week_1', 'week_2', 'week_3', 'demo_day', 'post_camp']
 const VISIBILITIES: ResourceVisibility[] = ['public', 'admitted_only']
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {

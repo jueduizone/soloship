@@ -65,7 +65,7 @@ do $$ begin
 exception when duplicate_object then null; end $$;
 
 do $$ begin
-  create type resource_stage as enum ('pre_camp', 'week_1', 'week_2', 'demo_day', 'post_camp');
+  create type resource_stage as enum ('pre_camp', 'week_1', 'week_2', 'week_3', 'demo_day', 'post_camp');
 exception when duplicate_object then null; end $$;
 
 do $$ begin

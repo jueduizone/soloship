@@ -28,7 +28,7 @@ import type {
 } from '@/lib/db/types'
 
 const EVENT_STATUSES: EventStatus[] = ['draft', 'recruiting', 'reviewing', 'running', 'finished']
-const RESOURCE_STAGES: ResourceStage[] = ['pre_camp', 'week_1', 'week_2', 'demo_day', 'post_camp']
+const RESOURCE_STAGES: ResourceStage[] = ['pre_camp', 'week_1', 'week_2', 'week_3', 'demo_day', 'post_camp']
 const RESOURCE_VISIBILITIES: ResourceVisibility[] = ['public', 'admitted_only']
 const PROFILE_VISIBILITIES: ProfileVisibility[] = ['public', 'cohort_only', 'private']
 

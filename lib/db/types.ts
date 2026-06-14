@@ -20,7 +20,7 @@ export type EventStatus = 'draft' | 'recruiting' | 'reviewing' | 'running' | 'fi
 
 export type ProfileVisibility = 'public' | 'cohort_only' | 'private'
 
-export type ResourceStage = 'pre_camp' | 'week_1' | 'week_2' | 'demo_day' | 'post_camp'
+export type ResourceStage = 'pre_camp' | 'week_1' | 'week_2' | 'week_3' | 'demo_day' | 'post_camp'
 
 export type ResourceVisibility = 'public' | 'admitted_only'
 

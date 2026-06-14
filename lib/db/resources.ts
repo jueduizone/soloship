@@ -5,6 +5,7 @@ export const RESOURCE_STAGE_LABEL: Record<ResourceStage, string> = {
   pre_camp: '开营前',
   week_1: 'Week 1',
   week_2: 'Week 2',
+  week_3: 'Week 3',
   demo_day: 'Demo Day',
   post_camp: '结营后',
 }
@@ -13,6 +14,7 @@ export const RESOURCE_STAGE_ORDER: ResourceStage[] = [
   'pre_camp',
   'week_1',
   'week_2',
+  'week_3',
   'demo_day',
   'post_camp',
 ]

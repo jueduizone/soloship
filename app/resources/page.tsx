@@ -12,7 +12,7 @@ import type { SiteLocale } from '@/app/_components/content'
 
 export const dynamic = 'force-dynamic'
 
-const STAGE_ORDER: ResourceStage[] = ['pre_camp', 'week_1', 'week_2', 'demo_day', 'post_camp']
+const STAGE_ORDER: ResourceStage[] = ['pre_camp', 'week_1', 'week_2', 'week_3', 'demo_day', 'post_camp']
 const RESOURCE_COPY: Record<SiteLocale, {
   backHome: string
   login: string
@@ -49,6 +49,7 @@ const RESOURCE_COPY: Record<SiteLocale, {
       pre_camp: '开营前',
       week_1: 'Week 1',
       week_2: 'Week 2',
+      week_3: 'Week 3',
       demo_day: 'Demo Day',
       post_camp: '结营后',
     },
@@ -79,6 +80,7 @@ const RESOURCE_COPY: Record<SiteLocale, {
       pre_camp: 'Before kickoff',
       week_1: 'Week 1',
       week_2: 'Week 2',
+      week_3: 'Week 3',
       demo_day: 'Demo Day',
       post_camp: 'After cohort',
     },
